@@ -701,7 +701,9 @@ li.last {
   border-bottom: 1px solid #dadada;
 }
 
-
+.test-class{
+  color: transparent;
+}
 todays-vitals {
   display: block;
 }
