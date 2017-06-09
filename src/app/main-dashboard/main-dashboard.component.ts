@@ -173,6 +173,11 @@ export class MainDashboardComponent implements OnInit, OnDestroy {
   closeOpenSideBar(): void {
       this.dashboard.closeOpenSideBar();
   }
+  navigateAndCloseMenu(): void {
+    console.log('Close Menu');
+     this.closeOpenSideBar();
+
+  }
 
 
 
