@@ -87,4 +87,9 @@ toggleMenu(): void {
   toggleSideBarDropDown(event): void {
       this.dashboard.toggleSideBarDropDown(event);
   }
+
+  navigateAndCloseMenu(): void {
+     this.dashboard.closeOpenSideBar();
+
+  }
 }

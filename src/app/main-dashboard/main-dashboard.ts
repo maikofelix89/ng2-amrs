@@ -84,6 +84,7 @@ public windowWidth: number;
          }
 
         if ($li.is('.active')) {
+            console.log('Is ACTIVE');
             $li.removeClass('active active-sm');
             jQuery('ul:first', $li).slideUp();
         } else {

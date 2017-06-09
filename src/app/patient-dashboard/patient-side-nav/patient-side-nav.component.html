@@ -4,7 +4,7 @@
             *ngFor='let route of routes'><a><i class="fa fa-info"></i>{{route.label}}<span class="fa fa-chevron-down"></span></a>
                    <ul class="nav child_menu">
                       <li routerLinkActive="active" *ngFor='let childRoute of selectedRoute.childRoutes'>
-                           <a routerLink="/{{childRoute.url}}">
+                           <a routerLink="/{{childRoute.url}}" (click)="navigateAndCloseMenu()">
                                <i class="{{childRoute.renderingInfo.icon}}" aria-hidden="true"></i> {{childRoute.label}}
                           </a>
                       </li>

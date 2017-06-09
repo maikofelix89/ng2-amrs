@@ -26,7 +26,7 @@
                     </li>
                   </ul>
                   <ul class="nav side-menu" *ngIf="!viewingChildRoutes">
-                    <li><a routerLink="/{{route.url}}">{{route.label}}</a></li>
+                    <li><a routerLink="/{{route.url}}" (click)="navigateAndCloseMenu()">{{route.label}}</a></li>
                   </ul>
               </div>
               </div>
@@ -76,10 +76,10 @@
                   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Search <i class="fa fa-search fa-fw" aria-hidden="true"></i> <span class="caret"></span></a>
                       <ul class="dropdown-menu">
                         <li routerLinkActive="active" class="search_link">
-                             <a routerLink="/patient-dashboard/patient-search"><i class="icon-i-outpatient"></i> Patient Search</a>
+                             <a routerLink="/patient-dashboard/patient-search">Patient Search <i class="icon-i-outpatient"></i></a>
                         </li>
                         <li routerLinkActive="trail">
-                             <a routerLink="/lab-order-search" routerLinkActive="active"><i class="icon-i-pathology"></i> Lab Order Search</a>
+                             <a routerLink="/lab-order-search" routerLinkActive="active"> Lab Order Search <i class="icon-i-pathology"></i></a>
                         </li>
                       </ul>
          </li>

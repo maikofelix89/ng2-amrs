@@ -86,7 +86,7 @@ body {
     text-align: center !important;
     font-weight: 400;
     font-size: 10px;
-    padding: 10px 5px
+    padding: 10px 5px;
 }
 .nav-sm .nav.child_menu li.active,
 .nav-sm .nav.side-menu li.active-sm {
@@ -206,7 +206,7 @@ body {
     position: fixed
 }
 body .container.body .right_col {
-    background: #F7F7F7
+    background: #ECF0F5;
 }
 .nav-md .container.body .right_col {
     padding: 10px 20px 0;
@@ -346,6 +346,9 @@ body .container.body .right_col {
     position: relative;
     display: block;
     cursor: pointer;
+    border-bottom-style: solid;
+    border-bottom-width: 1px;
+    border-bottom-color:#1ABB9C;
     
     
 }
@@ -602,7 +605,9 @@ footer {
 
 .nav-sm .nav.side-menu .parent-side-menu-item a {
         font-size: 15px !important;
+        
 }
+
 
 .nav-sm .nav.side-menu .parent-side-menu-item .nav.child_menu li a{
        font-size: 10px !important; 
@@ -613,7 +618,7 @@ footer {
 }
 
 .content-wrapper {
-    margin-left: 0px;
+    margin-left: 50px;
     background-color: #ecf0f5;
     min-height: 100%;
 }
@@ -651,6 +656,9 @@ footer {
   padding-bottom: 8px;
   border-bottom: 1px solid rgba(34, 36, 38, .15);
   margin-bottom: 8px;
+}
+.fixed .content-wrapper, .fixed .right-side {
+    padding-top: 0px;
 }
 
 .component-title span{
@@ -693,7 +701,7 @@ app-patient-search .input-wrapper {
   }
 
   app-patient-search .input-group-btn.pull-right {
-    margin-top: 20px;
+    /* margin-top: 20px; */
   }
 
   app-patient-search .wrapper {
@@ -715,6 +723,21 @@ app-patient-search .input-wrapper {
 .footer-logo {
     width: 120px;
 }
+/*
+.nav-sm .nav.side-menu .parent-side-menu-item >a::first-letter {
+    visibility: visible;
+    font-size: 15px !important;
+    
+}
+
+.nav-sm .nav.side-menu .parent-side-menu-item>a {
+    visibility: hidden;
+    font-size: 0px !important;
+}
+*/
+
+
+
 
 
 [class^="icon-"], [class*=" icon-"] {
@@ -814,6 +837,7 @@ footer online-tracker {
   
    .content-wrapper {
     margin-top: 10px;
+    margin-left: 70px;
    }
 
    .fixed .content-wrapper, .fixed .right-side {
