@@ -161,7 +161,6 @@ export class MainDashboardComponent implements OnInit, OnDestroy {
   toggleSideBarDropDown(event): void {
       this.dashboard.toggleSideBarDropDown(event);
   }
-
   closeOpenSideBar(): void {
       this.dashboard.closeOpenSideBar();
   }

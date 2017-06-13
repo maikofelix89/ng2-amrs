@@ -26,7 +26,6 @@ public windowWidth: number;
         this.adjustSidebar(width);
      });
     }
-
    subscribeToBannerCheck() {
     return Observable.interval(1000)
      .map(this.pageHasBanner)
@@ -34,11 +33,9 @@ public windowWidth: number;
             this.adjustContentBanner(hasBanner);
      });
     }
-
     getWindowSize(): number {
       return window.innerWidth;
     }
-
      adjustSidebar(width: number): void {
         if (width < 992) {
              this.narrowSideBar();
@@ -123,7 +120,6 @@ closeOpenSideBar(): void {
             activeMenu.removeClass( 'active active-sm');
             jQuery(activeMenu[0]).find('ul').slideUp();
        }
-
 }
 
 toggleBanner(): void {

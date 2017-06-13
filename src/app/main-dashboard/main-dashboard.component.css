@@ -320,6 +320,9 @@ body .container.body .right_col {
     background-color: #FCFCFC;
 }
 
+.nav.side-menu>li>a {
+    margin-bottom: 6px
+}
 
 .container {
     width: 100%;
@@ -563,6 +566,7 @@ footer {
     bottom: 0px;
     width: 100%
 }
+
 .dropdown-menu {
     border: medium none;
     box-shadow: none;
@@ -686,7 +690,6 @@ footer {
     cursor: pointer
 }
 
-
 .content-wrapper {
     margin-left: 50px;
     background-color: #ecf0f5;
@@ -709,6 +712,7 @@ footer {
   margin-bottom: 10px;
   margin-left:5px;
 }
+
 .banner-top {
   display: block;
   height: 9px;
@@ -866,8 +870,6 @@ footer online-tracker {
     top:50px;
     z-index: 2;
 }
-
-
 .nav-sm .collapse.in #fixed{
     top:200px;
 }
