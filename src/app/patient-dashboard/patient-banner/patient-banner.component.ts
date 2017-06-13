@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ViewEncapsulation } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewEncapsulation, style } from '@angular/core';
 import * as Moment from 'moment';
 
 import { PatientService } from '../patient.service';
@@ -22,6 +22,8 @@ export class PatientBannerComponent implements OnInit, OnDestroy {
   constructor(private patientService: PatientService) { }
 
   ngOnInit() {
+    console.log('Loaded Banner');
+    this.adjustContentBanner();
     this.subscription = this.patientService.currentlyLoadedPatient.subscribe(
       (patient) => {
         this.patient = new Patient({});
@@ -39,6 +41,20 @@ export class PatientBannerComponent implements OnInit, OnDestroy {
       this.subscription.unsubscribe();
     }
   }
+
+  // set margin on top on content
+  adjustContentBanner(): void {
+
+     let componentWrapper = <HTMLElement>document.querySelector('.component-wrapper');
+     componentWrapper.style.marginTop = '10px';
+
+     let contentWrapper = <HTMLElement> document.querySelector('.content-wrapper');
+     contentWrapper.style.marginTop = '150px';
+
+
+
+
+}
 
 }
 

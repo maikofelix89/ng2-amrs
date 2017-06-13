@@ -102,9 +102,9 @@ export class DynamicRoutesService {
   public hideSidebar($event) {
 
     let body = document.getElementsByTagName('body')[0];
-    body.classList.remove('sidebar-collapse');
-    body.classList.remove('sidebar-open');
-    body.classList.add('sidebar-collapse');
+    // body.classList.remove('sidebar-collapse');
+    // body.classList.remove('sidebar-open');
+    // body.classList.add('sidebar-collapse');
   }
 
   public extractParameter(routeParameterKey: string, route: DynamicRouteModel): string {

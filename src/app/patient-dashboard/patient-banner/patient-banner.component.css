@@ -49,7 +49,7 @@
     display: inherit;
 }*/
 
-.sticky {
+.sticky2 {
     /*padding-left: 56px;*/
     /*left: 0 !important;*/
     position: fixed;
@@ -74,7 +74,7 @@
  display:none;
 }*/
 
-.sticky .container-fluid.patient-banner-partially{
+.sticky2 .container-fluid.patient-banner-partially{
      border-bottom: 1px solid #dadada;
 }
 
