@@ -17,6 +17,7 @@ const NormalModuleReplacementPlugin = require('webpack/lib/NormalModuleReplaceme
 const ProvidePlugin = require('webpack/lib/ProvidePlugin');
 const UglifyJsPlugin = require('webpack/lib/optimize/UglifyJsPlugin');
 const OptimizeJsPlugin = require('optimize-js-plugin');
+const SourceMapDevToolPlugin = require('webpack/lib/SourceMapDevToolPlugin');
 
 /**
  * Webpack Constants
@@ -132,7 +133,15 @@ module.exports = function (env) {
          * by wrapping eagerly-invoked functions.
          *
          * See: https://github.com/vigneshshanmugam/optimize-js-plugin
+         * 
          */
+
+         new SourceMapDevToolPlugin({
+            filename: null, // if no value is provided the sourcemap is inlined
+            lineToLine: true,
+            module: false,
+            test: /\.(ts|map|js)($|\?)/i // process .js and .ts files only
+         }),
 
         new OptimizeJsPlugin({
           sourceMap: false
