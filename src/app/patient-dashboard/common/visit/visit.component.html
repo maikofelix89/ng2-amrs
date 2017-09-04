@@ -1,4 +1,4 @@
-<div>
+<div class="container-fluid">
   <div [ngBusy]="{busy:[loadingVisitTypes, visitBusy],message:'Please wait. Loading..'}"></div>
   <p-dialog header="Warning!" [(visible)]="showDialog" modal="true" width="400" [closable]="false" responsive="true">
     <div class="text-bold">
@@ -20,79 +20,170 @@
         <button (click)="onNo()" type="button" id="onNo" class="btn btn-danger">No</button>
       </div>
     </footer>
-
   </p-dialog>
   <div *ngFor="let error of errors" class="alert alert-danger alert-dismissible">
     <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button> {{error.message}}
   </div>
   <h4 class="component-title"><span class="icon-i-outpatient"></span>Current Visit</h4>
-  <div class="list-group-item" *ngIf="!visit">
-    <div class="visit-label">
-      <h3>Select visit type</h3>
-    </div>
-
-    <table id="visitTypes" class='table'>
-      <tr *ngFor="let visitType of visitTypes">
-        <td>
-          {{visitType.display}}
-        </td>
-        <td>
-          {{visitType.description}}
-        </td>
-        <td>
-          <a id="startButton" class="" (click)="startVisit(visitType.uuid)">
-              <i class="glyphicon glyphicon-circle-arrow-right"></i> Start Visit
-            </a>
-        </td>
-      </tr>
-    </table>
-  </div>
-
-  <div *ngIf="visit">
-    <div class="visit-panel-heading">
-      <div class="locationdetails">
-        <visit-period [visitUuid]="visit.uuid" (editedLocation)="locationChanges($event)" [iseditLocation]="iseditLocation"></visit-period>
-      </div>
-
-
-    </div>
-    <div class="button-nav">
-      <div class="add-borders ">
-        <div class="btn-group blocks">
-          <a *ngIf="!iseditLocation" (click)="editLocation()">
-            <i class="glyphicon glyphicon-edit"></i> Edit Visit Location</a>
-
-          <a *ngIf="iseditLocation" class="cancel-edit" (click)="editLocation()">
-            <i class="glyphicon glyphicon-remove"></i> Cancel Edit
-          </a>
-
-          <a id="endVisitButton" (click)="endVisit()">
-            <i class="glyphicon glyphicon-check"></i> End Visit</a>
-
-          <a id="cancelVisitButton" (click)="cancelVisit()">
-            <i class="glyphicon glyphicon-remove"></i> Cancel Visit</a>
-
-        </div>
-
-
-      </div>
-
-    </div>
-    <div class="list-group-item">
-      <h4 class="component-title">Visit Encounters</h4>
-      <div class="visit-panel-body">
-        <encounter-list *ngIf="!visitWithNoEncounters" [encounters]="visit.encounters" (onEncounterSelected)="encounterSelected($event)"></encounter-list>
-        <div *ngIf="visitWithNoEncounters" class="alert">
-          Patient yet to see provider
+    <div class="row">
+       <h5>Search for Visit type or Form and its associated encounter types and visit types :</h5>
+      <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <div class="row">     
+                  <div class="form-group">
+                    <div class="col-md-3 col-lg-3 col-sm-3 col-xs-12">
+                      <label class="control-label">Select Main Filter</label>
+                      <select name="filter" class="form-control" [(ngModel)]="mainFilterType" (change)="selectMainFilter($event)">
+                          <option value="">Select Filter Type</option>
+                          <option value="visitType">Visit Type</option>
+                          <option value="form">Form</option>
+                      </select>
+                    </div> 
+                    <div class="col-md-3 col-lg-3 col-sm-3 col-xs-3">
+                      <label class="control-label" *ngIf="mainFilterType !== 'visitType' && mainFilterType !== 'form'">Second Filter</label>
+                      <label class="control-label" *ngIf="mainFilterType == 'visitType'">Select Visit Type</label>
+                      <label class="control-label" *ngIf="mainFilterType == 'form'">Select Form Type</label>
+                      <select name="secondaryFilter" class="form-control" [(ngModel)]="secondaryFilter" (change)="selectSecondaryFilter(secondaryFilter)">
+                          <option value="" selected>Select Filter Type </option>
+                          <option value="all">All</option>
+                          <option *ngFor="let secondFilter of secondFilters" [ngValue]="secondFilter">{{secondFilter.name}}</option>
+                      </select>
+                    </div>  
+                  </div>       
         </div>
       </div>
-    </div>
-    <span style="padding:10px;"></span>
-
-    <div class="list-group-item">
-      <div>
-        <form-list [excludedForms]="excludedForms" (onFormSelected)="formSelected($event)"></form-list>
+      <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+          <div class="row">
+             <br>
+              <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
+                <div class="row">
+                    <div class="chip col-md-2 col-lg-2 col-sm-4"  *ngFor="let filter of selectedFilterArray ;let i = index"  (click)="removeFilterItem(i)">
+                        {{filter.name}}
+                    </div>
+					          <div class="col-md-4 col-lg-4 col-sm-4" *ngIf="selectedFilterArray.length > 0">
+						            <button class="btn btn-danger" (click)="clearSelectedFilter()"><i class="fa fa-trash fa-fw"></i>Remove All</button>
+		               </div>
+                </div>
+              </div>
+          </div>
       </div>
+       <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+          <div class="row">
+              <div class="col-md-12">
+                <table class="table table-striped" *ngIf="showVisitResults && visitTypeResult.length > 0">
+                  <caption>List of visit types and encounter types that can  be filled for each visit type and condition for starting the visit type</caption>
+                   <thead>
+                     <tr>
+                       <th>Visit Type</th>
+                       <th>Program</th>
+                       <th>Encounter Type</th>
+                       <th>Condition</th>
+                     </tr>
+                   </thead>
+                   <tbody>
+                     <tr *ngFor="let visitResult of visitTypeResult">
+                        <td>{{visitResult.visitType}}</td>
+                        <td>{{visitResult.program}}</td>
+                        <td><span *ngFor="let encounterType of visitResult.encounterType; let i = index">{{i+1}}.{{encounterType.display}} </span></td>
+                        <td>{{visitResult.condition}}</td>
+                     </tr>
+                   </tbody>
+                </table>
+
+                <table class="table table-striped" *ngIf="showFormResults && formTypeResult.length > 0">
+                   <caption>List of Form types and the visit types that have the form as well as the condition for accessing the form</caption>
+                   <thead>
+                     <tr>
+                       <th>Form</th>
+                       <th>Visit Type</th>
+                       <th>Program</th>
+                       <th>Condition</th>
+                     </tr>
+                   </thead>
+                   <tbody>
+                      <tr *ngFor="let form of formTypeResult">
+                          <td>{{form.form}}</td>
+                          <td><span *ngFor="let formType of form.visitType; let i = index">{{i+1}}.{{formType}} </span></td>
+                          <td>{{form.program}}</td>
+                          <td>{{form.condition}}</td>
+                      </tr>
+                   </tbody>
+                </table>
+                 
+              </div>
+          </div>
+      </div>
+    </div>
+  <div class="row">
+    <div class="col-md-12 col-lg-12 col-sm-12">
+        <div class="list-group-item" *ngIf="!visit">
+          <div class="visit-label">
+            <h3>Select visit type</h3>
+          </div>
+
+          <table id="visitTypes" class='table'>
+            <tr *ngFor="let visitType of visitTypes">
+              <td>
+                {{visitType.display}}
+              </td>
+              <td>
+                {{visitType.description}}
+              </td>
+              <td>
+                <a id="startButton" class="" (click)="startVisit(visitType.uuid)">
+                    <i class="glyphicon glyphicon-circle-arrow-right"></i> Start Visit
+                  </a>
+              </td>
+            </tr>
+          </table>
+        </div>
+
+        <div *ngIf="visit">
+          <div class="visit-panel-heading">
+            <div class="locationdetails">
+              <visit-period [visitUuid]="visit.uuid" (editedLocation)="locationChanges($event)" [iseditLocation]="iseditLocation"></visit-period>
+            </div>
+
+
+          </div>
+          <div class="button-nav">
+            <div class="add-borders ">
+              <div class="btn-group blocks">
+                <a *ngIf="!iseditLocation" (click)="editLocation()">
+                  <i class="glyphicon glyphicon-edit"></i> Edit Visit Location</a>
+
+                <a *ngIf="iseditLocation" class="cancel-edit" (click)="editLocation()">
+                  <i class="glyphicon glyphicon-remove"></i> Cancel Edit
+                </a>
+
+                <a id="endVisitButton" (click)="endVisit()">
+                  <i class="glyphicon glyphicon-check"></i> End Visit</a>
+
+                <a id="cancelVisitButton" (click)="cancelVisit()">
+                  <i class="glyphicon glyphicon-remove"></i> Cancel Visit</a>
+
+              </div>
+
+
+            </div>
+
+          </div>
+          <div class="list-group-item">
+            <h4 class="component-title">Visit Encounters</h4>
+            <div class="visit-panel-body">
+              <encounter-list *ngIf="!visitWithNoEncounters" [encounters]="visit.encounters" (onEncounterSelected)="encounterSelected($event)"></encounter-list>
+              <div *ngIf="visitWithNoEncounters" class="alert">
+                Patient yet to see provider
+              </div>
+            </div>
+          </div>
+          <span style="padding:10px;"></span>
+
+          <div class="list-group-item">
+            <div>
+              <form-list [excludedForms]="excludedForms" (onFormSelected)="formSelected($event)"></form-list>
+            </div>
+          </div>
+        </div>
     </div>
   </div>
 </div>

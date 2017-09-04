@@ -30,18 +30,32 @@ export class VisitComponent implements OnInit, OnDestroy {
     public showDialog: boolean = false;
     public visitBusy: boolean;
     public iseditLocation: boolean = false;
-    constructor(private visitResourceService: VisitResourceService,
-                private userDefaultPropertiesService: UserDefaultPropertiesService,
-                private patientService: PatientService, private router: Router,
-                private appFeatureAnalytics: AppFeatureAnalytics,
-                private route: ActivatedRoute,
-                private encounterResourceService: EncounterResourceService) { }
+    public programVisitConfig: any[] = require('./program-visits-config.json');
+    public mainFilterType: string = '';
+    public visitTypeList: any = [];
+    public formList: any = [];
+    public encounterTypeList: any = [];
+    public secondFilters: any = [];
+    public selectedFilterArray: any = [];
+    public showVisitResults: boolean = false;
+    public showFormResults: boolean = false;
+    public visitTypeResult: any = [];
+    public formTypeResult: any = [];
+    constructor(
+        private visitResourceService: VisitResourceService,
+        private userDefaultPropertiesService: UserDefaultPropertiesService,
+        private patientService: PatientService, private router: Router,
+        private appFeatureAnalytics: AppFeatureAnalytics,
+        private route: ActivatedRoute,
+        private encounterResourceService: EncounterResourceService) { }
 
     public ngOnInit() {
         this.getPatient();
+        this.getSecondaryFilters();
         // app feature analytics
         this.appFeatureAnalytics
             .trackEvent('Patient Dashboard', 'Patient Visits Loaded', 'ngOnInit');
+        console.log('Program Visits Config', this.programVisitConfig);
     }
 
     public ngOnDestroy(): void {
@@ -61,12 +75,13 @@ export class VisitComponent implements OnInit, OnDestroy {
                 this.visitBusy = false;
                 if (visit) {
                     this.visit = visit;
+                    console.log('Visit', visit);
                     if (visit.encounters && visit.encounters.length > 0) {
                         this.visitWithNoEncounters = false;
                     }
                     this.excludedForms = visit.encounters.map((a) => {
-                            return a.encounterType.uuid;
-                });
+                        return a.encounterType.uuid;
+                    });
                 } else {
                     this.getVisitTypes();
                 }
@@ -99,16 +114,16 @@ export class VisitComponent implements OnInit, OnDestroy {
         this.loadingVisitTypes = true;
         this.visitResourceService.getVisitTypes({}).subscribe(
             (visitTypes) => {
-              // Hotfix: This will patch version 2.3.0 in readiness for the  release of 2.4.x
+                // Hotfix: This will patch version 2.3.0 in readiness for the  release of 2.4.x
                 this.visitTypes = [
-                  {
-                    uuid: '77b6e076-e866-46cf-9959-4a3703dba3fc',
-                    display: 'INITIAL HIV CLINIC VISIT'
-                  },
-                  {
-                    uuid: 'd4ac2aa5-2899-42fb-b08a-d40161815b48',
-                    display: 'RETURN HIV CLINIC VISIT'
-                  }
+                    {
+                        uuid: '77b6e076-e866-46cf-9959-4a3703dba3fc',
+                        display: 'INITIAL HIV CLINIC VISIT'
+                    },
+                    {
+                        uuid: 'd4ac2aa5-2899-42fb-b08a-d40161815b48',
+                        display: 'RETURN HIV CLINIC VISIT'
+                    }
                 ];
                 this.loadingVisitTypes = false;
             }
@@ -240,6 +255,75 @@ export class VisitComponent implements OnInit, OnDestroy {
         }
     }
 
+    public selectMainFilter($event) {
+        console.log($event);
+        let mainFilter = $event.target.value;
+
+        if (mainFilter === 'visitType') {
+            this.secondFilters = _.uniq(this.visitTypeList);
+            this.showVisitResults = true;
+            this.showFormResults = false;
+        } else if (mainFilter === 'form') {
+            this.secondFilters = _.uniq(this.formList);
+            this.showFormResults = true;
+            this.showVisitResults = false;
+        } else {
+            this.secondFilters = [];
+        }
+
+        this.selectedFilterArray = [];
+
+    }
+
+    public selectSecondaryFilter(secondaryFilter) {
+
+        console.log('Selected Secondary', secondaryFilter);
+
+        if ( secondaryFilter === 'all') {
+            /*  if one has selected all as the second filter
+                then load the selected filter array with all
+                the options
+            */
+            console.log('Select all in secondary filter');
+            let secondFilters = _.uniq(this.secondFilters);
+            this.selectedFilterArray = secondFilters;
+
+        }else {
+
+             let secondFilter = secondaryFilter;
+             console.log('Secondary filter', secondaryFilter);
+             this.selectedFilterArray.push(secondFilter);
+
+        }
+
+        this.getResultData();
+
+    }
+
+    public orderFilterByAlphabetAsc(filter) {
+
+         filter.sort((a: any, b: any) => {
+                if (a.name < b.name) {
+                    return -1;
+                } else if (a.name > b.name) {
+                    return 1;
+                } else {
+                    return 0;
+                }
+                });
+         return filter;
+
+    }
+
+    public removeFilterItem(i) {
+        this.selectedFilterArray.splice(i, 1);
+        this.getResultData();
+    }
+    public clearSelectedFilter() {
+        this.selectedFilterArray = [];
+        this.getResultData();
+    }
+
     private getLastVisit(visits: any[]) {
         let filtered = visits.filter((visit) => {
             let today = Moment().format('l');
@@ -286,4 +370,149 @@ export class VisitComponent implements OnInit, OnDestroy {
                 });
             });
     }
+
+    private getSecondaryFilters() {
+
+        let programVisitConfig = this.programVisitConfig;
+        let visitTrackArray = [];
+        let formTrackArray = [];
+
+        console.log('ProgramConf', programVisitConfig);
+
+        _.each(programVisitConfig, (program: any) => {
+            console.log('Program', program);
+            let visitTypes = program.visitTypes;
+
+            _.each(visitTypes, (visitType: any) => {
+
+                let encounterTypes = visitType.encounterTypes;
+                console.log('Visit Type', visitType);
+                if ( _.includes(visitTrackArray , visitType.uuid ) === false) {
+
+                    this.visitTypeList.push({
+                        'uuid': visitType.uuid,
+                        'name': visitType.name
+
+                    });
+
+                    visitTrackArray.push(visitType.uuid);
+
+                }
+                _.each(encounterTypes, (encounterType: any) => {
+                    console.log('Encounter Type', encounterType);
+
+                    console.log('Contains Similar visit Type ' ,
+                     _.includes(this.formList , encounterType.uuid));
+
+                    if (_.includes(formTrackArray, encounterType.uuid )  === false) {
+
+                        this.formList.push({
+                            'uuid': encounterType.uuid,
+                            'name': encounterType.display
+
+                        });
+
+                        formTrackArray.push(encounterType.uuid);
+
+                    }
+                });
+            });
+
+            this.orderFilterByAlphabetAsc(this.visitTypeList);
+            this.orderFilterByAlphabetAsc(this.formList);
+        });
+
+    }
+
+    private getResultData() {
+
+        let programsVisitConf = this.programVisitConfig;
+        let selectedFilterArray = this.selectedFilterArray;
+        this.visitTypeResult = [];
+        this.formTypeResult = [];
+        let formResult  = [];
+        let mainFilter = this.mainFilterType;
+        let formTrackArray = [];
+
+        _.each(selectedFilterArray, (filterItem: any) => {
+            let uuid = filterItem.uuid;
+            console.log('Filter Item', filterItem);
+            console.log('Filter Item Type', typeof filterItem);
+            _.each(programsVisitConf, (visitProgram: any) => {
+                let program = visitProgram.name;
+                let visitTypes = visitProgram.visitTypes;
+                _.each(visitTypes, (visitType: any) => {
+                    // console.log('Visit Type Name', visitType.name);
+                    // console.log('Visit Type', typeof visitType.name);
+                    let visitUuid = visitType.uuid;
+                    let visitTypeName = visitType.name;
+                    let allowedIf = visitType.allowedIf;
+                    let reason = visitType.reason;
+                    let encounterTypes = visitType.encounterTypes;
+                    if (mainFilter === 'visitType') {
+
+                        if (uuid === visitUuid) {
+                            console.log('Visit Type Matches');
+                            this.visitTypeResult.push({
+                                        'program': program,
+                                        'visitType': visitTypeName,
+                                        'encounterType': encounterTypes,
+                                        'condition': reason
+                                    });
+
+                        }
+
+                    }
+
+                    if (mainFilter === 'form') {
+
+                           console.log('Form selected');
+                           // loop through encounters
+                           _.each(encounterTypes, (encounterType: any) => {
+                                let encounterUuid = encounterType.uuid;
+                                let encounterName = encounterType.display;
+
+                                console.log('Form Result', formResult);
+
+                                if (_.includes(formTrackArray , encounterUuid) === false) {
+                                      console.log('Does not contain encounter uuid');
+                                      if (encounterUuid === uuid) {
+
+                                            this.formTypeResult.push({
+                                                'form': encounterName,
+                                                'formUuid': encounterUuid,
+                                                'program': program,
+                                                'visitType': [visitTypeName],
+                                                'condition': reason
+                                            });
+
+                                            formTrackArray.push(encounterUuid);
+
+                                      }
+
+                                 } else {
+
+                                     console.log('Contains encounter uuid');
+
+                                     _.each(this.formTypeResult, (form: any , index) => {
+                                             let formUuid = form.formUuid;
+                                             if (formUuid === uuid) {
+
+                                                   form.visitType.push(visitTypeName);
+
+                                             }
+                                     });
+
+                            }
+
+                           });
+
+                    }
+
+                });
+            });
+        });
+
+    }
+
 }
