@@ -12,7 +12,7 @@
         (visitStarted)="onVisitStartedOrChanged($event)"></app-visit-starter>
     </div>
   </div>
-
   <app-visit-details *ngIf="visit && patient" [visit]="visit" (encounterSelected)="onEncounterSelected($event)" [programVisitTypesConfig]="currentProgramConfig"
     (formSelected)="onFormSelected($event)" (visitCancelled)="onVisitStartedOrChanged($event)"></app-visit-details>
+  <form-visit-type-search></form-visit-type-search>
 </div>

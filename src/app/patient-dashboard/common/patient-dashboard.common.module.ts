@@ -121,6 +121,8 @@ import { PatientProgramService } from '../programs/patient-programs.service';
 import { BusyComponent } from '../../shared/busy-loader/busy.component';
 import { VisitDetailsComponent } from './visit/visit-details/visit-details.component';
 import { VisitStarterComponent } from './visit/visit-starter/visit-starter.component';
+import { FormVisitTypeSearchComponent
+ } from './../../form-visit-type-search/form-visit-type-search.component';
 
 @NgModule({
   imports: [
@@ -254,6 +256,7 @@ import { VisitStarterComponent } from './visit/visit-starter/visit-starter.compo
     VisitEncountersPipe,
     OrderByAlphabetPipe,
     OrderByEncounterTimeAscPipe,
+    FormVisitTypeSearchComponent,
     EncounterTypeFilter],
   providers: [
     PatientEncounterService,
