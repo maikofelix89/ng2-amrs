@@ -16,7 +16,7 @@ export class AppSettingsComponent implements OnInit {
   public urlModal: ModalComponent;
   public newUrl: string;
   public urlPlaceholder: string;
-  public  urlType: string;
+  public urlType: string;
   public serverTemplates: Array<object> = this.getServerTemplates();
 
   constructor(private router: Router,

@@ -48,6 +48,7 @@ export class HivSummaryLatestComponent implements OnInit {
       patientUuid, 0, 1, false)
       .subscribe((data) => {
         if (data) {
+          console.log('HIV Summary', data);
           this.hivSummary = data[0];
         }
         this.loadingHivSummary = false;

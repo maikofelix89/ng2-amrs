@@ -19,6 +19,7 @@ export class HivSummaryService {
     this.hivSummaryResourceService.getHivSummary(patientUuid,
       startIndex, this.limit, includeNonClinicalEncounter).subscribe((data) => {
         if (data) {
+            console.log('Hiv Summary', data);
           // tslint:disable-next-line:prefer-for-of
             for (let r = 0; r < data.length; r++) {
               let isPendingViralLoad = this.determineIfVlIsPending(data);
