@@ -1,4 +1,4 @@
-@import url(https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic);
+@import url('./SourceSansPro.css');
 /*!
  *   AdminLTE v2.3.6
  *   Author: Almsaeed Studio
@@ -23,6 +23,7 @@ body {
   -moz-osx-font-smoothing: grayscale;
   font-family: 'Source Sans Pro', 'Helvetica Neue', Helvetica, Arial, sans-serif;
   font-weight: 400;
+  font-size: 16px;
   overflow-x: hidden;
   overflow-y: auto;
 }
@@ -934,6 +935,7 @@ a:focus {
 /*Dropdowns in general*/
 .dropdown-menu {
   box-shadow: none;
+  font-size: 16px;
   border-color: #eee;
 }
 .dropdown-menu > li > a {

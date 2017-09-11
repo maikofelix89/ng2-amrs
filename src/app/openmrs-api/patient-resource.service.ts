@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { AppSettingsService } from '../app-settings/app-settings.service';
+import { AppSettingsService } from '../app-settings';
 import { Http, Response, Headers, URLSearchParams, RequestOptions } from '@angular/http';
 import { Observable, Subject } from 'rxjs/Rx';
 
@@ -9,7 +9,7 @@ import { Observable, Subject } from 'rxjs/Rx';
 export class PatientResourceService {
 
   public v: string = 'custom:(uuid,display,' +
-    'identifiers:(identifier,uuid,' +
+    'identifiers:(identifier,uuid,preferred,location:(uuid,name),' +
     'identifierType:(uuid,name,format,formatDescription,checkDigit,validator)),' +
     'person:(uuid,display,gender,birthdate,dead,age,deathDate,' +
     'causeOfDeath,preferredName:(uuid,preferred,givenName,middleName,familyName),'

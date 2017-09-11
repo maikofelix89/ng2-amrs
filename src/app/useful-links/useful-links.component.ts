@@ -27,9 +27,12 @@ export class UsefulLinksComponent implements OnInit {
     {
       url: 'https://wiki.ampath.or.ke/display/POC/POC+Release+Notes',
       title: 'POC Release Notes '
+    },
+    {
+      url: 'https://wiki.ampath.or.ke/display/POC/AMPATHPlus+Master+Facility+List+-+MFL',
+      title: 'MFL Wiki'
     }
   ];
-
   constructor(private linksService: UsefulLinksService) {
     this.nativeWindow = linksService.getNativeWindow();
   }
@@ -40,6 +43,10 @@ export class UsefulLinksComponent implements OnInit {
   public goToLink(link: string) {
     let newWindow = this.nativeWindow.open('/');
     newWindow.location.href = link;
+  }
+
+  public goBack() {
+    this.nativeWindow.history.back();
   }
 
   get externalLinks(): Array<any> {
