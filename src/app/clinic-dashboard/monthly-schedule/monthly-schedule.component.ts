@@ -44,11 +44,12 @@ const colors: any = {
 export class MonthlyScheduleComponent implements OnInit, OnDestroy {
   public viewDate: Date = new Date();
   public view = 'month';
-  public filter: any = {
+  public params = {
      'programType': '',
      'visitType': '',
      'encounterType': ''
   };
+  public filter: string = encodeURI(JSON.stringify(this.params));
   public events: CalendarEvent[] = [];
   public activeDayIsOpen: boolean = false;
   public location: string = '';
