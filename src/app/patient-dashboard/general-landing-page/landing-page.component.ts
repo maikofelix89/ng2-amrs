@@ -9,6 +9,7 @@ import { ProgramService } from '../programs/program.service';
 import { PatientService } from '../services/patient.service';
 import { Patient } from '../../models/patient.model';
 import { LocationResourceService } from '../../openmrs-api/location-resource.service';
+import { PatientProgramResourceService } from './../../etl-api/patient-program-resource.service';
 
 @Component({
   selector: 'landing-page',
@@ -36,17 +37,19 @@ export class GeneralLandingPageComponent implements OnInit, OnDestroy {
   public incompatibleCount: number = 0;
   public enrolledProgrames: any = [];
   public selectedLocation: string;
-  public programList: any[] = require('../programs/programs.json');
+  public programList: any[] ;
   private _datePipe: DatePipe;
   private subscription: Subscription;
 
   constructor(private patientService: PatientService,
               private programService: ProgramService,
-              private locationResourceService: LocationResourceService) {
+              private locationResourceService: LocationResourceService,
+              private _patientProgramResourceService: PatientProgramResourceService) {
     this._datePipe = new DatePipe('en-US');
   }
 
   public ngOnInit() {
+    this.getProgramsList();
     this.fetchLocations();
     this.loadProgramBatch();
   }
@@ -55,6 +58,18 @@ export class GeneralLandingPageComponent implements OnInit, OnDestroy {
     if (this.subscription) {
       this.subscription.unsubscribe();
     }
+  }
+
+  public getProgramsList() {
+
+  this._patientProgramResourceService.getAllProgramVisitConfigs()
+        .subscribe((response) => {
+              if (response) {
+                    this.programList = response;
+                    console.log(this.programList);
+              }
+        });
+
   }
 
   public loadProgramsPatientIsEnrolledIn(patientUuid: string) {
