@@ -59,7 +59,7 @@
                         <td>{{visitResult.visitType}}</td>
                         <td>{{visitResult.program}}</td>
                         <td><span *ngFor="let encounterType of visitResult.encounterType; let i = index">{{i+1}}.{{encounterType.display}} <br *ngIf="(i+1)%3==0"> </span></td>
-                        <td>{{visitResult.message}}</td>
+                        <td>{{visitResult.condition}}</td>
                      </tr>
                    </tbody>
                 </table>
