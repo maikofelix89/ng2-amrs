@@ -66,7 +66,7 @@ export class GeneralLandingPageComponent implements OnInit, OnDestroy {
         .subscribe((response) => {
               if (response) {
                     this.programList = response;
-                    console.log(this.programList);
+                    console.log('Program List', this.programList);
               }
         });
 
