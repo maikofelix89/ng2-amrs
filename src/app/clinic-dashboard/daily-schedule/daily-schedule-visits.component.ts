@@ -20,12 +20,12 @@ export class DailyScheduleVisitsComponent implements OnInit, OnDestroy {
   public currentTabLoaded: boolean = false;
   public selectedVisitTab: any;
   public nextStartIndex: number = 0;
-  public programVisitEncounterFilter: any = {
+  public filter: any = {
      'programType': [],
      'visitType': [],
      'encounterType': []
   };
-  public filterParam: any = [];
+  public encodedParams: string =  encodeURI(JSON.stringify(this.filter));
   @Input() public tab: any;
   @Input() public newList: any;
 
@@ -86,7 +86,7 @@ export class DailyScheduleVisitsComponent implements OnInit, OnDestroy {
       startDate: this.selectedDate,
       startIndex: this.nextStartIndex,
       locationUuids: this.selectedClinic,
-      programVisitEncounter: this.filterParam,
+      programVisitEncounter: this.encodedParams,
       limit: undefined
     };
 
@@ -141,7 +141,7 @@ export class DailyScheduleVisitsComponent implements OnInit, OnDestroy {
     private filterSelected() {
       let cookieKey = 'programVisitEncounterFilter';
 
-      let cookieVal =  encodeURI(JSON.stringify(this.programVisitEncounterFilter));
+      let cookieVal = encodeURI(JSON.stringify(this.encodedParams));
 
       let programVisitCookie = this._cookieService.get(cookieKey);
 
@@ -149,17 +149,19 @@ export class DailyScheduleVisitsComponent implements OnInit, OnDestroy {
 
       if (typeof programVisitCookie === 'undefined') {
 
-           this._cookieService.put(cookieKey, cookieVal);
+        this._cookieService.put(cookieKey, cookieVal);
 
       } else {
 
-         // this._cookieService.remove(cookieKey);
 
-         // this._cookieService.put(cookieKey, cookieVal);
+        cookieVal = this._cookieService.get(cookieKey);
+
+        // this._cookieService.put(cookieKey, cookieVal);
       }
 
-      this.filterParam = cookieVal;
+      console.log('Daily Visits Cookie val', cookieKey);
 
+      this.encodedParams = cookieVal;
   }
 
 }

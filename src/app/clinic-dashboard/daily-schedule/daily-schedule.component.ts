@@ -134,7 +134,7 @@ export class DailyScheduleComponent implements OnInit {
   public filterSelected($event) {
 
       let cookieKey = 'programVisitEncounterFilter';
-      let cookieVal = $event;
+      let cookieVal =  encodeURI(JSON.stringify($event));
 
       let programVisitCookie = this._cookieService.get(cookieKey);
 

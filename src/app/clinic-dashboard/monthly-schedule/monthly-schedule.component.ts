@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit , Input } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute, Params } from '@angular/router';
 import {
   CalendarEvent,
   CalendarEventAction,
@@ -45,10 +45,11 @@ export class MonthlyScheduleComponent implements OnInit, OnDestroy {
   public viewDate: Date = new Date();
   public view = 'month';
   public filter: any = {
-     'programType': '',
-     'visitType': '',
-     'encounterType': ''
+     'programType': [],
+     'visitType': [],
+     'encounterType': []
   };
+  public encodedParams: string = '';
   public events: CalendarEvent[] = [];
   public activeDayIsOpen: boolean = false;
   public location: string = '';
@@ -105,12 +106,21 @@ export class MonthlyScheduleComponent implements OnInit, OnDestroy {
     this.getAppointments();
   }
 
+  public convertFilterToUri() {
+
+  this.encodedParams = encodeURI(JSON.stringify(this.filter));
+
+  console.log('Encode Monthly Filter Params', this.encodedParams);
+
+}
+
   public getAppointments() {
+      this.convertFilterToUri();
       this.fetchError = false;
       this.busy = this.monthlyScheduleResourceService.getMonthlySchedule({
       endDate: Moment(endOfMonth(this.viewDate)).format('YYYY-MM-DD'),
       startDate: Moment(startOfMonth(this.viewDate)).format('YYYY-MM-DD'),
-      programVisitEncounter: this.filter,
+      programVisitEncounter: this.encodedParams,
       locationUuids: this.location, limit: 10000
     }).subscribe((results) => {
       this.events = this.processEvents(results);

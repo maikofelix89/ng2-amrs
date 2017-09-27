@@ -20,12 +20,12 @@ export class DailyScheduleNotReturnedComponent implements OnInit, OnDestroy {
   public dataLoaded: boolean = false;
   public nextStartIndex: number = 0;
   public selectedNotReturnedTab: any;
-  public programVisitEncounterFilter: any = {
+  public filter: any = {
      'programType': [],
      'visitType': [],
      'encounterType': []
   };
-  public filterParam: any = [];
+  public encodedParams: string =  encodeURI(JSON.stringify(this.filter));
   public extraColumns: any = {
     headerName: 'Phone Number',
     width: 80,
@@ -98,7 +98,7 @@ export class DailyScheduleNotReturnedComponent implements OnInit, OnDestroy {
       startDate: this.selectedDate,
       startIndex: this.nextStartIndex,
       locationUuids: this.selectedClinic,
-      programVisitEncounter: this.filterParam,
+      programVisitEncounter: this.encodedParams,
       limit: undefined
     };
 
@@ -141,9 +141,10 @@ export class DailyScheduleNotReturnedComponent implements OnInit, OnDestroy {
   }
 
     private filterSelected() {
+
       let cookieKey = 'programVisitEncounterFilter';
 
-      let cookieVal =  encodeURI(JSON.stringify(this.programVisitEncounterFilter));
+      let cookieVal =  encodeURI(JSON.stringify(this.encodedParams));
 
       let programVisitCookie = this._cookieService.get(cookieKey);
 
@@ -155,12 +156,15 @@ export class DailyScheduleNotReturnedComponent implements OnInit, OnDestroy {
 
       } else {
 
-         // this._cookieService.remove(cookieKey);
+
+         cookieVal =  this._cookieService.get(cookieKey);
 
          // this._cookieService.put(cookieKey, cookieVal);
       }
 
-      this.filterParam = cookieVal;
+      console.log('Daily Has not returned Cookie val', cookieKey);
+
+      this.encodedParams = cookieVal;
 
   }
 
