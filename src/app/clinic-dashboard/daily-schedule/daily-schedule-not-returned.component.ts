@@ -61,7 +61,7 @@ export class DailyScheduleNotReturnedComponent implements OnInit, OnDestroy {
                 this.selectedDate = date;
                 this.initParams();
                 let params = this.getQueryParams();
-                this.getDailyHasNotReturned(params);
+                // this.getDailyHasNotReturned(params);
               }
 
             });

@@ -58,7 +58,7 @@ export class DailyScheduleVisitsComponent implements OnInit, OnDestroy {
               this.selectedDate = date;
               this.initParams();
               let params = this.getQueryParams();
-              this.getDailyVisits(params);
+              // this.getDailyVisits(params);
             }
 
             });

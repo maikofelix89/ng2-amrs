@@ -57,7 +57,7 @@ export class DailyScheduleAppointmentsComponent implements OnInit, OnDestroy {
 
               this.initParams();
               let params = this.getQueryParams();
-              this.getDailyAppointments(params);
+              // this.getDailyAppointments(params);
             }
 
           });

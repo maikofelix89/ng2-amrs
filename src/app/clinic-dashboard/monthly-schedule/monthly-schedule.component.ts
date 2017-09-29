@@ -73,7 +73,7 @@ export class MonthlyScheduleComponent implements OnInit, OnDestroy {
     this.subscription = this.clinicDashboardCacheService.getCurrentClinic()
       .subscribe((location: string) => {
         this.location = location;
-        this.getAppointments();
+        // this.getAppointments();
       });
   }
 

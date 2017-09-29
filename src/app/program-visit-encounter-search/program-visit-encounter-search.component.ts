@@ -4,7 +4,9 @@ import {
   Output , EventEmitter, Input , ChangeDetectorRef }
   from '@angular/core';
 import * as _ from 'lodash';
-
+import { CookieService } from 'ngx-cookie';
+import { PatientProgramResourceService } from './../etl-api/patient-program-resource.service';
+import { LocalStorageService } from '../utils/local-storage.service';
 
 @Component({
   selector: 'program-visit-encounter-search',
@@ -18,7 +20,6 @@ export class ProgramVisitEncounterSearchComponent implements OnInit, OnDestroy ,
     public programs: Array <any> = [];
     public visitTypes: Array <any> = [];
     public encounterTypes: any = [];
-    public programConf: any[] = require('./program-visits-config.json');
     public departmentConf: any[] = require('./department-programs-config.json');
     public programDepartments: any = [];
     public programVisitsEncounters: any[];
@@ -37,10 +38,15 @@ export class ProgramVisitEncounterSearchComponent implements OnInit, OnDestroy ,
     public trackPrograms: any = [];
     public trackVisitTypes: any = [];
     public trackEncounterTypes: any = [];
+    public filterError: boolean = false;
 
     @Output() public filterSelected: EventEmitter<any> = new EventEmitter<any>();
 
-    constructor(private cd: ChangeDetectorRef) {
+    constructor(
+      private cd: ChangeDetectorRef,
+      private _cookieService: CookieService,
+      private _patientProgramService: PatientProgramResourceService,
+      private localStorageService: LocalStorageService) {
 
     }
 
@@ -65,10 +71,14 @@ export class ProgramVisitEncounterSearchComponent implements OnInit, OnDestroy ,
       this.cd.detectChanges();
     }
 
-
-
     public getProgramVisitsConfig() {
-        this.programVisitsEncounters = JSON.parse(JSON.stringify(this.programConf));
+       this._patientProgramService.getAllProgramVisitConfigs()
+        .subscribe((response) => {
+              if (response) {
+                    console.log('ProgramVisitsConfig ', response);
+                    this.programVisitsEncounters = JSON.parse(JSON.stringify(response));
+              }
+        });
     }
 
      // get all the programs
@@ -90,7 +100,6 @@ export class ProgramVisitEncounterSearchComponent implements OnInit, OnDestroy ,
         });
 
     }
-
 
     public getPrograms(departmentUuid) {
 
@@ -136,7 +145,6 @@ export class ProgramVisitEncounterSearchComponent implements OnInit, OnDestroy ,
 
       console.log('Get Visit Types', progUuid);
 
-
       let programs = this.programVisitsEncounters;
 
       _.each(programs, (program: any, index) => {
@@ -159,8 +167,6 @@ export class ProgramVisitEncounterSearchComponent implements OnInit, OnDestroy ,
                console.log('VisitType already selected');
              }
 
-
-
           });
 
           this.visitTypes = this.visits;
@@ -168,7 +174,6 @@ export class ProgramVisitEncounterSearchComponent implements OnInit, OnDestroy ,
         }
 
       });
-
 
       console.log('Visit Types', this.visitTypes);
 
@@ -205,7 +210,6 @@ export class ProgramVisitEncounterSearchComponent implements OnInit, OnDestroy ,
                }else {
                    console.log('Encounter Type already selected');
                 }
-
 
              });
 
@@ -253,12 +257,9 @@ export class ProgramVisitEncounterSearchComponent implements OnInit, OnDestroy ,
 
        // console.log('Program Uuid', programUuid);
 
-
-
        this.selectedProgramType = this.program;
 
        this.filterSet = false;
-
 
     }
 
@@ -279,12 +280,8 @@ export class ProgramVisitEncounterSearchComponent implements OnInit, OnDestroy ,
 
        let visitTypeUuid = visitType.value;
 
-
        this.selectedVisitType = this.visitType;
        this.filterSet = false;
-
-
-
 
     }
 
@@ -298,6 +295,15 @@ export class ProgramVisitEncounterSearchComponent implements OnInit, OnDestroy ,
         console.log('Program Change', $event);
         this.updateVisitTypes($event);
         this.filterSet = false;
+        this.selectedProgramType = $event;
+
+    }
+
+    public encounterTypeChange($event) {
+        console.log('EncounterType Change', $event);
+        // this.updateEncounterTypes($event);
+        this.selectedEncounterType = $event;
+        this.filterSet = false;
 
     }
 
@@ -308,7 +314,6 @@ export class ProgramVisitEncounterSearchComponent implements OnInit, OnDestroy ,
         _.each(departments, (department: any, index) => {
             this.getPrograms(department);
         });
-
 
     }
 
@@ -321,8 +326,9 @@ export class ProgramVisitEncounterSearchComponent implements OnInit, OnDestroy ,
     }
 
     public visitTypeChange($event) {
-          console.log('Event', $event);
+          console.log('Visit Type Change', $event);
           this.updateEncounterTypes($event);
+          this.selectedVisitType = this.visitType;
 
     }
 
@@ -342,7 +348,6 @@ export class ProgramVisitEncounterSearchComponent implements OnInit, OnDestroy ,
         this.department.push(department.value);
       });
 
-
     }
 
     public clearDepartments() {
@@ -358,7 +363,6 @@ export class ProgramVisitEncounterSearchComponent implements OnInit, OnDestroy ,
        this.filterSet = false;
 
     }
-
 
     public clearPrograms() {
 
@@ -390,18 +394,24 @@ export class ProgramVisitEncounterSearchComponent implements OnInit, OnDestroy ,
 
         // load all the programs to programs select module
 
+         console.log('Select all Programs');
+
          this.program = [];
 
          _.each(this.programs, ( program, index) => {
                 this.program.push(program.value);
          });
 
-         this.selectProgram = this.program;
+         this.selectedProgramType = this.program;
+
+         console.log('Selected Program Types', this.selectedProgramType);
 
     }
     public selectAllVisitTypes() {
 
         // load all the programs to programs select module
+
+         console.log('Select all Visit Types');
 
          this.visitType = [];
 
@@ -411,10 +421,12 @@ export class ProgramVisitEncounterSearchComponent implements OnInit, OnDestroy ,
 
          this.selectedVisitType = this.visitType;
 
+         console.log('Selected Visit Type', this.selectedVisitType);
+
     }
     public selectAllEncouterTypes() {
 
-         console.log('Select All Encounter Types', this.encounterTypes);
+         console.log('Select All Encounter Types');
 
          // load all the programs to programs select module
 
@@ -425,6 +437,8 @@ export class ProgramVisitEncounterSearchComponent implements OnInit, OnDestroy ,
          });
 
          this.selectedEncounterType = this.encounterType;
+
+         console.log('Selected Encounter Type', this.selectedEncounterType);
 
     }
 
@@ -437,7 +451,6 @@ export class ProgramVisitEncounterSearchComponent implements OnInit, OnDestroy ,
         'value': encounterType.name
       };
 
-
       this.filterKeys.push(filterKey);
 
       this.selectedEncounterType = this.encounterType;
@@ -445,28 +458,83 @@ export class ProgramVisitEncounterSearchComponent implements OnInit, OnDestroy ,
 
     }
 
-    public getMonthlyScheduleParameters() {
+    // load all the programs when it loads
 
-           let params = {
-              'programType': this.selectedProgramType,
-              'visitType': this.selectedVisitType,
-              'encounterType' : this.selectedEncounterType
-           };
+    public  allProgramsInitialLoad() {
 
-           console.log('Emit Params', params);
+
+       let params = {
+         'programType': [],
+         'visitType': [],
+         'encounterType': []
+       };
+
+       // load inital params
+
+       this.emitParams(params);
+
+    }
+
+    public emitParams(params) {
 
            let urlParams = encodeURI(JSON.stringify(params));
 
-           let decodedUrlParams = decodeURI(urlParams);
+           let cookieKey = 'programVisitEncounterFilter';
 
-           this.filterSelected.emit(urlParams);
+           let cookieVal =  urlParams;
+
+           let programVisitCookie = this._cookieService.get(cookieKey);
+
+           console.log('Cookie val', urlParams);
+
+           if (typeof programVisitCookie === 'undefined') {
+
+                console.log('Set Cookie val');
+
+
+           } else {
+
+             console.log('Change Cookie val');
+
+             this.localStorageService.remove('programVisitEncounterFilter');
+
+           }
+
+           this.localStorageService.setItem('programVisitEncounterFilter', cookieVal);
+
+           this._cookieService.put(cookieKey, 'true');
+
+           // let decodedUrlParams = decodeURI(urlParams);
+
+           this.filterSelected.emit(params);
+
+           console.log('Emit Params', params);
 
            this.filterSet = true;
 
-           console.log('Decoded Params', decodedUrlParams);
+           // console.log('Decoded Params', decodedUrlParams);
+
+    }
+
+
+
+    public getMonthlyScheduleParameters() {
+
+      console.log('Get Monthly Params');
+
+      let params = {
+        'programType': this.selectedProgramType,
+        'visitType': this.selectedVisitType,
+        'encounterType': this.selectedEncounterType
+      };
+
+      this.emitParams(params);
+
+
     }
 
     public resetFilter() {
+       this.department = [];
        this.program = [];
        this.visitType = [];
        this.visitTypes = [];
@@ -476,6 +544,30 @@ export class ProgramVisitEncounterSearchComponent implements OnInit, OnDestroy ,
        this.selectedEncounterType = [];
        this.selectedVisitType = [];
        this.filterSet = false;
+
+       let cookieKey = 'programVisitEncounterFilter';
+       let programVisitCookie = this._cookieService.get(cookieKey);
+
+       console.log('Cookie Val', typeof programVisitCookie);
+
+       if (typeof programVisitCookie === 'undefined') {
+
+
+       } else {
+
+         this._cookieService.remove(cookieKey);
+
+         this.localStorageService.remove(cookieKey);
+
+       }
+
+       let params = {
+         'programType': this.selectedProgramType,
+         'visitType': this.selectedVisitType,
+         'encounterType': this.selectedEncounterType
+       };
+
+       this.emitParams(params);
 
     }
 
