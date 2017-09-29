@@ -469,6 +469,8 @@ export class ProgramVisitEncounterSearchComponent implements OnInit, OnDestroy ,
          'encounterType': []
        };
 
+       // load inital params
+
        this.emitParams(params);
 
     }
