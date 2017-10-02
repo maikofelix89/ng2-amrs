@@ -3,12 +3,12 @@
         <form>
                 <div class="row">
                             <div class="col-md-6 col-lg-6 col-sm-12 col-xs-12">
-                                           <label class="control-label">Departments</label>
+                                           <label class="control-label">Department</label>
                                            <div class="input-group">
                                                 <span class="input-group-addon filter-add-on">
                                                     <i class="fa fa-filter fa-fw" aria-hidden="true"></i>
                                                 </span>
-                                                <ng-select #programSelect [multiple]="true" id="department-filter" (selected)="selectDepartment($event)"
+                                                <ng-select #departmentSelect [multiple]="true" id="department-filter" (selected)="selectDepartment($event)"
                                                             (ngModelChange)="departmentChange($event)"
                                                             [placeholder]="'Select or enter to search'"
                                                             [(ngModel)]="department" [options]="departments"
@@ -20,6 +20,7 @@
                                                 </span>
                                            </div>
                             </div>
+                            <div id="showOtherFilters" *ngIf="department.length > 0">
                              <div class="col-md-6 col-lg-6 col-sm-12 col-xs-12">
                                            <label class="control-label">Program</label>
                                            <div class="input-group">
@@ -45,7 +46,9 @@
                                                     <span class="input-group-addon filter-add-on">
                                                         <i class="fa fa-filter fa-fw" aria-hidden="true"></i>
                                                     </span>
-                                                    <ng-select [multiple]="true" id="visitType-filter" (selected)="selectVisitType($event)"
+                                                    <ng-select #visitTypeFilter 
+                                                                [multiple]="true" id="visitType-filter" 
+                                                                (selected)="selectVisitType($event)"
                                                                 (ngModelChange)="visitTypeChange($event)"
                                                                 [placeholder]="'Select or enter to search'"
                                                                 [(ngModel)]="visitType"
@@ -64,10 +67,12 @@
                                                  <span class="input-group-addon filter-add-on">
                                                     <i class="fa fa-filter fa-fw" aria-hidden="true"></i>
                                                 </span>
-                                                <ng-select [multiple]="true" id="encounterType-filter" (selected)="selectEncounterType(encounterType)"
-                                                           (ngModelChange)="encounterTypeChange($event)"
+                                                <ng-select  [multiple]="true" id="encounterType-filter" 
+                                                            (selected)="selectEncounterType(encounterType)"
+                                                            (ngModelChange)="encounterTypeChange($event)"
                                                             [placeholder]="'Select or enter to search'"
-                                                            [(ngModel)]="encounterType" [options]="encounterTypes"
+                                                            [(ngModel)]="encounterType" 
+                                                            [options]="encounterTypes"
                                                             name="encounterType-filter">
                                                 </ng-select>
                                                 <span class="input-group-addon">                        
@@ -76,6 +81,7 @@
                                                 </span>
                                     </div>
                           </div>
+                            </div>
 
             </div>
             <div class="row">

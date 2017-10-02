@@ -1,8 +1,10 @@
 import {
   Component,
   OnInit , OnDestroy , AfterViewInit,
-  Output , EventEmitter, Input , ChangeDetectorRef }
+  Output , EventEmitter, Input , ChangeDetectorRef,
+  ViewChild }
   from '@angular/core';
+import { SelectComponent, SelectItem } from 'ng2-select';
 import * as _ from 'lodash';
 import { CookieService } from 'ngx-cookie';
 import { PatientProgramResourceService } from './../etl-api/patient-program-resource.service';
@@ -39,8 +41,11 @@ export class ProgramVisitEncounterSearchComponent implements OnInit, OnDestroy ,
     public trackVisitTypes: any = [];
     public trackEncounterTypes: any = [];
     public filterError: boolean = false;
+    public activePrograms: any = [];
 
     @Output() public filterSelected: EventEmitter<any> = new EventEmitter<any>();
+
+    @ViewChild('visitTypeFilter') public visitTypeFilter: SelectComponent;
 
     constructor(
       private cd: ChangeDetectorRef,
@@ -108,6 +113,7 @@ export class ProgramVisitEncounterSearchComponent implements OnInit, OnDestroy ,
 
         let departments = this.programDepartments;
         let programs = this.programVisitsEncounters;
+        let programsArray = [];
 
         _.each(departments, (department: any, index) => {
           // console.log('Department', index);
@@ -124,12 +130,11 @@ export class ProgramVisitEncounterSearchComponent implements OnInit, OnDestroy ,
             };
 
             if (_.includes(this.trackPrograms, program.uuid ) === false) {
-                 console.log('');
+                 console.log('getProgram', program.uuid );
                  this.programs.push(specificProgram);
                  this.trackPrograms.push(program.uuid);
 
             }else {
-               // console.log('Program already selected');
             }
 
           });
@@ -138,45 +143,63 @@ export class ProgramVisitEncounterSearchComponent implements OnInit, OnDestroy ,
 
         });
 
+        setTimeout(() => {
+          this.loadProgramFromPrograms();
+        }, 500);
+
+
     }
+
+    // load program from programs
+
+    public loadProgramFromPrograms() {
+
+        this.program = [];
+
+         // console.log('Programs', this.programs);
+
+        _.each(this.programs, (program: any , index) => {
+              // console.log('sPEC Programs', program);
+              this.program.push(program.value);
+        });
+
+    }
+
+
 
     // get visitType Selected based on program selected
 
     public  getVisitTypes(progUuid) {
 
-      console.log('Get Visit Types', progUuid);
-
       let programs = this.programVisitsEncounters;
 
       _.each(programs, (program: any, index) => {
-        if (progUuid === index) {
+        if (progUuid === index ) {
 
           let visitTypes = program.visitTypes;
 
           _.each(visitTypes, (visitType: any) => {
 
-             let specificVisitType = {
-               'label': visitType.name,
-               'value': visitType.uuid
-             };
-             if (_.includes(this.trackVisitTypes, visitType.uuid) === false) {
-               console.log('');
-               this.visits.push(specificVisitType);
-               this.trackVisitTypes.push(visitType.uuid);
+            let specificVisitType = {
+              'label': visitType.name,
+              'value': visitType.uuid
+            };
+            if (_.includes(this.trackVisitTypes, visitType.uuid) === false) {
+              this.visits.push(specificVisitType);
+              this.trackVisitTypes.push(visitType.uuid);
 
-             } else {
-               console.log('VisitType already selected');
-             }
+            } else {
+            }
 
           });
 
-          this.visitTypes = this.visits;
-
+        } else {
         }
 
       });
 
-      console.log('Visit Types', this.visitTypes);
+      this.visitTypes = this.visits;
+
 
     }
 
@@ -204,12 +227,10 @@ export class ProgramVisitEncounterSearchComponent implements OnInit, OnDestroy ,
                };
 
                if (_.includes(this.trackEncounterTypes, encounterType.uuid ) === false) {
-                    console.log('Encounter Type is already there');
                     this.encounterTypes.push(specificEncounterType);
                     this.trackEncounterTypes.push(encounterType);
 
                }else {
-                   console.log('Encounter Type already selected');
                 }
 
              });
@@ -224,39 +245,36 @@ export class ProgramVisitEncounterSearchComponent implements OnInit, OnDestroy ,
 
     public selectDepartment(department) {
 
-        console.log('Department Selected', department);
-
         let departmentsSelected = this.department;
 
         this.programs = [];
         this.trackPrograms = [];
 
         _.each(departmentsSelected, (departmentSelected: any) => {
-           console.log('Department Selected', departmentSelected);
            this.getPrograms(departmentSelected);
         });
+
 
     }
 
     public selectProgram(program) {
 
-       // console.log('Program Selected', program);
 
-       // get list of programs selected
+       /*
+       when program is selected it uses its uuid
+       to get its associated visit types
+       */
 
        let programsSelected = this.program;
-
-       this.visits = [];
        this.trackVisitTypes = [];
+       this.visits = [];
 
        _.each(programsSelected, (programSelected: any) => {
-             console.log('Program Selected', programSelected);
              this.getVisitTypes(programSelected);
        });
 
-       // let programUuid = program.value;
 
-       // console.log('Program Uuid', programUuid);
+
 
        this.selectedProgramType = this.program;
 
@@ -266,8 +284,6 @@ export class ProgramVisitEncounterSearchComponent implements OnInit, OnDestroy ,
 
     public selectVisitType(visitType) {
 
-       console.log('Visit Type Selected', visitType);
-
        // get a list of visitTypes selected
 
        this.encounterTypes = [];
@@ -275,7 +291,6 @@ export class ProgramVisitEncounterSearchComponent implements OnInit, OnDestroy ,
        let selectedVisitTypes = this.visitType;
 
        _.each(selectedVisitTypes, (selectedVisit: any) => {
-             console.log('Visit Selected', selectedVisit);
              this.getEncounterTypes(selectedVisit);
        });
 
@@ -287,22 +302,25 @@ export class ProgramVisitEncounterSearchComponent implements OnInit, OnDestroy ,
     }
 
     public departmentChange($event) {
-       console.log('Department Change', $event);
        this.updatePrograms($event);
        this.filterSet = false;
     }
 
     public programChange($event) {
-        console.log('Program Change', $event);
         this.updateVisitTypes($event);
         this.filterSet = false;
         this.selectedProgramType = $event;
 
     }
 
+    public visitTypeChange($event) {
+          this.updateEncounterTypes($event);
+          this.selectedVisitType = this.visitType;
+
+    }
+
     public encounterTypeChange($event) {
-        console.log('EncounterType Change', $event);
-        // this.updateEncounterTypes($event);
+        this.updateEncounterTypes($event);
         this.selectedEncounterType = $event;
         this.filterSet = false;
 
@@ -321,17 +339,14 @@ export class ProgramVisitEncounterSearchComponent implements OnInit, OnDestroy ,
     public updateVisitTypes(programs) {
           this.visits = [];
           this.trackVisitTypes = [];
+
           _.each(programs, (program: any, index) => {
             this.getVisitTypes(program);
           });
-    }
-
-    public visitTypeChange($event) {
-          console.log('Visit Type Change', $event);
-          this.updateEncounterTypes($event);
-          this.selectedVisitType = this.visitType;
 
     }
+
+  
 
     public updateEncounterTypes(visitTypes) {
       this.encounterTypes = [];
@@ -393,10 +408,6 @@ export class ProgramVisitEncounterSearchComponent implements OnInit, OnDestroy ,
     }
     public selectAllPrograms() {
 
-        // load all the programs to programs select module
-
-         console.log('Select all Programs');
-
          this.program = [];
 
          _.each(this.programs, ( program, index) => {
@@ -405,14 +416,8 @@ export class ProgramVisitEncounterSearchComponent implements OnInit, OnDestroy ,
 
          this.selectedProgramType = this.program;
 
-         console.log('Selected Program Types', this.selectedProgramType);
-
     }
     public selectAllVisitTypes() {
-
-        // load all the programs to programs select module
-
-         console.log('Select all Visit Types');
 
          this.visitType = [];
 
@@ -422,14 +427,9 @@ export class ProgramVisitEncounterSearchComponent implements OnInit, OnDestroy ,
 
          this.selectedVisitType = this.visitType;
 
-         console.log('Selected Visit Type', this.selectedVisitType);
 
     }
     public selectAllEncouterTypes() {
-
-         console.log('Select All Encounter Types');
-
-         // load all the programs to programs select module
 
          this.encounterType = [];
 
@@ -439,7 +439,6 @@ export class ProgramVisitEncounterSearchComponent implements OnInit, OnDestroy ,
 
          this.selectedEncounterType = this.encounterType;
 
-         console.log('Selected Encounter Type', this.selectedEncounterType);
 
     }
 
@@ -485,15 +484,10 @@ export class ProgramVisitEncounterSearchComponent implements OnInit, OnDestroy ,
 
            let programVisitCookie = this._cookieService.get(cookieKey);
 
-           console.log('Cookie val', urlParams);
-
            if (typeof programVisitCookie === 'undefined') {
 
-                console.log('Set Cookie val');
 
            } else {
-
-             console.log('Change Cookie val');
 
              this._cookieService.remove(cookieKey);
 
@@ -505,21 +499,13 @@ export class ProgramVisitEncounterSearchComponent implements OnInit, OnDestroy ,
 
            this._cookieService.put(cookieKey, 'true');
 
-           // let decodedUrlParams = decodeURI(urlParams);
-
            this.filterSelected.emit(params);
 
-           console.log('Emit Params', params);
-
            this.filterSet = true;
-
-           // console.log('Decoded Params', decodedUrlParams);
 
     }
 
     public getMonthlyScheduleParameters() {
-
-      console.log('Get Monthly Params');
 
       let params = {
         'programType': this.selectedProgramType,
@@ -535,8 +521,6 @@ export class ProgramVisitEncounterSearchComponent implements OnInit, OnDestroy ,
 
        let cookieKey = 'programVisitEncounterFilter';
        let programVisitCookie = this._cookieService.get(cookieKey);
-
-       console.log('Clearing filter data..');
 
        if (typeof programVisitCookie === 'undefined') {
 
@@ -564,8 +548,6 @@ export class ProgramVisitEncounterSearchComponent implements OnInit, OnDestroy ,
 
        let cookieKey = 'programVisitEncounterFilter';
        let programVisitCookie = this._cookieService.get(cookieKey);
-
-       console.log('Cookie Val', typeof programVisitCookie);
 
        if (typeof programVisitCookie === 'undefined') {
 
