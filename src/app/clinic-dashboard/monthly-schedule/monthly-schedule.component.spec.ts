@@ -24,8 +24,9 @@ import {
   ProgramVisitEncounterSearchComponent
 } from './../../program-visit-encounter-search/program-visit-encounter-search.component';
 import { SelectModule } from 'angular2-select';
-import { CookieService, CookieModule } from 'ngx-cookie';
 import { PatientProgramResourceService } from './../../etl-api/patient-program-resource.service';
+import { AngularMultiSelectModule }
+from 'angular2-multiselect-dropdown/angular2-multiselect-dropdown';
 class DataStub {
 
   public getMonthlySchedule(payload): Observable<any> {
@@ -225,13 +226,12 @@ describe('MonthlyScheduleComponent', () => {
   let fixture: ComponentFixture<MonthlyScheduleComponent>;
   let comp: MonthlyScheduleComponent;
   let dataStub: MonthlyScheduleResourceService;
-  let cookieService: CookieService;
   let patientProgramResourceService: PatientProgramResourceService;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [BusyModule, CalendarModule.forRoot(),  SelectModule,
-       BrowserAnimationsModule, CacheModule,  CookieModule.forRoot(),
+       BrowserAnimationsModule, CacheModule, AngularMultiSelectModule ,
        FormsModule],
       declarations: [MonthlyScheduleComponent, ProgramVisitEncounterSearchComponent],
       providers: [
@@ -241,7 +241,6 @@ describe('MonthlyScheduleComponent', () => {
         AppSettingsService,
         LocalStorageService,
         DataCacheService,
-        CookieService,
         CacheService,
         {
           provide: Http, useFactory: (backend, options) => {
