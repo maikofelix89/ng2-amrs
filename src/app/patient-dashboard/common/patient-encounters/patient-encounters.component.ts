@@ -56,6 +56,7 @@ export class PatientEncountersComponent implements OnInit, OnDestroy {
       .getEncountersByPatientUuid(patientUuid)
       .subscribe(
         (data) => {
+          console.log('Encounters', data);
           this.encounters = data;
           this.isVisible = false;
           this.loadEncounterTypes(data);
