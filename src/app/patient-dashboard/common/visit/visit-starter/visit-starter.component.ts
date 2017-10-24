@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, style } from '@angular/core';
 import { UserDefaultPropertiesService } from
   '../../../../user-default-properties/index';
 import { PatientProgramResourceService } from
@@ -124,7 +124,18 @@ export class VisitStarterComponent implements OnInit {
       });
   }
 
-  public startVisit(visitTypeUuid) {
+  public startVisit(visitTypeUuid, $event) {
+
+    /*
+    check if btn is disabled and  if true then don't do anything
+    to avoid starting mutiple similar visit types
+    */
+    console.log('Start visit btn attr', $event.target.attributes);
+
+    if ($event.target.attributes.disabled &&
+     $event.target.attributes.disabled.value === 'true') {
+    }else {
+    $event.target.setAttribute('disabled', 'true');
     this.isBusy = true;
     this.error = '';
     let payload = {
@@ -145,6 +156,7 @@ export class VisitStarterComponent implements OnInit {
         console.error('Error starting visit', error);
       }
     );
+    }
   }
 
   public onLocationChanged(locations) {
