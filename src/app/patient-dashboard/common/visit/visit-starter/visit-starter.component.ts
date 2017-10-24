@@ -136,7 +136,7 @@ export class VisitStarterComponent implements OnInit {
      $event.target.attributes.disabled.value === 'true') {
     }else {
     $event.target.setAttribute('disabled', 'true');
-    this.isBusy = true;
+    // this.isBusy = true;
     this.error = '';
     let payload = {
       patient: this.patientUuid,
@@ -144,7 +144,7 @@ export class VisitStarterComponent implements OnInit {
       startDatetime: new Date(),
       visitType: visitTypeUuid
     };
-
+ /*
     this.visitResourceService.saveVisit(payload).subscribe(
       (savedVisit) => {
         this.isBusy = false;
@@ -156,6 +156,7 @@ export class VisitStarterComponent implements OnInit {
         console.error('Error starting visit', error);
       }
     );
+    */
     }
   }
 
