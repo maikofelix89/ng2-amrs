@@ -125,7 +125,7 @@
     "ng2-select": "^1.2.0",
     "ng2-slider-component": "^1.0.9",
     "ngx-cookie": "^1.0.0",
-    "ngx-file-uploader": "git+https://github.com/enyachoke/ngx-file-uploader.git#0.0.9",
+    "ngx-file-uploader": "git+https://github.com/maikofelix89/file-uploader.git",
     "ngx-mydatepicker": "^0.1.0",
     "ngx-toastr": "^4.1.1",
     "pdfjs-dist": "^1.7.308",
