@@ -1,6 +1,6 @@
 <p-dialog header="Add Relationship" responsive="true" [(visible)]="display" modal="true"
-          appendTo="body">
-    <div class="container-fluid">
+          appendTo="body" styleClass="add-relationship-dialog">
+    <div class="container-fluid" id="add-relationship-dialog-content">
        <app-patient-search (patientSelected)='relativeSelected($event)' [hideResults]="hideResult"></app-patient-search>
 	   <div class="row">
 		   

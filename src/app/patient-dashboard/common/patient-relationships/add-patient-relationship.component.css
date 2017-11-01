@@ -1,3 +1,31 @@
-.ui-dialog {
-  top: 52px !important;
+@media screen and (max-width: 600px) {
+
+  .add-relationship-dialog{
+    top:5px !important;
+   }
+  
+
+}
+
+@media screen and (min-width: 601px) {
+
+  .add-relationship-dialog{
+    top:130px !important;
+   }
+
+}
+
+ #add-relationship-dialog-content{
+         max-height: 700px;
+         overflow-y: scroll;
+}
+
+.edit-demographics-dialog{
+    top:185px !important;
+}
+.edit-contacts-dialog,.edit-address-dialog{
+   top:185px !important;
+}
+.edit-identifier-dialog{
+   top:185px !important;
 }
