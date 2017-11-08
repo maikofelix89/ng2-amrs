@@ -56,12 +56,16 @@ export class AppState {
 
   public resetTimer(e) {
 
-    let taskid = this.timeoutID.data.handleId;
+    // let taskid = this.timeoutID.data.handleId;
     // console.log('Resetting timer!', this.timeoutID, taskid);
+     window.clearTimeout(this.timeoutID);
+     this.goActive();
+     /*
     if (this.timeoutID.cancelFn) {
       clearTimeout(this.timeoutID);
     }
     this.goActive(true);
+    */
   }
 
   public goInactive() {

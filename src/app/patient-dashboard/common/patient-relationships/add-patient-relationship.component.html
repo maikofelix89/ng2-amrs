@@ -2,6 +2,7 @@
           appendTo="body" styleClass="add-relationship-dialog">
     <div class="container-fluid" id="add-relationship-dialog-content">
        <app-patient-search (patientSelected)='relativeSelected($event)' [hideResults]="hideResult"></app-patient-search>
+	   <div class="container-fluid">
 	   <div class="row">
 		   
 	<form>
@@ -30,6 +31,7 @@
 
 		</div>
 	</form>
+	   </div>
 	   </div>
     </div>
 
