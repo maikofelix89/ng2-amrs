@@ -32,6 +32,7 @@ import {
 import { ProgramsContainerComponent } from './programs/programs-container.component';
 import { ProgramTransferCareModule } from './programs/transfer-care/transfer-care.module';
 import { ProgramEnrollmentComponent } from './programs/program-enrollment.component';
+import { DepartmentProgramsConfigService } from '../etl-api/department-programs-config.service';
 
 @NgModule({
   imports: [
@@ -74,6 +75,7 @@ import { ProgramEnrollmentComponent } from './programs/program-enrollment.compon
     PatientProgramService,
     PatientPreviousEncounterService,
     ProgramService,
+    DepartmentProgramsConfigService,
     DatePipe,
     PatientRoutesFactory
   ],
