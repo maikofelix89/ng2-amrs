@@ -130,8 +130,6 @@ import { VisitDetailsComponent } from './visit/visit-details/visit-details.compo
 import { VisitStarterComponent } from './visit/visit-starter/visit-starter.component';
 import { TodayVisitService } from './visit/today-visit.service';
 import { TodayVisitsComponent } from './visit/today-visits/today-visits.component';
-import { FormVisitTypeSearchComponent } from
-  './form-visit-type-search/form-visit-type-search.component';
 import { VisitSummaryComponent } from './visit/visit-summary/visit-summary.component';
 import { UnenrollPatientProgramsComponent } from './programs/unenroll-patient-programs.component';
 import { ProgramTransferCareModule } from '../programs/transfer-care/transfer-care.module';
@@ -275,7 +273,6 @@ import { ProgramTransferCareModule } from '../programs/transfer-care/transfer-ca
     VisitEncountersPipe,
     OrderByAlphabetPipe,
     OrderByEncounterTimeAscPipe,
-    FormVisitTypeSearchComponent,
     EncounterTypeFilter],
   providers: [
     PatientEncounterService,
