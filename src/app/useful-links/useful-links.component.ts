@@ -54,10 +54,8 @@ export class UsefulLinksComponent implements OnInit {
 
     this._links.push({
       url: this.formVisitSearchUrl + '',
-      title: 'Form,Visit Type Search'
+      title: 'Information on Forms / Visit Type'
     });
-
-    console.log('formvisiturl', this.formVisitSearchUrl);
 
   }
 
