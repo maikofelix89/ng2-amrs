@@ -20,8 +20,10 @@ import { HivSummaryLatestComponent } from './hiv-summary/hiv-summary-latest.comp
 import { MedicationHistoryComponent } from './hiv-summary/medication-history.component';
 import { PatientMonthlyStatusComponent
 } from './patient-status-change/patient-monthly-status.component';
+import { PreviousVisitComponent } from './hiv-summary/previous-visit.component';
 import { HivLandingPageComponent } from './landing-page/landing-page.component';
 import { NgamrsSharedModule } from '../../shared/ngamrs-shared.module';
+import { FormEntryModule } from 'ng2-openmrs-formentry';
 
 @NgModule({
   imports: [
@@ -38,7 +40,9 @@ import { NgamrsSharedModule } from '../../shared/ngamrs-shared.module';
     NgamrsSharedModule,
     OpenmrsApi,
     TabViewModule,
-    GrowlModule, PanelModule
+    GrowlModule,
+    PanelModule,
+    FormEntryModule
   ],
   exports: [
     HivLandingPageComponent,
@@ -48,7 +52,9 @@ import { NgamrsSharedModule } from '../../shared/ngamrs-shared.module';
     HivSummaryHistoricalComponent,
     HivSummaryLatestComponent,
     MedicationHistoryComponent,
-    PatientMonthlyStatusComponent],
+    PatientMonthlyStatusComponent,
+    PreviousVisitComponent
+  ],
   declarations: [
     HivLandingPageComponent,
     HivPatientClinicalSummaryComponent,
@@ -57,7 +63,8 @@ import { NgamrsSharedModule } from '../../shared/ngamrs-shared.module';
     HivSummaryHistoricalComponent,
     HivSummaryLatestComponent,
     MedicationHistoryComponent,
-    PatientMonthlyStatusComponent
+    PatientMonthlyStatusComponent,
+    PreviousVisitComponent
   ],
   providers: [],
 })
