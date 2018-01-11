@@ -64,7 +64,8 @@ import { ProgramResourceService } from '../../../openmrs-api/program-resource.se
 import { FormentryReferralsHandlerService } from './formentry-referrals-handler.service';
 import { PatientReferralsModule } from '../patient-referrals/patient-referrals.module';
 import { ProgramsTransferCareService } from '../../programs/transfer-care/transfer-care.service';
-import {PatientProgramResourceService} from "../../../etl-api/patient-program-resource.service";
+import { PatientProgramResourceService }
+from '../../../etl-api/patient-program-resource.service';
 
 describe('Component: FormentryComponent', () => {
   let router = {
