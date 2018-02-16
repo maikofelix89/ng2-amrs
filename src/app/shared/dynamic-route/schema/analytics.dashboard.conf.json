@@ -25,6 +25,12 @@
       "label": "HIV Summary Monthly Indicators",
       "icon": "fa fa-file-pdf-o",
       "isSideBarOpen": false
+    },
+    {
+      "url": "data-entry-statistics",
+      "label": "Data Entry Statistics",
+      "icon": "fa fa-bar-chart",
+      "isSideBarOpen": false
     }
   ],
   "programs": []

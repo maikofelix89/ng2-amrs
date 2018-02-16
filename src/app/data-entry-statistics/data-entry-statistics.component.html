@@ -1,0 +1,35 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
+                <h4 class="component-title" style="color: green;"><span class="fa fa-bar-chart"></span>Data Entry Statistics</h4>
+        </div>
+    </div>
+    <div class="row">
+           
+                    <div class="col-md-6 col-lg-6 col-sm-12 col-xs-12">
+                            <label class="control-label">Select View</label>
+                              <angular2-multiselect
+                                          [data]="views" 
+                                          [(ngModel)]="view" 
+                                          [settings]="statsDropdownSettings" 
+                                          (onSelect)="selectView($event)" 
+                                          (onDeSelect)="viewDeselect($event)"
+                                          name="view-filter">
+                              </angular2-multiselect>
+                    </div>
+    </div>
+    <div class="row">
+            <div *ngIf="2==1" class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
+                <encounter-creator-filter></encounter-creator-filter>
+            </div>
+
+            <div *ngIf="2==1" class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
+                    <encounter-day-filter></encounter-day-filter>
+            </div>
+
+            <div *ngIf="2==2" class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
+                    <encounter-month-filter></encounter-month-filter>
+            </div>
+    </div>
+
+</div>

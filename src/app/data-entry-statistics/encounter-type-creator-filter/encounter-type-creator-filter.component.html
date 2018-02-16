@@ -1,0 +1,78 @@
+        <div class="row">
+            <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
+                    <h4>{{title}}</h4>
+            </div>
+        </div>
+        <div class="row">
+               
+                        <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
+                                <label class="control-label">Locations</label>
+                                  <angular2-multiselect
+                                              [data]="locations" 
+                                              [(ngModel)]="location" 
+                                              [settings]="locationDropdownSettings" 
+                                              (onSelect)="locationSelect($event)" 
+                                              (onDeSelect)="locationDeselect($event)"
+                                              name="location-filter">
+                                  </angular2-multiselect>
+                        </div>
+        </div>
+        <div class="row">
+                        <div class="col-md-6 col-lg-6 col-sm-12 col-xs-12">
+                                <label class="control-label">Start Date</label>
+                                
+                                <date-time-picker 
+                                        tabindex="0" 
+                                        [modelValue]="selectedStartDate" 
+                                        [id]="'selectedStartDate'" 
+                                        (onDateChange)="getSelectedStartDate($event)">
+                               </date-time-picker>
+                        </div>
+
+                        <div class="col-md-6 col-lg-6 col-sm-12 col-xs-12">
+                                        <label class="control-label">End Date</label>
+                                        
+                                        <date-time-picker 
+                                                tabindex="0" 
+                                                [modelValue]="selectedEndDate" 
+                                                [id]="'selectedEndDate'" 
+                                                (onDateChange)="getSelectedEndDate($event)">
+                                       </date-time-picker>
+                                </div>
+
+                        <div class="col-md-6 col-lg-6 col-sm-12 col-xs-12">
+                                        <label class="control-label">Creator</label>
+                                        <angular2-multiselect
+                                              [data]="creators" 
+                                              [(ngModel)]="creator" 
+                                              [settings]="creatorDropdownSettings" 
+                                              (onSelect)="creatorSelect($event)" 
+                                              (onDeSelect)="creatorDeselect($event)"
+                                              name="creator-filter">
+                                         </angular2-multiselect>
+                        </div>
+
+                        <div class="col-md-6 col-lg-6 col-sm-12 col-xs-12">
+                                        <label class="control-label">Encounter Type</label>
+                                        <angular2-multiselect
+                                              [data]="encounterType" 
+                                              [(ngModel)]="encounterTypes" 
+                                              [settings]="dropdownSettings" 
+                                              (onSelect)="encounterTypeSelect($event)" 
+                                              (onDeSelect)="encounterTypeDeselect($event)"
+                                              name="provider-filter">
+                                         </angular2-multiselect>
+                        </div>
+
+                        <div class="col-md-6 col-lg-6 col-sm-12 col-xs-12">
+                                        <label class="control-label">Form</label>
+                                        <angular2-multiselect
+                                              [data]="form" 
+                                              [(ngModel)]="forms" 
+                                              [settings]="dropdownSettings" 
+                                              (onSelect)="formSelect($event)" 
+                                              (onDeSelect)="formDeselect($event)"
+                                              name="provider-filter">
+                                         </angular2-multiselect>
+                        </div>
+        </div>
