@@ -37,6 +37,11 @@ export class GeneralLandingPageComponent implements OnInit, OnDestroy {
   public dateCompleted: string;
   public programIncompatible: boolean = false;
   public incompatibleMessage: any = [];
+  public genderIncompatibility: any = {
+    'value': false,
+    'message': ''
+
+  };
   public confirmationMesssage: string;
   public incompatibleCount: number = 0;
   public enrolledProgrames: any = [];
@@ -158,10 +163,12 @@ export class GeneralLandingPageComponent implements OnInit, OnDestroy {
 
       // check the compatibility of the program
        this.checkIncompatibility(programUuid);
+       this.checkgenderCompatibility(programUuid);
       }
       this.updateEnrollmentButtonState();
 
   }
+
   public fetchAllProgramVisitConfigs() {
     this.allProgramVisitConfigs = {};
     let sub = this.patientProgramResourceService.
@@ -192,7 +199,7 @@ export class GeneralLandingPageComponent implements OnInit, OnDestroy {
   }
   private updateEnrollmentButtonState() {
     this.enrollmentButtonActive = !_.isNil(this.selectedLocation) && !_.isNil(this.program) &&
-      !_.isNil(this.dateEnrolled);
+      !_.isNil(this.dateEnrolled) && !this.genderIncompatibility.value;
   }
   private loadProgramBatch(): void {
     this._resetVariables();
@@ -202,6 +209,7 @@ export class GeneralLandingPageComponent implements OnInit, OnDestroy {
         this.programsBusy = false;
         if (patient) {
           this.patient = patient;
+          console.log('Patient', this.patient);
          // this.availablePrograms = patient.enrolledPrograms;
           this.availablePrograms  =  _.filter( patient.enrolledPrograms,  (item) => {
               return item.program.uuid !== '781d8a88-1359-11df-a1f1-0026b9348838' &&
@@ -408,6 +416,39 @@ export class GeneralLandingPageComponent implements OnInit, OnDestroy {
       }else {
            this.programIncompatible = false;
       }
+
+  }
+
+  private checkgenderCompatibility(programUuid) {
+
+    /*
+    some programs such as Gyn oncology treatment program and Cervical
+    cancer screening program are female only programs
+    */
+
+    let person: any = this.patient;
+    let gender = person.person.gender;
+    let onlyFemalePrograms = ['43b42170-b3ce-4e03-9390-6bd78384ac06',
+    'cad71628-692c-4d8f-8dac-b2e20bece27f'];
+    if ( _.includes(onlyFemalePrograms, programUuid ) === true && gender !== 'F') {
+
+        this.genderIncompatibility = {
+          'value': true,
+          'message': 'Only females can be enrolled into the selected program'
+        };
+
+        // this.enrollmentButtonActive = true;
+
+     }else {
+
+       this.genderIncompatibility = {
+          'value': false,
+          'message': ''
+        };
+
+       // this.enrollmentButtonActive = false;
+
+     }
 
   }
 

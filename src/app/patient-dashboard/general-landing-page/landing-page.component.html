@@ -81,7 +81,7 @@
     </ng-container>
   </div>
   <div class="program non-enrolled">
-    <h4 class="component-title">Enroll Patient to Program {{programIncopatible}}</h4>
+    <h4 class="component-title">Enroll Patient to Program</h4>
     <div *ngIf="programIncompatible">
       <unenroll-patient-programs [enrollments]="incompatibleProgrames"
                                  [reason]="reasonForUnenroll"
@@ -91,6 +91,7 @@
     </div>
     <div class="program-body">
       <em class="text-danger" *ngIf="hasValidationErrors">{{currentError}}</em>
+      <em class="text-danger" *ngIf="genderIncompatibility.value">{{genderIncompatibility.message}}</em>
       <div class="container-fluid">
         <div class="row" style="padding:4px">
           <div class="col-md-4 cell">
@@ -120,6 +121,7 @@
           <div class="col-md-4 cell enroll-button">
             <label class="buttons"></label>
             <div class="buttons" style="width:100%">
+              Enrollment Active {{enrollmentButtonActive}}
               <button [disabled]="!enrollmentButtonActive" class="btn"
                       [ngClass]="{'btn-primary': !isFocused, 'btn-info': isFocused}"
                       (click)="enrollPatientToProgram()">
