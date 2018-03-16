@@ -50,6 +50,7 @@ import { DataListsModule } from '../shared/data-lists/data-lists.module';
 import { ClinicLabOrdersComponent } from './clinic-lab-orders/clinic-lab-orders.component';
 import { NgxMyDatePickerModule } from 'ngx-mydatepicker';
 import { DateTimePickerModule } from 'ng2-openmrs-formentry/dist/components/date-time-picker';
+import { Ng2PaginationModule } from 'ng2-pagination';
 
 import {
   HivCareIndicatorDefComponent
@@ -118,6 +119,12 @@ import { DataAnalyticsDashboardService
 import {
   ProgramVisitEncounterSearchModule
 } from '../program-visit-encounter-search/program-visit-encounter-search.module';
+import { PatientCreationComponent } from './patient-creation/patient-creation.component';
+import { PatientCreationService } from './patient-creation/patient-creation.service';
+import {
+  PatientCreationResourceService
+} from '../openmrs-api/patient-creation-resource.service';
+
 @NgModule({
   declarations: [
     /**
@@ -146,7 +153,8 @@ import {
     PatientStatusChangeListComponent,
     PatientStatusDatalistCellComponent,
     PatientStatusChangeVisualizationComponent,
-    PatientStatusChangeVisualizationContainerComponent
+    PatientStatusChangeVisualizationContainerComponent,
+    PatientCreationComponent
   ],
   imports: [
     CommonModule,
@@ -182,7 +190,8 @@ import {
     MdProgressBarModule,
     CacheModule,
     MdSlideToggleModule,
-    ProgramVisitEncounterSearchModule
+    ProgramVisitEncounterSearchModule,
+    Ng2PaginationModule
   ],
   providers: [
     ClinicDashboardCacheService,
@@ -202,7 +211,10 @@ import {
       provide: 'ClinicFlowResource',
       useExisting: HivClinicFlowResourceService
     },
-    DataAnalyticsDashboardService
+    DataAnalyticsDashboardService,
+    PatientCreationResourceService,
+    PatientCreationService
+
   ],
   entryComponents: [PatientStatusDatalistCellComponent]
 })
