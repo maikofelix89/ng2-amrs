@@ -101,17 +101,17 @@ const mockDepartmentConfig = {
 };
 
 const mockPatientList = [
-  { 
-    no: 1, 
-    name: 'Test Patient 1', 
-    identifier: '1321', 
+  {
+    no: 1,
+    name: 'Test Patient 1',
+    identifier: '1321',
     program: 'STANDARD HIV TREATMENT( Enrolled - 28-Feb-2018)', 
-    patient_uuid: 'f4788c37' 
+    patient_uuid: 'f4788c37'
   },
   {
-    no: 2, 
-    name: 'Test Patient 2', 
-    identifier: '1320', 
+    no: 2,
+    name: 'Test Patient 2',
+    identifier: '1320',
     program: 'HIV DIFFERENTIATED CARE PROGRAM( Enrolled - 01-Mar-2018)',
     patient_uuid: 'f4788c38'
   }
@@ -120,21 +120,21 @@ const mockPatientList = [
 
 const mockSummaryList = [
 {
-  dept : "HIV",
+  dept : 'HIV',
   enrolled : 1 ,
-  program : "STANDARD HIV TREATMENT",
-  programUuid : "uuid1"
+  program : 'STANDARD HIV TREATMENT',
+  programUuid : 'uuid1'
 },
 {
-  dept : "HIV",
+  dept : 'HIV',
   enrolled : 1 ,
-  program : "HIV DIFFERENTIATED CARE PROGRAM",
-  programUuid : "uuid2"
+  program : 'HIV DIFFERENTIATED CARE PROGRAM',
+  programUuid : 'uuid2'
 }
 
 ];
 
-fdescribe('Component: Patient Program Enrollment', () => {
+describe('Component: Patient Program Enrollment', () => {
   let fixture: ComponentFixture<PatientsProgramEnrollmentComponent>;
   let patientProgramEnrollmentService: PatientProgramEnrollmentService;
   let localStorageService: LocalStorageService;
@@ -145,7 +145,6 @@ fdescribe('Component: Patient Program Enrollment', () => {
   let cd: ChangeDetectorRef;
   let storage: Storage;
   let comp: any;
-
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -204,11 +203,11 @@ fdescribe('Component: Patient Program Enrollment', () => {
       });
   }));
 
-  fit('should create an instance', () => {
+  it('should create an instance', () => {
       expect(comp).toBeTruthy();
   });
 
-  fit('should generate patient list and summary list from enrolled list response', () => {
+  it('should generate patient list and summary list from enrolled list response', () => {
     comp.departmentProgConfig = mockDepartmentConfig;
     comp.processEnrollments(mockActiveEnrollmentsResult);
     cd.detectChanges();

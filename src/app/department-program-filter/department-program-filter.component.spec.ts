@@ -1,4 +1,3 @@
-/*
 import { TestBed, async, fakeAsync, ComponentFixture } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 import { PatientProgramResourceService } from './../etl-api/patient-program-resource.service';
@@ -16,16 +15,23 @@ import { Http, Response, Headers, BaseRequestOptions, ResponseOptions } from '@a
 import { AppFeatureAnalytics } from './../shared/app-analytics/app-feature-analytics.service';
 import { FakeAppFeatureAnalytics } from './../shared/app-analytics/app-feature-analytcis.mock';
 import { DateTimePickerModule } from 'ng2-openmrs-formentry/dist/components/date-time-picker';
+import { UserService } from './../openmrs-api/user.service';
+import { ChangeDetectorRef } from '@angular/core';
+import { DataCacheService } from '../shared/services/data-cache.service';
+import { CacheService } from 'ionic-cache';
+import { IonicStorageModule } from '@ionic/storage';
+import { SessionStorageService } from './../utils/session-storage.service';
 
 fdescribe('Component : DepartmentProgramFilter', () => {
-    let fixture: ComponentFixture<DepartmentProgramsConfigService>;
-    let comp: DepartmentProgramsConfigService;
+    let fixture: ComponentFixture<DepartmentProgramFilterComponent>;
+    let comp: DepartmentProgramFilterComponent;
     let patientProgramService: PatientProgramResourceService;
     let localStorageService: LocalStorageService;
     let departmentProgramService: DepartmentProgramsConfigService;
     let userDefaultService: UserDefaultPropertiesService;
     let locationResourceService: LocationResourceService;
     let storage: Storage;
+    let cd: ChangeDetectorRef;
 
     beforeEach(async(() => {
 
@@ -34,7 +40,8 @@ fdescribe('Component : DepartmentProgramFilter', () => {
         [
          AngularMultiSelectModule,
          FormsModule,
-         DateTimePickerModule
+         DateTimePickerModule,
+         IonicStorageModule.forRoot(),
         ],
         declarations: [
             DepartmentProgramFilterComponent
@@ -46,7 +53,11 @@ fdescribe('Component : DepartmentProgramFilter', () => {
           LocalStorageService,
           DepartmentProgramsConfigService,
           UserDefaultPropertiesService,
-          LocationResourceService
+          LocationResourceService,
+          SessionStorageService,
+          CacheService,
+          DataCacheService,
+          UserService,
           Storage,
           {
             provide: Http,
@@ -81,4 +92,3 @@ fdescribe('Component : DepartmentProgramFilter', () => {
     });
 
 });
-*/
