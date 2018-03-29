@@ -123,7 +123,7 @@ const visitTypes = [
 
 ];
 
-describe('Component: ProgramVisitEncounterSearch', () => {
+fdescribe('Component: ProgramVisitEncounterSearch', () => {
   let fixture: ComponentFixture<ProgramVisitEncounterSearchComponent>;
   let comp: ProgramVisitEncounterSearchComponent;
   let patientProgramService: PatientProgramResourceService;
@@ -190,10 +190,10 @@ describe('Component: ProgramVisitEncounterSearch', () => {
   }));
 
 
-  it('should create an instance', () => {
+  fit('should create an instance', () => {
       expect(comp).toBeTruthy();
   });
-  it('should load departments from departments config', () => {
+  fit('should load departments from departments config', () => {
     comp.programDepartments = departmentConfig;
     comp.getAllDepartments();
     let departments = comp.departments;
@@ -201,7 +201,7 @@ describe('Component: ProgramVisitEncounterSearch', () => {
     expect(departments).toEqual(mockDepartmentsFilter);
   });
 
-  it('should load programs on selecting departments config', () => {
+  fit('should load programs on selecting departments config', () => {
 
     comp.department = departmentSelected;
     comp.departments = mockDepartmentsFilter;
