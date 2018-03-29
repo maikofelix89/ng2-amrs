@@ -24,6 +24,10 @@ import { DataAnalyticsDashboardComponent } from '../data-analytics.component';
 import {
   HivSummaryMonthlyIndicatorsComponent
 } from './hiv-summary-monthly-indicators/hiv-summary-monthly-indicators';
+import { PatientsProgramEnrollmentComponent } from
+'../../patients-program-enrollment/patients-program-enrollment.component';
+import { PatientProgramEnrollmentModule } from
+'../../patients-program-enrollment/patients-program-enrollment.module';
 
 @NgModule({
   imports: [
@@ -38,7 +42,8 @@ import {
     MdTabsModule,
     MdProgressSpinnerModule,
     MdProgressBarModule,
-     MdSlideToggleModule
+    MdSlideToggleModule,
+    PatientProgramEnrollmentModule
   ],
   exports: [
     DataAnalyticsDashboardComponent,

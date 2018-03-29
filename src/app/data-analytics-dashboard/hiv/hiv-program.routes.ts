@@ -26,6 +26,8 @@ import {
 import {
   HivMonthlySummaryIndicatorsPatientListComponent
 } from '../../hiv-care-lib/hiv-monthly-summary-indicators/patient-list.component';
+import { PatientsProgramEnrollmentComponent } from
+'../../patients-program-enrollment/patients-program-enrollment.component';
 
 const routes: Routes = [
   {
@@ -45,6 +47,9 @@ const routes: Routes = [
           },
           {
             path: 'clinic-flow', component: AdminDashboardClinicFlowComponent
+          },
+          {
+            path: 'program-enrollment', component: PatientsProgramEnrollmentComponent
           },
           {
             path: 'hiv-comparative-chart-analytics',

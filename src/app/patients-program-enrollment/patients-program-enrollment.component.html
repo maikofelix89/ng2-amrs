@@ -1,0 +1,71 @@
+<div class="container-fluid">
+        <div class="loader" *ngIf="busyIndicator.busy"><span><i class="fa fa-spinner fa-spin">
+           </i>{{busyIndicator.message}}</span>
+        </div>
+    <div class="row">
+                <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
+                        <h4 class="component-title" style="color: green;"><span class="fa fa fa-list-alt"></span> {{title}}</h4>
+                </div>
+    </div>
+    <div class="row">
+           
+        <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
+            <department-program-filter (filterSelected)="selectedFilter($event)"></department-program-filter>
+        </div>
+    </div>
+    <hr class="intro-divider" />
+    <div class="row">
+            <div class="col-md-12 col-lg-12 col-xs-12 col-sm-12">
+                    <h4 align="center" class="section-title">Active Enrolled Summary List</h4>
+                      <div class="row">
+                        <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
+                                  <a (click)="collapseExpandSummary()" class="btn btn-primary list-collapse pull-right"><span *ngIf="showSummary" class="glyphicon glyphicon-chevron-down" ></span><span *ngIf="!showSummary" class="glyphicon glyphicon-chevron-left" ></span></a>
+                        </div>
+                      </div>
+            </div>
+             <div class="col-md-12 col-lg-12 col-xs-12 col-sm-12" *ngIf="showSummary">
+                    <hr class="intro-divider" width="40%"/>
+                    <ag-grid-angular  
+                        style="width: 100%; height: 300px;" 
+                        class="ag-blue"
+                        #agSummaryGrid
+                        [enableSorting]="true"
+                        [rowData]="enrolledSummaryList"
+                        [columnDefs]="enrollmentSummaryColdef"
+                        [gridOptions]="summaryGridOptions"
+                        >
+                    </ag-grid-angular>
+            </div>
+
+    </div>
+    <div class="row">
+            <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
+                <h4 align="center" class="section-title">Patients Enrolled <span *ngIf="startDate!=''"> as of {{startDate | date:'dd-MMMM-yyyy' }} to {{ endDate | date:'dd-MMMM-yyyy'}} </span></h4>
+                <div class="row">
+                        <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
+                                  <a (click)="collapseExpandPatientList()" class="btn btn-primary list-collapse pull-right"><span *ngIf="showPatientList" class="glyphicon glyphicon-chevron-down" ></span><span *ngIf="!showPatientList" class="glyphicon glyphicon-chevron-left" ></span></a>
+                        </div>
+                </div>
+                <hr class="intro-divider" width="40%"/>
+            </div>
+             <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12" *ngIf="showPatientList">
+                    <ag-grid-angular  
+                       style="width: 100%; height: 500px" 
+                       class="ag-blue"
+                       #agPatientGrid
+                       [enableSorting]="true"
+                       [rowData]="patientsEnrolledList"
+                       [columnDefs]="enrollmentColdef"
+                       [pagination]="true"
+                       [gridOptions]="gridOptions"
+                       >
+                    </ag-grid-angular>
+                     <button class="btn btn-info pull-right" *ngIf="patientsEnrolledList.length > 0" (click)="exportPatientListToCsv()" style="color: #fff;">
+                        <i class="inline fa fa-file-excel-o"></i>
+                        <span>Export</span>
+                      </button>
+
+            </div>
+</div>
+
+</div>

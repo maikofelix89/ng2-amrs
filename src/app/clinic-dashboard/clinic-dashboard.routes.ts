@@ -36,6 +36,8 @@ import {
 } from '../hiv-care-lib/clinic-flow/clinic-flow-provider-stats.component';
 import { DailyScheduleClinicFlowComponent
 } from './hiv/clinic-flow/daily-schedule-clinic-flow.component';
+import { PatientsProgramEnrollmentComponent } from
+'../patients-program-enrollment/patients-program-enrollment.component';
 
 export const routes = [
   {
@@ -73,6 +75,7 @@ export const routes = [
 
           },
           { path: 'monthly-schedule', component: MonthlyScheduleComponent },
+          { path: 'program-enrollment', component: PatientsProgramEnrollmentComponent },
           {
             path: 'visualization',
             children: [

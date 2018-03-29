@@ -25,6 +25,12 @@
       "label": "HIV Summary Monthly Indicators",
       "icon": "fa fa-file-pdf-o",
       "isSideBarOpen": false
+    },
+    {
+      "url": "program-enrollment",
+      "label": "Program Enrollment",
+      "icon": "fa fa-list-alt",
+      "isSideBarOpen": false
     }
   ],
   "programs": []
