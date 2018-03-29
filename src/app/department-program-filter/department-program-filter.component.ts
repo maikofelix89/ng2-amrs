@@ -308,7 +308,7 @@ export class DepartmentProgramFilterComponent implements OnInit, OnDestroy, Afte
         });
 
       }else if (this.department.length > 0 && this.program.length > 0) {
-          // only department is selected
+          // department and program selected
         _.each(this.program, (program: any) => {
           programType.push(program);
           programUuids.push(program.id);

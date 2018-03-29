@@ -22,6 +22,60 @@ import { CacheService } from 'ionic-cache';
 import { IonicStorageModule } from '@ionic/storage';
 import { SessionStorageService } from './../utils/session-storage.service';
 
+const programsSelected = [
+  {
+     'id': '1',
+     'itemName': 'TEST PROGRAM'
+  }
+];
+
+const mocklocationSelected = [{
+   'id': '1',
+   'itemName': 'Test-location'
+}];
+
+const mockDepartmentSelected = [
+  {
+    'id': '1',
+    'itemName': 'TEST Department'
+ }
+
+];
+const mockDepartments = [
+  {
+    'id': '1',
+    'itemName': 'TEST Department'
+ },
+ {
+  'id': '2',
+  'itemName': 'TEST Department 2'
+}
+
+];
+const mockPrograms = [
+  {
+    'id': '1',
+    'itemName': 'TEST PROGRAM'
+  },
+  {
+    'id': '2',
+    'itemName': 'TEST PROGRAM'
+  }
+
+];
+
+const params = {
+    'startDate': '2018-03-01',
+    'endDate': '2018-03-31',
+    'locationUuid': 1,
+    'programType':  1,
+    'department': mockDepartmentSelected
+
+};
+
+let selectedStartDate = '2018-03-01';
+let selectedEndDate = '2018-03-31';
+
 fdescribe('Component : DepartmentProgramFilter', () => {
     let fixture: ComponentFixture<DepartmentProgramFilterComponent>;
     let comp: DepartmentProgramFilterComponent;
@@ -89,6 +143,18 @@ fdescribe('Component : DepartmentProgramFilter', () => {
 
     fit('should create an instance', () => {
       expect(comp).toBeTruthy();
+    });
+
+    fit('should set params and emit params on set filter', () => {
+        comp.location = mocklocationSelected;
+        comp.selectedStartDate = selectedStartDate;
+        comp.selectedEndDate = selectedEndDate;
+        comp.department = mockDepartmentSelected;
+        comp.program = programsSelected;
+        comp.location = mocklocationSelected;
+
+        // expect(comp.params).toEqual();
+        comp.setFilter();
     });
 
 });
