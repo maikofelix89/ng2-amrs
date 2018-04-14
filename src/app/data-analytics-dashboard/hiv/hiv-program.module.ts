@@ -24,7 +24,8 @@ import { DataAnalyticsDashboardComponent } from '../data-analytics.component';
 import {
   HivSummaryMonthlyIndicatorsComponent
 } from './hiv-summary-monthly-indicators/hiv-summary-monthly-indicators';
-
+import { DataEntryStatisticsModule } from
+'./../../data-entry-statistics/data-entry-statistics.module';
 @NgModule({
   imports: [
     dataAnalyticsDashboardHivRouting,
@@ -36,6 +37,7 @@ import {
     FormsModule,
     RouterModule,
     MdTabsModule,
+    DataEntryStatisticsModule,
     MdProgressSpinnerModule,
     MdProgressBarModule,
      MdSlideToggleModule
