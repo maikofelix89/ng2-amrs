@@ -53,6 +53,7 @@ export class MonthlyScheduleComponent implements OnInit, OnDestroy {
      'encounterType': []
   };
   public encodedParams: string =  encodeURI(JSON.stringify(this.filter));
+  public params: any  = [];
   public events: CalendarEvent[] = [];
   public activeDayIsOpen: boolean = false;
   public location: string = '';
@@ -62,6 +63,10 @@ export class MonthlyScheduleComponent implements OnInit, OnDestroy {
   public encounterTypes: any [];
   public trackEncounterTypes: any = [];
   public department: string = 'hiv';
+  public busyIndicator: any = {
+    busy: false,
+    message: ''
+  };
   private subscription: Subscription = new Subscription();
 
   constructor(private monthlyScheduleResourceService: MonthlyScheduleResourceService,
@@ -94,7 +99,9 @@ export class MonthlyScheduleComponent implements OnInit, OnDestroy {
 
   public filterSelected($event) {
          this.filter = $event;
-         this.encodedParams = encodeURI(JSON.stringify($event));
+         this.params = $event;
+         console.log('Monthly filter selected', $event);
+         // this.encodedParams = encodeURI(JSON.stringify($event));
          this.getAppointments();
   }
 
@@ -120,7 +127,9 @@ export class MonthlyScheduleComponent implements OnInit, OnDestroy {
       this.busy = this.monthlyScheduleResourceService.getMonthlySchedule({
       endDate: Moment(endOfMonth(this.viewDate)).format('YYYY-MM-DD'),
       startDate: Moment(startOfMonth(this.viewDate)).format('YYYY-MM-DD'),
-      programVisitEncounter: this.encodedParams,
+      programType: this.params.programType,
+      visitType: this.params.encounterType,
+      encounterType: this.params.encounterType,
       locationUuids: this.location, limit: 10000
     }).subscribe((results) => {
       this.events = this.processEvents(results);

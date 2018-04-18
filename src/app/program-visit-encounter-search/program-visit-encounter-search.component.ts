@@ -28,6 +28,7 @@ export class ProgramVisitEncounterSearchComponent implements OnInit, OnDestroy ,
     public selectedEncounterType: any = [];
     public selectedProgramType: any = [];
     public selectedVisitType: any  = [];
+    public selectedDepartment: any = [];
     public params: any = [];
     public filterKeys: any = [];
     public program: any = [];
@@ -652,10 +653,9 @@ public loadSavedFilterItems() {
       let params = {
         'programType': this.selectedProgramType,
         'visitType': this.selectedVisitType,
-        'encounterType': this.selectedEncounterType
+        'encounterType': this.selectedEncounterType,
+        'department': this.selectedDepartment
       };
-
-      let encodedParams = encodeURI(JSON.stringify(params));
 
       this.emitParams(params);
 
@@ -663,9 +663,7 @@ public loadSavedFilterItems() {
 
       const currentParams = this.route.snapshot.queryParams;
       let navigationData = {
-        queryParams: {
-          filter: encodedParams
-        },
+        queryParams: params,
         replaceUrl: true
       };
 
@@ -853,6 +851,7 @@ public loadSavedFilterItems() {
       let visitTypeArray = [];
       let selectedEncounterType = this.encounterType;
       let encounterTypeArray = [];
+      let departmentArray = [];
 
       // strip property names and remain with array of uuids
 
@@ -868,9 +867,15 @@ public loadSavedFilterItems() {
            encounterTypeArray.push(encounterType.id);
       });
 
+      _.each(this.department, (department: any) => {
+        departmentArray.push(department.id);
+      });
+
+
       this.selectedProgramType = programArray;
       this.selectedVisitType = visitTypeArray;
       this.selectedEncounterType = encounterTypeArray;
+      this.selectedDepartment = departmentArray;
 
     }
 
