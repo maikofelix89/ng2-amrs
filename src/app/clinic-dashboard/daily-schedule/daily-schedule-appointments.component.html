@@ -1,4 +1,5 @@
 <div class="daily-schedule">
+   <div [ngBusy]="appointmentSubscription"></div>
     <patient-list [data]="dailyAppointmentsPatientList">
     </patient-list>
     <div *ngFor="let error of errors" class="alert alert-danger alert-dismissible">

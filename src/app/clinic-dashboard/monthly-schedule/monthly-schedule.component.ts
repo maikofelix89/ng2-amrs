@@ -128,7 +128,7 @@ export class MonthlyScheduleComponent implements OnInit, OnDestroy {
       endDate: Moment(endOfMonth(this.viewDate)).format('YYYY-MM-DD'),
       startDate: Moment(startOfMonth(this.viewDate)).format('YYYY-MM-DD'),
       programType: this.params.programType,
-      visitType: this.params.encounterType,
+      visitType: this.params.visitType,
       encounterType: this.params.encounterType,
       locationUuids: this.location, limit: 10000
     }).subscribe((results) => {

@@ -28,6 +28,11 @@ export class DailyScheduleVisitsComponent implements OnInit, OnDestroy {
      'encounterType': []
   };
   public encodedParams: string =  encodeURI(JSON.stringify(this.filter));
+  public params: any =  {
+    'programType': '',
+    'visitType': '',
+    'encounterType': ''
+  };
   public fetchCount: number = 0;
   @Input() public tab: any;
   @Input() public newList: any;

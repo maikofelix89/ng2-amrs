@@ -21,6 +21,11 @@ export class DailyScheduleAppointmentsComponent implements OnInit, OnDestroy {
      'encounterType': []
   };
   public encodedParams: string =  encodeURI(JSON.stringify(this.filter));
+  public params: any =  {
+    'programType': '',
+    'visitType': '',
+    'encounterType': ''
+  };
   public errors: any[] = [];
   public dailyAppointmentsPatientList: any[] = [];
   public loadingDailyAppointments: boolean = false;
@@ -29,6 +34,7 @@ export class DailyScheduleAppointmentsComponent implements OnInit, OnDestroy {
   public selectedClinic: any;
   public nextStartIndex: number = 0;
   public fetchCount: number = 0;
+  public busy: Subscription;
   @Input() public tab: any;
   @Input()
   set options(value) {
@@ -80,6 +86,9 @@ export class DailyScheduleAppointmentsComponent implements OnInit, OnDestroy {
             */
 
           }else {
+            this.params = params;
+            console.log('Params', params);
+            console.log('This Params', this.params);
             this.initParams();
             let searchParams = this.getQueryParams();
             this.getDailyAppointments(searchParams);
@@ -103,6 +112,7 @@ export class DailyScheduleAppointmentsComponent implements OnInit, OnDestroy {
   }
 
   public getDailyAppointments(params) {
+    console.log('getDailyAppointments Params', params);
     this.loadingDailyAppointments = true;
     this.clinicDashboardCacheService.setIsLoading(this.loadingDailyAppointments);
 
@@ -162,7 +172,9 @@ export class DailyScheduleAppointmentsComponent implements OnInit, OnDestroy {
       startDate: this.selectedDate,
       startIndex: this.nextStartIndex,
       locationUuids: this.selectedClinic,
-      programVisitEncounter: this.encodedParams,
+      programType: this.params.programType,
+      visitType: this.params.visitType,
+      encounterType: this.params.encounterType,
       limit: undefined
     };
 
