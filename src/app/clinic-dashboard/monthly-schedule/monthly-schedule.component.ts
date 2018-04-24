@@ -114,10 +114,11 @@ export class MonthlyScheduleComponent implements OnInit, OnDestroy {
   public navigateToMonth() {
     let date = Moment(this.viewDate).format('YYYY-MM-DD');
     this.viewDate = new Date(date);
-    const currentParams = this.route.snapshot.queryParams;
+    let currentParams = this.route.snapshot.queryParams;
     console.log('Current Params', currentParams);
     this.router.navigate(['./'], {
       queryParams: {date: date},
+      queryParamsHandling: 'merge',
       relativeTo: this.route
     });
     // this.getAppointments();

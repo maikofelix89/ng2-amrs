@@ -19,6 +19,7 @@ import { DepartmentProgramsConfigService } from './../etl-api/department-program
 export class ProgramVisitEncounterSearchComponent implements OnInit, OnDestroy , AfterViewInit {
 
     public selectedProgram: string;
+    public showProgramTypes: boolean = false;
     public programs: Array <any> = [];
     public visitTypes: Array <any> = [];
     public encounterTypes: any = [];
@@ -98,7 +99,8 @@ export class ProgramVisitEncounterSearchComponent implements OnInit, OnDestroy ,
         department: [],
         programType: [],
         visitType: [],
-        encounterType:[]
+        encounterType: [],
+        date: ''
 
       };
 
@@ -130,10 +132,15 @@ export class ProgramVisitEncounterSearchComponent implements OnInit, OnDestroy ,
       if (params.programType) {
 
           let program = this.loadFilterFromMap(params.programType , this.programTypeMap);
-          this.program = program;
+          if (this.showProgramTypes) {
+              this.program = program;
+          }
           newParams.programType = params.programType;
           console.log('Params Programs', program);
 
+      }
+      if (params.date) {
+          newParams.date = params.date;
       }
 
       this.emitParams(newParams);
@@ -477,15 +484,13 @@ export class ProgramVisitEncounterSearchComponent implements OnInit, OnDestroy ,
 
         _.each(visits, (visit: any) => {
 
-            console.log('visit', visit);
+            // console.log('visit', visit);
 
             _.each(programVisitEnounters, (programVisit: any, index) => {
 
                 let visitTypes = programVisit.visitTypes;
 
                 _.each(visitTypes, (visitType: any) => {
-
-                  console.log('visitType', visitType);
 
                   if (visitType.uuid === visit.id) {
 
@@ -509,7 +514,7 @@ export class ProgramVisitEncounterSearchComponent implements OnInit, OnDestroy ,
         });
 
         this.encounterTypes = encountersArray;
-        console.log('loadEncounterTypesFromVisitTypes', encountersArray);
+        // console.log('loadEncounterTypesFromVisitTypes', encountersArray);
 
     }
 
@@ -798,6 +803,7 @@ export class ProgramVisitEncounterSearchComponent implements OnInit, OnDestroy ,
       let visitTypeArray = [];
       let encounterTypeArray = [];
       let departmentArray = [];
+      this.showProgramTypes = false;
 
       console.log('this.departmentConf', this.programDepartments);
 
@@ -853,6 +859,8 @@ export class ProgramVisitEncounterSearchComponent implements OnInit, OnDestroy ,
                }
 
            }
+
+          this.showProgramTypes = true;
 
       }
 

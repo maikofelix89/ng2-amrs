@@ -21,12 +21,11 @@ export class DailyScheduleNotReturnedComponent implements OnInit, OnDestroy {
   public dataLoaded: boolean = false;
   public nextStartIndex: number = 0;
   public selectedNotReturnedTab: any;
-  public filter: any = {
+  public params: any = {
      'programType': [],
      'visitType': [],
      'encounterType': []
   };
-  public encodedParams: string =  encodeURI(JSON.stringify(this.filter));
   public extraColumns: any = {
     headerName: 'Phone Number',
     width: 80,
@@ -53,7 +52,6 @@ export class DailyScheduleNotReturnedComponent implements OnInit, OnDestroy {
   }
 
   public ngOnInit() {
-     this.filterSelected();
      this.selectedDate = Moment().format('YYYY-MM-DD');
      this.currentClinicSubscription = this.clinicDashboardCacheService.getCurrentClinic()
        .subscribe((location) => {
@@ -76,20 +74,13 @@ export class DailyScheduleNotReturnedComponent implements OnInit, OnDestroy {
      this.route
        .queryParams
        .subscribe((params) => {
-         if (params) {
-           if (this.fetchCount === 0 ) {
-            /*
-            for intial page load do not fetch daily visits as
-            it has been already fetched
-            */
-
-          }else {
-             let searchParams = this.getQueryParams();
-             this.initParams();
-             this.getDailyHasNotReturned(searchParams);
-          }
-           this.fetchCount++;
-         }
+        if (params) {
+          this.params = params;
+          console.log('Has Not Returned Params', params);
+          let searchParams = this.getQueryParams();
+          this.initParams();
+          this.getDailyHasNotReturned(searchParams);
+      }
        });
   }
 
@@ -116,12 +107,13 @@ export class DailyScheduleNotReturnedComponent implements OnInit, OnDestroy {
   }
 
   private getQueryParams() {
-    this.filterSelected();
     return {
       startDate: this.selectedDate,
       startIndex: this.nextStartIndex,
       locationUuids: this.selectedClinic,
-      programVisitEncounter: this.encodedParams,
+      programType: this.params.programType,
+      visitType: this.params.visitType,
+      encounterType: this.params.encounterType,
       limit: undefined
     };
 
@@ -161,27 +153,6 @@ export class DailyScheduleNotReturnedComponent implements OnInit, OnDestroy {
         }
       );
     }
-  }
-
-    private filterSelected() {
-
-      let cookieKey = 'programVisitEncounterFilter';
-
-      let cookieVal =  encodeURI(JSON.stringify(this.encodedParams));
-
-      let programVisitStored = this.localStorageService.getItem(cookieKey);
-
-      if (programVisitStored === null) {
-
-      } else {
-
-         cookieVal =  this.localStorageService.getItem(cookieKey);
-
-         // this._cookieService.put(cookieKey, cookieVal);
-      }
-
-      this.encodedParams = cookieVal;
-
   }
 
 }

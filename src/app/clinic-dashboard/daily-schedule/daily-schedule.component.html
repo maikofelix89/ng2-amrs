@@ -22,7 +22,7 @@
         </div>
       </div>
       <nav md-tab-nav-bar aria-label="weather navigation links">
-        <a md-tab-link *ngFor="let tabLink of tabLinks; let i = index" [routerLink]="tabLink.link" [active]="activeLinkIndex === i"
+        <a md-tab-link *ngFor="let tabLink of tabLinks; let i = index" [routerLink]="tabLink.link" [queryParams]="params" [active]="activeLinkIndex === i"
           (click)="activeLinkIndex = i">
       {{tabLink.label}}
     </a>

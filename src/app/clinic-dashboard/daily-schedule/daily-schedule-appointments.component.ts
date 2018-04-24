@@ -54,7 +54,6 @@ export class DailyScheduleAppointmentsComponent implements OnInit, OnDestroy {
   }
 
   public ngOnInit() {
-    this.filterSelected();
     this.selectedDate = Moment().format('YYYY-MM-DD');
     this.currentClinicSubscription = this.clinicDashboardCacheService.getCurrentClinic()
       .subscribe((location) => {
@@ -79,21 +78,11 @@ export class DailyScheduleAppointmentsComponent implements OnInit, OnDestroy {
       .queryParams
       .subscribe((params) => {
         if (params) {
-          if (this.fetchCount === 0 ) {
-            /*
-            for intial page load do not fetch daily visits as
-            it has been already fetched
-            */
-
-          }else {
             this.params = params;
-            console.log('Params', params);
-            console.log('This Params', this.params);
+            console.log('Appontments Params', params);
             this.initParams();
             let searchParams = this.getQueryParams();
             this.getDailyAppointments(searchParams);
-          }
-          this.fetchCount++;
         }
       });
   }
@@ -167,7 +156,6 @@ export class DailyScheduleAppointmentsComponent implements OnInit, OnDestroy {
   }
 
   private getQueryParams() {
-    this.filterSelected();
     return {
       startDate: this.selectedDate,
       startIndex: this.nextStartIndex,
@@ -177,26 +165,6 @@ export class DailyScheduleAppointmentsComponent implements OnInit, OnDestroy {
       encounterType: this.params.encounterType,
       limit: undefined
     };
-
-  }
-
-  private filterSelected() {
-      let cookieKey = 'programVisitEncounterFilter';
-
-      let cookieVal =  encodeURI(JSON.stringify(this.encodedParams));
-
-      let programVisitStored = this.localStorageService.getItem(cookieKey);
-
-      if (programVisitStored === null) {
-
-      } else {
-
-         cookieVal =  this.localStorageService.getItem(cookieKey);
-
-         // this._cookieService.put(cookieKey, cookieVal);
-      }
-
-      this.encodedParams = cookieVal;
 
   }
 }

@@ -79,19 +79,11 @@ export class DailyScheduleVisitsComponent implements OnInit, OnDestroy {
       .queryParams
       .subscribe((params) => {
         if (params) {
-          if (this.fetchCount === 0 ) {
-            /*
-            for intial page load do not fetch daily visits as
-            it has been already fetched
-            */
-
-          }else {
-            let searchParams = this.getQueryParams();
-            this.initParams();
-            this.getDailyVisits(searchParams);
-          }
-          this.fetchCount++;
-
+          this.params = params;
+          console.log('Visit Params', params);
+          let searchParams = this.getQueryParams();
+          this.initParams();
+          this.getDailyVisits(searchParams);
         }
       });
   }
@@ -110,12 +102,13 @@ export class DailyScheduleVisitsComponent implements OnInit, OnDestroy {
   }
 
   public getQueryParams() {
-    this.filterSelected();
     return {
       startDate: this.selectedDate,
       startIndex: this.nextStartIndex,
       locationUuids: this.selectedClinic,
-      programVisitEncounter: this.encodedParams,
+      programType: this.params.programType,
+      visitType: this.params.visitType,
+      encounterType: this.params.encounterType,
       limit: undefined
     };
 
@@ -167,23 +160,6 @@ export class DailyScheduleVisitsComponent implements OnInit, OnDestroy {
     }
   }
 
-    private filterSelected() {
-      let cookieKey = 'programVisitEncounterFilter';
 
-      let cookieVal = encodeURI(JSON.stringify(this.encodedParams));
-
-      let programVisitStored = this.localStorageService.getItem(cookieKey);
-
-      if (programVisitStored === null) {
-
-      } else {
-
-        cookieVal =  this.localStorageService.getItem(cookieKey);
-
-        // this._cookieService.put(cookieKey, cookieVal);
-      }
-
-      this.encodedParams = cookieVal;
-  }
 
 }
