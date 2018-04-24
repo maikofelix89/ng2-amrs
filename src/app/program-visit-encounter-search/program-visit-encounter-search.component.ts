@@ -34,6 +34,10 @@ export class ProgramVisitEncounterSearchComponent implements OnInit, OnDestroy ,
     public program: any = [];
     public department: any = [];
     public visitType: any  = [];
+    public departmentMap = new Map();
+    public programTypeMap = new Map();
+    public encounterTypeMap = new Map();
+    public visitTypeMap = new Map();
     public visits = [];
     public encounterType: any = [];
     public filterSet: boolean = false;
@@ -72,6 +76,67 @@ export class ProgramVisitEncounterSearchComponent implements OnInit, OnDestroy ,
     public ngOnInit() {
       this.getProgramVisitsConfig();
       this.getDepartmentConfig();
+      this.route
+      .queryParams
+      .subscribe((params) => {
+        if (params) {
+            this.params = params;
+            console.log('Visit enounter Params', params);
+            setTimeout(() => {
+              this.loadFilterFromParams(params);
+            }, 1000);
+        }
+      }, (error) => {
+          console.error('Error', error);
+      });
+    }
+
+    public loadFilterFromParams(params) {
+      console.log('loadFilterFromParams', params);
+
+      let newParams = {
+        department: [],
+        programType: [],
+        visitType: [],
+        encounterType:[]
+
+      };
+
+      if (params.visitType) {
+
+        let visitType = this.loadFilterFromMap(params.visitType , this.visitTypeMap);
+        this.visitType = visitType;
+        newParams.visitType = params.visitType;
+        console.log('Params VisitType', visitType);
+
+      }
+      if (params.encounterType) {
+
+        let encounterType = this.loadFilterFromMap(params.visitType , this.encounterTypeMap);
+        this.encounterType = encounterType;
+        newParams.encounterType = params.encounterType;
+        console.log('Params EncounterType', encounterType);
+
+      }
+      if (params.department) {
+
+        let department = this.loadFilterFromMap(params.department , this.departmentMap);
+        this.department = department;
+        newParams.department = params.department;
+        this.loadProgramFromDepartment();
+        console.log('Params Department', department);
+
+      }
+      if (params.programType) {
+
+          let program = this.loadFilterFromMap(params.programType , this.programTypeMap);
+          this.program = program;
+          newParams.programType = params.programType;
+          console.log('Params Programs', program);
+
+      }
+
+      this.emitParams(newParams);
     }
 
     public getDepartmentConfig() {
@@ -80,7 +145,7 @@ export class ProgramVisitEncounterSearchComponent implements OnInit, OnDestroy ,
      .subscribe((results) => {
          if (results) {
               this.programDepartments = results;
-              this.getSavedDepartment();
+              this.getAllDepartments();
           }
      });
 
@@ -99,53 +164,84 @@ export class ProgramVisitEncounterSearchComponent implements OnInit, OnDestroy ,
         .subscribe((response) => {
               if (response) {
                     this.programVisitsEncounters = JSON.parse(JSON.stringify(response));
-                    this.getSavedFilters();
+                    this.loadProgramVisitEncounterMap(this.programVisitsEncounters);
               }
         });
     }
 
-  public getSavedDepartment() {
+  public isString(value) {
+      if (typeof value === 'string') {
+        return true;
+      } else {
+        return false;
+      }
+   }
 
-       // check if department is stored in local storage
-       let savedDepartment = this.localStorageService.getItem(this.departmentKey);
+   public loadFilterFromMap(values: any , map) {
+     let filterArray = [];
 
-       let departmentsConf = this.programDepartments;
+     if (this.isString(values)) {
+       let selectedType = map.get(values);
+       filterArray.push(selectedType);
 
-       if (savedDepartment == null) {
-
-           /*
-           if no department has been saved then load all departments
-           */
-           this.getAllDepartments();
-
-       } else {
-
-            /*
-             if department was saved then use the saved value
-            */
-
-            this.getAllDepartments();
-
-            let tempDept = [];
-
-            setTimeout(() => {
-
-              let departmentStored = JSON.parse(savedDepartment);
-
-              _.each(departmentStored, (department: any, index) => {
-                  this.department.push(department);
-
-              });
-
-              this.cd.detectChanges();
-
-            }, 500);
-
-            this.getAllPrograms();
+       }else {
+         for (let value of values){
+           let selectedType = map.get(value);
+           filterArray.push(selectedType);
+         }
 
        }
 
-     }
+     return filterArray;
+
+   }
+
+    public loadProgramVisitEncounterMap(programVisitConfig) {
+
+        console.log('loadProgramVisitEncounterMap');
+
+        _.each(programVisitConfig, (program: any, index) => {
+
+          let specificProgram = {
+            'id': index,
+            'itemName': program.name
+          };
+
+          this.programTypeMap.set(index, specificProgram);
+
+          let visitTypes = program.visitTypes;
+
+          _.each(visitTypes, (visitType: any) => {
+
+              let specificVisitType = {
+                  'id': visitType.uuid,
+                  'itemName': visitType.name
+              };
+
+              this.visitTypeMap.set(visitType.uuid, specificVisitType);
+
+              let encounterTypes = visitType.encounterTypes;
+
+              _.each(encounterTypes, (encounterType: any) => {
+
+                let specificEncounterType = {
+                  'id': encounterType.uuid,
+                  'itemName': encounterType.display
+                };
+
+                this.encounterTypeMap.set(encounterType.uuid, specificEncounterType);
+
+              });
+
+          });
+
+        });
+
+        console.log('ProgramMap', this.programTypeMap);
+        console.log('VisitTypeMap', this.visitTypeMap);
+        console.log('EncounterTypeMap', this.encounterTypeMap);
+
+    }
 
      // get all the departments
 
@@ -160,163 +256,16 @@ export class ProgramVisitEncounterSearchComponent implements OnInit, OnDestroy ,
                  'id': index
            };
 
+           this.departmentMap.set(index,specificDepartment);
+
            this.departments.push(specificDepartment);
 
         });
 
+        console.log('DepartmentMap', this.departmentMap);
+
     }
 
-public getSavedFilters() {
-
-      let savedFilters = this.localStorageService.getItem('programVisitEncounterFilter');
-
-      if (savedFilters === null) {
-
-          // no filters have been saved
-           this.loadingFilters = false;
-
-       } else {
-
-        this.loadSavedFilterItems()
-          .then((success) => {
-              this.loadingFilters = false;
-          });
-       }
-
- }
-
-// load all the saved filter items
-
-public loadSavedFilterItems() {
-
-  return new Promise((resolve, reject) => {
-
-            let savedFilters = this.localStorageService.getItem('programVisitEncounterFilter');
-            let filterCount = 0;
-
-           /*
-            decode saved filters to respective program, visittypes and encounter types
-           */
-
-            let decodedFilters = JSON.parse((decodeURI(savedFilters)));
-
-            // load filters to respective visit types and encountertypes ui
-
-            let programTypes = decodedFilters.programType;
-            let visitTypes = decodedFilters.visitType;
-            let encounterTypes = decodedFilters.encounterType;
-            let progVisitsEncounters = this.programVisitsEncounters;
-
-            // get program label and id
-
-            // load programs based on saved departments
-
-            this.getAllPrograms();
-
-            let programsArray = [];
-            this.program = [];
-
-            _.each(programTypes, (programType) => {
-              _.each(progVisitsEncounters, (progVisits: any, index) => {
-
-                if (index.toString() === programType) {
-
-                  let specificProgram = {
-                    'id': programType,
-                    'itemName': progVisits.name
-                  };
-
-                  programsArray.push(specificProgram);
-
-                }
-
-              });
-
-            });
-
-            this.program = programsArray;
-
-            this.cd.detectChanges();
-
-            // load visit types based on programs saved
-
-            this.loadVisitTypesFromPrograms();
-
-            // load selected visit types
-
-            this.visitType = [];
-            let trackVisitTypes = [];
-
-            _.each(visitTypes, (visitType) => {
-              _.each(progVisitsEncounters, (progVisits: any, index) => {
-
-                   let visits = progVisits.visitTypes;
-
-                   _.each(visits, (visit: any) => {
-
-                      if (visit.uuid === visitType &&
-                      _.includes(trackVisitTypes, visitType) === false) {
-
-                            let specificVisitType = {
-                              'itemName': visit.name,
-                              'id': visitType
-                            };
-
-                            this.visitType.push(specificVisitType);
-                            trackVisitTypes.push(visitType);
-
-                       }
-
-                   });
-
-              });
-
-            });
-
-            // load encounter types based on visitTypes available
-
-            this.loadEncounterTypesFromVisitTypes();
-            let trackEncounters = [];
-            this.encounterType = [];
-
-            // load selected encounter types if any
-
-            _.each(encounterTypes, (encounterType) => {
-              _.each(progVisitsEncounters, (progVists: any, index) => {
-
-                let visits = progVists.visitTypes;
-
-                _.each(visits, (visit: any) => {
-
-                    let encounters = visit.encounterTypes;
-
-                    _.each(encounters, (encounter: any) => {
-
-                      if (encounterType === encounter.uuid
-                        && _.includes(trackEncounters, encounter.uuid) === false) {
-
-                            let specificEncounterType = {
-                              'itemName': encounter.display,
-                              'id': encounter.uuid
-                            };
-                            this.encounterType.push(specificEncounterType);
-                            trackEncounters.push(encounter.uuid);
-                      }
-                    });
-
-                });
-
-              });
-
-            });
-
-            filterCount++;
-
-            resolve('success');
-
-  });
-
-}
 
         // load all programs
 
@@ -346,13 +295,23 @@ public loadSavedFilterItems() {
     public selectDepartment(department) {
 
         let departmentsSelected = this.department;
+        this.filterSet = false;
 
         this.programs = [];
         this.trackPrograms = [];
 
         _.each(departmentsSelected, (departmentSelected: any) => {
-           this.getPrograms(departmentSelected);
+           this.getDepartmentPrograms(departmentSelected);
         });
+
+    }
+
+    public loadProgramFromDepartment() {
+
+      let departmentsSelected = this.department;
+      _.each(departmentsSelected, (departmentSelected: any) => {
+         this.getDepartmentPrograms(departmentSelected);
+      });
 
     }
 
@@ -381,7 +340,7 @@ public loadSavedFilterItems() {
 
     }
 
-  public getPrograms(departmentSelected) {
+  public getDepartmentPrograms(departmentSelected) {
 
         let departments = this.programDepartments;
         let programs = this.programVisitsEncounters;
@@ -413,7 +372,8 @@ public loadSavedFilterItems() {
 
         });
 
-        this.loadProgramFromPrograms();
+        // this.loadProgramFromPrograms();
+        this.loadVisitTypesFromPrograms();
 
     }
 
@@ -438,7 +398,7 @@ public loadSavedFilterItems() {
 
     public loadVisitTypesFromPrograms() {
 
-      let programsSelected = this.program;
+      let programsSelected = this.programs;
       let programVisitEncounters = this.programVisitsEncounters;
 
       _.each(programsSelected, (program: any) => {
@@ -447,7 +407,7 @@ public loadSavedFilterItems() {
              _.each(programVisitEncounters, (programVisit: any, index) => {
 
                if (index === progUuid) {
-                   // load all the visittypes for the program
+                   // load all the visit
                    let visitTypes = programVisit.visitTypes;
 
                    _.each(visitTypes, (visitType: any) => {
@@ -462,6 +422,8 @@ public loadSavedFilterItems() {
              });
 
       });
+
+      this.loadEncounterTypesFromVisitTypes();
 
     }
 
@@ -500,6 +462,8 @@ public loadSavedFilterItems() {
 
     public loadEncounterTypesFromVisitTypes() {
 
+        console.log('loadEncounterTypesFromVisitTypes');
+
       /*
          checks the available saved selected visit type and
          loads the available encounter types for the
@@ -508,15 +472,20 @@ public loadSavedFilterItems() {
 
         let programVisitEnounters = this.programVisitsEncounters;
         let visits = this.visitType;
+        let encountersArray = [];
         this.encounterTypes = [];
 
         _.each(visits, (visit: any) => {
+
+            console.log('visit', visit);
 
             _.each(programVisitEnounters, (programVisit: any, index) => {
 
                 let visitTypes = programVisit.visitTypes;
 
                 _.each(visitTypes, (visitType: any) => {
+
+                  console.log('visitType', visitType);
 
                   if (visitType.uuid === visit.id) {
 
@@ -529,7 +498,7 @@ public loadSavedFilterItems() {
                         'itemName': encounterType.display
                       };
 
-                      this.encounterTypes.push(specificEncounterType);
+                      encountersArray.push(specificEncounterType);
 
                     });
 
@@ -538,6 +507,9 @@ public loadSavedFilterItems() {
               });
 
         });
+
+        this.encounterTypes = encountersArray;
+        console.log('loadEncounterTypesFromVisitTypes', encountersArray);
 
     }
 
@@ -657,10 +629,6 @@ public loadSavedFilterItems() {
         'department': this.selectedDepartment
       };
 
-      this.emitParams(params);
-
-      this.localStorageService.setItem('department', JSON.stringify(this.department));
-
       const currentParams = this.route.snapshot.queryParams;
       let navigationData = {
         queryParams: params,
@@ -683,24 +651,6 @@ public loadSavedFilterItems() {
     }
 
      public emitParams(params) {
-
-           let urlParams = encodeURI(JSON.stringify(params));
-
-           let cookieKey = 'programVisitEncounterFilter';
-
-           let cookieVal =  urlParams;
-
-           let programVisitStored = this.localStorageService.getItem(cookieKey);
-
-           if (programVisitStored === null) {
-
-           } else {
-
-             this.localStorageService.remove('programVisitEncounterFilter');
-
-           }
-
-           this.localStorageService.setItem('programVisitEncounterFilter', cookieVal);
 
            this.filterSelected.emit(params);
 
@@ -844,33 +794,71 @@ public loadSavedFilterItems() {
     }
 
     public setFilterParams() {
-
-      let selectedProgram = this.program;
       let programArray  = [];
-      let selectedVisitType = this.visitType;
       let visitTypeArray = [];
-      let selectedEncounterType = this.encounterType;
       let encounterTypeArray = [];
       let departmentArray = [];
 
+      console.log('this.departmentConf', this.programDepartments);
+
       // strip property names and remain with array of uuids
 
-      _.each(selectedProgram, (program: any) => {
-           programArray.push(program.id);
-      });
+      if (this.department.length === 0) {
+        // if nothing is selected
 
-      _.each(selectedVisitType, (visitType: any) => {
-           visitTypeArray.push(visitType.id);
-      });
+      } else {
 
-      _.each(selectedEncounterType, (encounterType: any) => {
-           encounterTypeArray.push(encounterType.id);
-      });
+        _.each(this.department, (department: any) => {
+              departmentArray.push(department.id);
+        });
 
-      _.each(this.department, (department: any) => {
-        departmentArray.push(department.id);
-      });
+      }
+      if (this.department.length > 0 && this.program.length === 0) {
+        // if only department is selected then load programs from department
+         console.log('this.department.length > 0 && this.program.length === 0');
+         _.each(this.department, (department: any) => {
+            console.log('index', department.id);
+            console.log('department', department);
+            let departmentPrograms = this.programDepartments[department.id];
 
+            console.log('departmentPrograms', departmentPrograms);
+
+            _.each(departmentPrograms.programs, (deptProgram: any) => {
+                    programArray.push(deptProgram.uuid);
+            });
+          });
+
+      }
+      if (this.department.length > 0 && this.program.length > 0) {
+        // if depatment and programs and selected
+          console.log('this.department.length > 0 && this.program.length > 0');
+
+          _.each(this.program, (program) => {
+              programArray.push(program.id);
+          });
+
+          if (this.visitType.length > 0 ) {
+
+               console.log('this.visitType.length > 0');
+
+               _.each(this.visitType, (visitType) => {
+                  visitTypeArray.push(visitType.id);
+               });
+
+               if (this.encounterType.length > 0) {
+                    console.log('this.encounterType.length > 0');
+                    _.each(this.encounterType, (encounterType) => {
+                      encounterTypeArray.push(encounterType.id);
+                    });
+               }
+
+           }
+
+      }
+
+      console.log('Program Array', programArray);
+      console.log('visitTypeArray', visitTypeArray);
+      console.log('encounterTypeArray', encounterTypeArray);
 
       this.selectedProgramType = programArray;
       this.selectedVisitType = visitTypeArray;
@@ -890,26 +878,6 @@ public loadSavedFilterItems() {
        this.selectedEncounterType = [];
        this.selectedVisitType = [];
        this.filterSet = false;
-
-       let cookieKey = 'programVisitEncounterFilter';
-       let programVisitStored = this.localStorageService.getItem(cookieKey);
-       let departmentStored = this.localStorageService.getItem('department');
-
-       if (programVisitStored === null) {
-
-       } else {
-
-         this.localStorageService.remove(cookieKey);
-
-       }
-
-       if (departmentStored === null) {
-
-       } else {
-
-         this.localStorageService.remove('department');
-
-       }
 
        this.sendNewRequest();
 

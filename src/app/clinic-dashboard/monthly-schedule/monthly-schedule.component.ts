@@ -78,7 +78,6 @@ export class MonthlyScheduleComponent implements OnInit, OnDestroy {
   }
 
   public ngOnInit() {
-    this.getSavedFilter();
     this.appFeatureAnalytics
       .trackEvent('Monthly Schedule', 'Monthly Schedule loaded', 'ngOnInit');
     let date = this.route.snapshot.queryParams['date'];
@@ -89,7 +88,7 @@ export class MonthlyScheduleComponent implements OnInit, OnDestroy {
     this.subscription = this.clinicDashboardCacheService.getCurrentClinic()
       .subscribe((location: string) => {
         this.location = location;
-        this.getAppointments();
+        // this.getAppointments();
       });
   }
 
@@ -115,11 +114,13 @@ export class MonthlyScheduleComponent implements OnInit, OnDestroy {
   public navigateToMonth() {
     let date = Moment(this.viewDate).format('YYYY-MM-DD');
     this.viewDate = new Date(date);
+    const currentParams = this.route.snapshot.queryParams;
+    console.log('Current Params', currentParams);
     this.router.navigate(['./'], {
       queryParams: {date: date},
       relativeTo: this.route
     });
-    this.getAppointments();
+    // this.getAppointments();
   }
 
   public getAppointments() {
@@ -212,25 +213,4 @@ export class MonthlyScheduleComponent implements OnInit, OnDestroy {
 
   }
 
-  // get filter saved
-
-  public getSavedFilter() {
-      let cookieKey = 'programVisitEncounterFilter';
-
-      let cookieVal =  encodeURI(JSON.stringify(this.encodedParams));
-
-      let programVisitStored = this._localstorageService.getItem(cookieKey);
-
-      if (programVisitStored === null) {
-
-      } else {
-
-         cookieVal =  this._localstorageService.getItem(cookieKey);
-
-         // this._cookieService.put(cookieKey, cookieVal);
-      }
-
-      this.encodedParams = cookieVal;
-
-  }
 }
