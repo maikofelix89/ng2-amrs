@@ -8,7 +8,7 @@ import { MockBackend } from '@angular/http/testing';
 import { LocalStorageService } from '../utils/local-storage.service';
 import { AppSettingsService } from '../app-settings';
 import { EncounterResourceService } from './encounter-resource.service';
-describe('EncounterResourceService', () => {
+fdescribe('EncounterResourceService', () => {
     beforeEach(() => {
         TestBed.configureTestingModule({
             providers: [
