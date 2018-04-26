@@ -15,16 +15,11 @@ import { Router, ActivatedRoute, ActivatedRouteSnapshot, Params } from '@angular
 export class DailyScheduleAppointmentsComponent implements OnInit, OnDestroy {
 
   @Input() public selectedDate: any;
-  public filter: any = {
-     'programType': [],
-     'visitType': [],
-     'encounterType': []
-  };
-  public encodedParams: string =  encodeURI(JSON.stringify(this.filter));
   public params: any =  {
     'programType': '',
     'visitType': '',
-    'encounterType': ''
+    'encounterType': '',
+    'startDate': Moment().format('YYYY-MM-DD')
   };
   public errors: any[] = [];
   public dailyAppointmentsPatientList: any[] = [];
@@ -58,32 +53,20 @@ export class DailyScheduleAppointmentsComponent implements OnInit, OnDestroy {
     this.currentClinicSubscription = this.clinicDashboardCacheService.getCurrentClinic()
       .subscribe((location) => {
         this.selectedClinic = location;
-        if (this.selectedClinic) {
-          this.selectedDateSubscription = this.clinicDashboardCacheService.
-            getDailyTabCurrentDate().subscribe((date) => {
-            if ( this.loadingDailyAppointments === false) {
-              this.selectedDate = date;
-              this.initParams();
-              let params = this.getQueryParams();
-              this.getDailyAppointments(params);
-            }
-
-          });
-        }
-
       });
 
     // get the current page url and params
     this.route
       .queryParams
       .subscribe((params) => {
-        if (params) {
+        console.log('subscribe params', params);
+        if (params.startDate) {
             this.params = params;
             console.log('Appontments Params', params);
-            this.initParams();
-            let searchParams = this.getQueryParams();
-            this.getDailyAppointments(searchParams);
         }
+        let searchParams = this.getQueryParams();
+        console.log('getDailyAppointments');
+        this.getDailyAppointments(searchParams);
       });
   }
 
@@ -142,6 +125,7 @@ export class DailyScheduleAppointmentsComponent implements OnInit, OnDestroy {
     this.loadingDailyAppointments = true;
     this.clinicDashboardCacheService.setIsLoading(this.loadingDailyAppointments);
     let params = this.getQueryParams();
+    console.log('getDailyAppointments');
     this.getDailyAppointments(params);
 
   }
@@ -156,8 +140,9 @@ export class DailyScheduleAppointmentsComponent implements OnInit, OnDestroy {
   }
 
   private getQueryParams() {
+    console.log('Getquery params', this.params);
     return {
-      startDate: this.selectedDate,
+      startDate: this.params.startDate,
       startIndex: this.nextStartIndex,
       locationUuids: this.selectedClinic,
       programType: this.params.programType,

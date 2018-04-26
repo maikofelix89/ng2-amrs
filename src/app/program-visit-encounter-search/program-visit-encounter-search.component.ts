@@ -9,6 +9,7 @@ import * as _ from 'lodash';
 import { PatientProgramResourceService } from './../etl-api/patient-program-resource.service';
 import { LocalStorageService } from '../utils/local-storage.service';
 import { DepartmentProgramsConfigService } from './../etl-api/department-programs-config.service';
+import * as Moment from 'moment';
 
 @Component({
   selector: 'program-visit-encounter-search',
@@ -19,7 +20,9 @@ import { DepartmentProgramsConfigService } from './../etl-api/department-program
 export class ProgramVisitEncounterSearchComponent implements OnInit, OnDestroy , AfterViewInit {
 
     public selectedProgram: string;
-    public showProgramTypes: boolean = false;
+    public selectedDate = Moment().format('YYYY-MM-DD');
+    public showProgramTypes: boolean = true;
+    public showFilters: boolean = true;
     public programs: Array <any> = [];
     public visitTypes: Array <any> = [];
     public encounterTypes: any = [];
@@ -63,6 +66,7 @@ export class ProgramVisitEncounterSearchComponent implements OnInit, OnDestroy ,
     public loadingFilters: boolean = true;
 
     @Output() public filterSelected: EventEmitter<any> = new EventEmitter<any>();
+    @Input() public dateTypeFilter: string = '';
 
     constructor(
       private cd: ChangeDetectorRef,
@@ -100,7 +104,8 @@ export class ProgramVisitEncounterSearchComponent implements OnInit, OnDestroy ,
         programType: [],
         visitType: [],
         encounterType: [],
-        date: ''
+        showPrograms: '',
+        startDate: this.selectedDate
 
       };
 
@@ -132,15 +137,19 @@ export class ProgramVisitEncounterSearchComponent implements OnInit, OnDestroy ,
       if (params.programType) {
 
           let program = this.loadFilterFromMap(params.programType , this.programTypeMap);
-          if (this.showProgramTypes) {
-              this.program = program;
+          this.program = [];
+          console.log('Show Programs', params.showPrograms);
+          if (params.showPrograms && params.showPrograms === 'true') {
+            this.program = program;
           }
           newParams.programType = params.programType;
+          newParams.showPrograms = params.showPrograms;
           console.log('Params Programs', program);
 
       }
-      if (params.date) {
-          newParams.date = params.date;
+      if (params.startDate) {
+          newParams.startDate = params.startDate;
+          this.selectedDate = params.startDate;
       }
 
       this.emitParams(newParams);
@@ -263,7 +272,7 @@ export class ProgramVisitEncounterSearchComponent implements OnInit, OnDestroy ,
                  'id': index
            };
 
-           this.departmentMap.set(index,specificDepartment);
+           this.departmentMap.set(index, specificDepartment);
 
            this.departments.push(specificDepartment);
 
@@ -631,7 +640,9 @@ export class ProgramVisitEncounterSearchComponent implements OnInit, OnDestroy ,
         'programType': this.selectedProgramType,
         'visitType': this.selectedVisitType,
         'encounterType': this.selectedEncounterType,
-        'department': this.selectedDepartment
+        'department': this.selectedDepartment,
+        'showPrograms': this.showProgramTypes,
+        'startDate': this.selectedDate
       };
 
       const currentParams = this.route.snapshot.queryParams;
@@ -886,11 +897,40 @@ export class ProgramVisitEncounterSearchComponent implements OnInit, OnDestroy ,
        this.selectedEncounterType = [];
        this.selectedVisitType = [];
        this.filterSet = false;
+       this.selectedDate = Moment().format('YYYY-MM-DD');
 
        this.sendNewRequest();
 
        // this.emitParams(params);
 
+    }
+
+    public toggleFilterView() {
+       this.showFilters = !this.showFilters;
+    }
+
+    public getSelectedDate($event) {
+       this.selectedDate = Moment($event).format('YYYY-MM-DD');
+       this.filterSet = false;
+    }
+
+    public prevMonth() {
+      this.selectedDate = Moment(this.selectedDate).subtract(1, 'months' ).format('YYYY-MM-DD');
+      this.sendNewRequest();
+    }
+    public nextMonth() {
+      this.selectedDate = Moment(this.selectedDate).add(1, 'months' ).format('YYYY-MM-DD');
+      this.sendNewRequest();
+    }
+    public prevDay() {
+
+      this.selectedDate = Moment(this.selectedDate).subtract(1, 'days' ).format('YYYY-MM-DD');
+      this.sendNewRequest();
+
+    }
+    public nextDay() {
+      this.selectedDate = Moment(this.selectedDate).add(1, 'days' ).format('YYYY-MM-DD');
+      this.sendNewRequest();
     }
 
 }

@@ -22,16 +22,11 @@ export class DailyScheduleVisitsComponent implements OnInit, OnDestroy {
   public currentTabLoaded: boolean = false;
   public selectedVisitTab: any;
   public nextStartIndex: number = 0;
-  public filter: any = {
-     'programType': [],
-     'visitType': [],
-     'encounterType': []
-  };
-  public encodedParams: string =  encodeURI(JSON.stringify(this.filter));
   public params: any =  {
     'programType': '',
     'visitType': '',
-    'encounterType': ''
+    'encounterType': '',
+    'startDate': Moment().format('YYYY-MM-DD')
   };
   public fetchCount: number = 0;
   @Input() public tab: any;
@@ -56,35 +51,24 @@ export class DailyScheduleVisitsComponent implements OnInit, OnDestroy {
   }
 
   public ngOnInit() {
+    console.log('Load Daily Visits');
     this.selectedDate = Moment().format('YYYY-MM-DD');
     this.currentClinicSubscription = this.clinicDashboardCacheService.getCurrentClinic()
       .subscribe((location) => {
         this.selectedClinic = location;
-        if (this.selectedClinic) {
-          this.selectedDateSubscription = this.clinicDashboardCacheService.
-            getDailyTabCurrentDate().subscribe((date) => {
-              if (this.loadingDailyVisits === false) {
-                this.selectedDate = date;
-                this.initParams();
-                let params = this.getQueryParams();
-                this.getDailyVisits(params);
-              }
-
-            });
-
-        }
       });
 
     this.route
       .queryParams
       .subscribe((params) => {
-        if (params) {
-          this.params = params;
-          console.log('Visit Params', params);
-          let searchParams = this.getQueryParams();
-          this.initParams();
-          this.getDailyVisits(searchParams);
+        console.log('subscribe params', params);
+        if (params.startDate) {
+            this.params = params;
+            console.log('Visits Params', params);
         }
+        let searchParams = this.getQueryParams();
+        console.log('getDailyVisits');
+        this.getDailyVisits(searchParams);
       });
   }
 
@@ -103,7 +87,7 @@ export class DailyScheduleVisitsComponent implements OnInit, OnDestroy {
 
   public getQueryParams() {
     return {
-      startDate: this.selectedDate,
+      startDate: this.params.startDate,
       startIndex: this.nextStartIndex,
       locationUuids: this.selectedClinic,
       programType: this.params.programType,

@@ -21,10 +21,11 @@ export class DailyScheduleNotReturnedComponent implements OnInit, OnDestroy {
   public dataLoaded: boolean = false;
   public nextStartIndex: number = 0;
   public selectedNotReturnedTab: any;
-  public params: any = {
-     'programType': [],
-     'visitType': [],
-     'encounterType': []
+  public params: any =  {
+    'programType': '',
+    'visitType': '',
+    'encounterType': '',
+    'startDate': Moment().format('YYYY-MM-DD')
   };
   public extraColumns: any = {
     headerName: 'Phone Number',
@@ -56,31 +57,19 @@ export class DailyScheduleNotReturnedComponent implements OnInit, OnDestroy {
      this.currentClinicSubscription = this.clinicDashboardCacheService.getCurrentClinic()
        .subscribe((location) => {
          this.selectedClinic = location;
-         if (this.selectedClinic) {
-           this.selectedDateSubscription = this.clinicDashboardCacheService.
-             getDailyTabCurrentDate().subscribe((date) => {
-               if (this.loadingDailyNotReturned === false) {
-                 this.selectedDate = date;
-                 this.initParams();
-                 let params = this.getQueryParams();
-                 this.getDailyHasNotReturned(params);
-               }
-
-             });
-
-         }
        });
 
      this.route
        .queryParams
        .subscribe((params) => {
-        if (params) {
-          this.params = params;
-          console.log('Has Not Returned Params', params);
+          console.log('subscribe params', params);
+          if (params.startDate) {
+              this.params = params;
+              console.log('Has Not Returned Params', params);
+          }
           let searchParams = this.getQueryParams();
-          this.initParams();
+          console.log('getHasNotReturned');
           this.getDailyHasNotReturned(searchParams);
-      }
        });
   }
 
@@ -108,8 +97,8 @@ export class DailyScheduleNotReturnedComponent implements OnInit, OnDestroy {
 
   private getQueryParams() {
     return {
-      startDate: this.selectedDate,
-      startIndex: this.nextStartIndex,
+      startDate: this.params.startDate,
+      startIndex: 0,
       locationUuids: this.selectedClinic,
       programType: this.params.programType,
       visitType: this.params.visitType,
