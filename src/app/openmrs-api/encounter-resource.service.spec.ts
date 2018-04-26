@@ -29,7 +29,7 @@ fdescribe('EncounterResourceService', () => {
         });
     });
 
-    it('should be defined', async(inject(
+    fit('should be defined', async(inject(
         [EncounterResourceService, MockBackend], (service, mockBackend) => {
 
             expect(service).toBeDefined();
