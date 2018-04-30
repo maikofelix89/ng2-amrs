@@ -5,3 +5,17 @@
 #daily-schedule-row{
   margin-top: 15px;
 }
+.day-nav-btn{
+  padding-top: 25px;
+}
+.mat-tab-nav-bar{
+  background: #337ab7 !important;
+}
+.mat-tab-link{
+  color:#FFF !important;
+  opacity: 1;
+  width: 25%;
+  border-right-style: solid;
+  border-width: 0.05em;
+  border-right-color: #e5e5e5;
+}

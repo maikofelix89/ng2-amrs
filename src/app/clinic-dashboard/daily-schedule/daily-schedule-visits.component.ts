@@ -22,12 +22,12 @@ export class DailyScheduleVisitsComponent implements OnInit, OnDestroy {
   public currentTabLoaded: boolean = false;
   public selectedVisitTab: any;
   public nextStartIndex: number = 0;
-  public filter: any = {
-     'programType': [],
-     'visitType': [],
-     'encounterType': []
+  public params: any =  {
+    'programType': '',
+    'visitType': '',
+    'encounterType': '',
+    'startDate': Moment().format('YYYY-MM-DD')
   };
-  public encodedParams: string =  encodeURI(JSON.stringify(this.filter));
   public fetchCount: number = 0;
   @Input() public tab: any;
   @Input() public newList: any;
@@ -51,43 +51,25 @@ export class DailyScheduleVisitsComponent implements OnInit, OnDestroy {
   }
 
   public ngOnInit() {
+    console.log('Load Daily Visits');
     this.selectedDate = Moment().format('YYYY-MM-DD');
     this.currentClinicSubscription = this.clinicDashboardCacheService.getCurrentClinic()
       .subscribe((location) => {
         this.selectedClinic = location;
-        if (this.selectedClinic) {
-          this.selectedDateSubscription = this.clinicDashboardCacheService.
-            getDailyTabCurrentDate().subscribe((date) => {
-              if (this.loadingDailyVisits === false) {
-                this.selectedDate = date;
-                this.initParams();
-                let params = this.getQueryParams();
-                this.getDailyVisits(params);
-              }
-
-            });
-
-        }
       });
 
     this.route
       .queryParams
       .subscribe((params) => {
-        if (params) {
-          if (this.fetchCount === 0 ) {
-            /*
-            for intial page load do not fetch daily visits as
-            it has been already fetched
-            */
-
-          }else {
-            let searchParams = this.getQueryParams();
-            this.initParams();
-            this.getDailyVisits(searchParams);
-          }
-          this.fetchCount++;
-
+        console.log('subscribe params', params);
+        this.initParams();
+        if (params.startDate) {
+            this.params = params;
+            console.log('Visits Params', params);
         }
+        let searchParams = this.getQueryParams();
+        console.log('getDailyVisits');
+        this.getDailyVisits(searchParams);
       });
   }
 
@@ -105,13 +87,14 @@ export class DailyScheduleVisitsComponent implements OnInit, OnDestroy {
   }
 
   public getQueryParams() {
-    this.filterSelected();
     return {
-      startDate: this.selectedDate,
-      startIndex: this.nextStartIndex,
+      startDate: this.params.startDate,
+      startIndex: 0,
       locationUuids: this.selectedClinic,
-      programVisitEncounter: this.encodedParams,
-      limit: undefined
+      programType: this.params.programType,
+      visitType: this.params.visitType,
+      encounterType: this.params.encounterType,
+      limit: 300
     };
 
   }
@@ -136,15 +119,15 @@ export class DailyScheduleVisitsComponent implements OnInit, OnDestroy {
     } else {
       this.visitsSubscription = result.subscribe(
         (patientList) => {
-          if (patientList.length > 0) {
-            this.dailyVisitsPatientList = this.dailyVisitsPatientList.concat(
-              patientList);
+          if (patientList.length > 300) {
             let size: number = patientList.length;
             this.nextStartIndex = this.nextStartIndex + size;
             this.currentTabLoaded = true;
           } else {
             this.dataLoaded = true;
           }
+          this.dailyVisitsPatientList = this.dailyVisitsPatientList.concat(
+            patientList);
           this.loadingDailyVisits = false;
           this.clinicDashboardCacheService.setIsLoading(this.loadingDailyVisits);
         }
@@ -162,23 +145,6 @@ export class DailyScheduleVisitsComponent implements OnInit, OnDestroy {
     }
   }
 
-    private filterSelected() {
-      let cookieKey = 'programVisitEncounterFilter';
 
-      let cookieVal = encodeURI(JSON.stringify(this.encodedParams));
-
-      let programVisitStored = this.localStorageService.getItem(cookieKey);
-
-      if (programVisitStored === null) {
-
-      } else {
-
-        cookieVal =  this.localStorageService.getItem(cookieKey);
-
-        // this._cookieService.put(cookieKey, cookieVal);
-      }
-
-      this.encodedParams = cookieVal;
-  }
 
 }

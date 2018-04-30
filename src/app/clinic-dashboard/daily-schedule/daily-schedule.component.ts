@@ -19,6 +19,7 @@ export class DailyScheduleComponent implements OnInit {
   public selectedLocation: any;
   public loadingData: boolean = true;
   public filterSet = false;
+  public params: any;
   @Output() public selectedSchedule = new EventEmitter();
   public msgs: Message[] = [];
   public reportFilter: any = { ageRange: [40, 70] };
@@ -71,6 +72,7 @@ export class DailyScheduleComponent implements OnInit {
       path = this.router.url.substring(0, n !== -1 ? n : path.length);
       path = path.substr(this.router.url.lastIndexOf('/') + 1);
       this.activeLinkIndex = this.tabLinks.findIndex((x) => x.link === path);
+      console.log('setActiveTab', this.router.url);
 
     }
   }
@@ -139,6 +141,7 @@ export class DailyScheduleComponent implements OnInit {
   public filterSelected($event) {
       this.filterSet = true;
       this.selectedDate = this._datePipe.transform( this.selectedDate, 'yyyy-MM-dd');
+      this.params = $event;
   }
 
 }

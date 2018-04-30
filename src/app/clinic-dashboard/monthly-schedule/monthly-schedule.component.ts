@@ -47,12 +47,12 @@ const colors: any = {
 export class MonthlyScheduleComponent implements OnInit, OnDestroy {
   public viewDate: Date = new Date();
   public view = 'month';
-  public filter: any = {
+  public params: any = {
      'programType': [],
      'visitType': [],
-     'encounterType': []
+     'encounterType': [],
+     'startDate': ''
   };
-  public encodedParams: string =  encodeURI(JSON.stringify(this.filter));
   public events: CalendarEvent[] = [];
   public activeDayIsOpen: boolean = false;
   public location: string = '';
@@ -62,6 +62,11 @@ export class MonthlyScheduleComponent implements OnInit, OnDestroy {
   public encounterTypes: any [];
   public trackEncounterTypes: any = [];
   public department: string = 'hiv';
+  public busyIndicator: any = {
+    busy: false,
+    message: ''
+  };
+
   private subscription: Subscription = new Subscription();
 
   constructor(private monthlyScheduleResourceService: MonthlyScheduleResourceService,
@@ -73,10 +78,9 @@ export class MonthlyScheduleComponent implements OnInit, OnDestroy {
   }
 
   public ngOnInit() {
-    this.getSavedFilter();
     this.appFeatureAnalytics
       .trackEvent('Monthly Schedule', 'Monthly Schedule loaded', 'ngOnInit');
-    let date = this.route.snapshot.queryParams['date'];
+    let date = this.route.snapshot.queryParams['startDate'];
     if (date) {
       this.viewDate = new Date(date);
     }
@@ -84,7 +88,7 @@ export class MonthlyScheduleComponent implements OnInit, OnDestroy {
     this.subscription = this.clinicDashboardCacheService.getCurrentClinic()
       .subscribe((location: string) => {
         this.location = location;
-        this.getAppointments();
+        // this.getAppointments();
       });
   }
 
@@ -93,8 +97,9 @@ export class MonthlyScheduleComponent implements OnInit, OnDestroy {
   }
 
   public filterSelected($event) {
-         this.filter = $event;
-         this.encodedParams = encodeURI(JSON.stringify($event));
+         this.params = $event;
+         console.log('Monthly filter selected', $event);
+         // this.encodedParams = encodeURI(JSON.stringify($event));
          this.getAppointments();
   }
 
@@ -108,21 +113,30 @@ export class MonthlyScheduleComponent implements OnInit, OnDestroy {
   public navigateToMonth() {
     let date = Moment(this.viewDate).format('YYYY-MM-DD');
     this.viewDate = new Date(date);
+    let currentParams = this.route.snapshot.queryParams;
+    console.log('Current Params', currentParams);
     this.router.navigate(['./'], {
       queryParams: {date: date},
+      queryParamsHandling: 'merge',
       relativeTo: this.route
     });
-    this.getAppointments();
+    // this.getAppointments();
   }
 
   public getAppointments() {
+      console.log('Get Monthly Appointments', this.params.startDate);
       this.fetchError = false;
+      this.viewDate = this.params.startDate;
       this.busy = this.monthlyScheduleResourceService.getMonthlySchedule({
-      endDate: Moment(endOfMonth(this.viewDate)).format('YYYY-MM-DD'),
-      startDate: Moment(startOfMonth(this.viewDate)).format('YYYY-MM-DD'),
-      programVisitEncounter: this.encodedParams,
+      endDate: Moment(endOfMonth(this.params.startDate)).format('YYYY-MM-DD'),
+      startDate: Moment(startOfMonth(this.params.startDate)).format('YYYY-MM-DD'),
+      programType: this.params.programType,
+      visitType: this.params.visitType,
+      encounterType: this.params.encounterType,
       locationUuids: this.location, limit: 10000
     }).subscribe((results) => {
+      console.log('Events', results);
+      this.events = [];
       this.events = this.processEvents(results);
     }, (error) => {
       this.fetchError = true;
@@ -134,21 +148,24 @@ export class MonthlyScheduleComponent implements OnInit, OnDestroy {
   }
 
   public navigateToDaily(event) {
+    console.log('navigate to daily', event);
+    let currentParams = this.params;
+    currentParams.startDate = Moment(event.start).format('YYYY-MM-DD');
     switch (event.type) {
       case 'scheduled':
         this.router.navigate(['clinic-dashboard',
             this.location, 'daily-schedule', 'daily-appointments'],
-          {queryParams: {date: Moment(event.start).format('YYYY-MM-DD')}});
+          {queryParams: currentParams});
         break;
       case 'attended':
         this.router.navigate(['clinic-dashboard',
             this.location, 'daily-schedule', 'daily-visits'],
-          {queryParams: {date: Moment(event.start).format('YYYY-MM-DD')}});
+          {queryParams: currentParams});
         break;
       case 'has_not_returned':
         this.router.navigate(['clinic-dashboard',
             this.location, 'daily-schedule', 'daily-not-returned'],
-          {queryParams: {date: Moment(event.start).format('YYYY-MM-DD')}});
+          {queryParams: currentParams});
         break;
       default:
     }
@@ -196,32 +213,15 @@ export class MonthlyScheduleComponent implements OnInit, OnDestroy {
       }
       /* tslint:enable */
     }
+    console.log('Processed', processed);
     return processed;
   }
 
   public dayClicked({date, events}: {date: Date, events: CalendarEvent[]}): void {
 
   }
-
-  // get filter saved
-
-  public getSavedFilter() {
-      let cookieKey = 'programVisitEncounterFilter';
-
-      let cookieVal =  encodeURI(JSON.stringify(this.encodedParams));
-
-      let programVisitStored = this._localstorageService.getItem(cookieKey);
-
-      if (programVisitStored === null) {
-
-      } else {
-
-         cookieVal =  this._localstorageService.getItem(cookieKey);
-
-         // this._cookieService.put(cookieKey, cookieVal);
-      }
-
-      this.encodedParams = cookieVal;
-
+  public getSelectedDate($event) {
+    console.log('Event', $event);
   }
+
 }

@@ -24,16 +24,25 @@ export class DailyScheduleResourceService {
         urlParams.set('startIndex', params.startIndex);
         urlParams.set('startDate', params.startDate);
         urlParams.set('locationUuids', params.locationUuids);
-        urlParams.set('programVisitEncounter', params.programVisitEncounter);
+        if (params.programType && params.programType.length > 0) {
+            urlParams.set('programType', params.programType);
+          }
+        if (params.visitType && params.visitType.length > 0) {
+            urlParams.set('visitType', params.visitType);
+        }
+        if (params.encounterType && params.encounterType.length > 0) {
+             urlParams.set('encounterType', params.encounterType);
+        }
+        // urlParams.set('programVisitEncounter', params.programVisitEncounter);
         urlParams.set('limit', params.limit);
         let url = this.getUrl('daily-visits', params.startDate);
-        let request = this.http.get(url, {
+        return this.http.get(url, {
             search: urlParams
         })
             .map((response: Response) => {
                 return response.json().result;
             });
-        return this.cacheService.cacheRequest(url, urlParams, request);
+        // return this.cacheService.cacheRequest(url, urlParams, request);
     }
 
     public getDailyAppointments(params) {
@@ -49,17 +58,26 @@ export class DailyScheduleResourceService {
         urlParams.set('startIndex', params.startIndex);
         urlParams.set('startDate', params.startDate);
         urlParams.set('locationUuids', params.locationUuids);
-        urlParams.set('programVisitEncounter', params.programVisitEncounter);
+        if (params.programType && params.programType.length > 0) {
+            urlParams.set('programType', params.programType);
+          }
+        if (params.visitType && params.visitType.length > 0) {
+            urlParams.set('visitType', params.visitType);
+        }
+        if (params.encounterType && params.encounterType.length > 0) {
+             urlParams.set('encounterType', params.encounterType);
+        }
+        // urlParams.set('programVisitEncounter', params.programVisitEncounter);
         urlParams.set('limit', params.limit);
 
         let url = this.getUrl('daily-appointments', params.startDate);
-        let request = this.http.get(url, {
+        return this.http.get(url, {
             search: urlParams
         })
             .map((response: Response) => {
                 return response.json().result;
             });
-        return this.cacheService.cacheRequest(url, urlParams, request);
+        // return this.cacheService.cacheRequest(url, urlParams, request);
     }
 
     public getDailyHasNotReturned(params) {
@@ -73,17 +91,26 @@ export class DailyScheduleResourceService {
         urlParams.set('startIndex', params.startIndex);
         urlParams.set('startDate', params.startDate);
         urlParams.set('locationUuids', params.locationUuids);
-        urlParams.set('programVisitEncounter', params.programVisitEncounter);
+        if (params.programType && params.programType.length > 0) {
+            urlParams.set('programType', params.programType);
+          }
+        if (params.visitType && params.visitType.length > 0) {
+            urlParams.set('visitType', params.visitType);
+        }
+        if (params.encounterType && params.encounterType.length > 0) {
+             urlParams.set('encounterType', params.encounterType);
+        }
+        // urlParams.set('programVisitEncounter', params.programVisitEncounter);
         urlParams.set('limit', params.limit);
 
         let url = this.getUrl('daily-has-not-returned', params.startDate);
-        let request = this.http.get(url, {
+        return this.http.get(url, {
             search: urlParams
         })
             .map((response: Response) => {
                 return response.json().result;
             });
-        return this.cacheService.cacheRequest(url, urlParams, request);
+        // return this.cacheService.cacheRequest(url, urlParams, request);
     }
 
 }

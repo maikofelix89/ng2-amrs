@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { AngularMultiSelectModule }
 from 'angular2-multiselect-dropdown/angular2-multiselect-dropdown';
+import { DateTimePickerModule } from 'ng2-openmrs-formentry/dist/components/date-time-picker';
 import { AppFeatureAnalytics } from '../shared/app-analytics/app-feature-analytics.service';
 import { DepartmentProgramsConfigService } from './../etl-api/department-programs-config.service';
 import { DataCacheService } from '../shared/services/data-cache.service';
@@ -12,7 +13,8 @@ import { DataCacheService } from '../shared/services/data-cache.service';
     imports: [
         FormsModule,
         CommonModule,
-        AngularMultiSelectModule
+        AngularMultiSelectModule,
+        DateTimePickerModule
     ],
     exports: [ProgramVisitEncounterSearchComponent],
     declarations: [ProgramVisitEncounterSearchComponent],

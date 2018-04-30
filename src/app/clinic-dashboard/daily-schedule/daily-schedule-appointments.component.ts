@@ -15,12 +15,12 @@ import { Router, ActivatedRoute, ActivatedRouteSnapshot, Params } from '@angular
 export class DailyScheduleAppointmentsComponent implements OnInit, OnDestroy {
 
   @Input() public selectedDate: any;
-  public filter: any = {
-     'programType': [],
-     'visitType': [],
-     'encounterType': []
+  public params: any =  {
+    'programType': '',
+    'visitType': '',
+    'encounterType': '',
+    'startDate': Moment().format('YYYY-MM-DD')
   };
-  public encodedParams: string =  encodeURI(JSON.stringify(this.filter));
   public errors: any[] = [];
   public dailyAppointmentsPatientList: any[] = [];
   public loadingDailyAppointments: boolean = false;
@@ -29,6 +29,7 @@ export class DailyScheduleAppointmentsComponent implements OnInit, OnDestroy {
   public selectedClinic: any;
   public nextStartIndex: number = 0;
   public fetchCount: number = 0;
+  public busy: Subscription;
   @Input() public tab: any;
   @Input()
   set options(value) {
@@ -48,44 +49,25 @@ export class DailyScheduleAppointmentsComponent implements OnInit, OnDestroy {
   }
 
   public ngOnInit() {
-    this.filterSelected();
     this.selectedDate = Moment().format('YYYY-MM-DD');
     this.currentClinicSubscription = this.clinicDashboardCacheService.getCurrentClinic()
       .subscribe((location) => {
         this.selectedClinic = location;
-        if (this.selectedClinic) {
-          this.selectedDateSubscription = this.clinicDashboardCacheService.
-            getDailyTabCurrentDate().subscribe((date) => {
-            if ( this.loadingDailyAppointments === false) {
-              this.selectedDate = date;
-              this.initParams();
-              let params = this.getQueryParams();
-              this.getDailyAppointments(params);
-            }
-
-          });
-        }
-
       });
 
     // get the current page url and params
     this.route
       .queryParams
       .subscribe((params) => {
-        if (params) {
-          if (this.fetchCount === 0 ) {
-            /*
-            for intial page load do not fetch daily visits as
-            it has been already fetched
-            */
-
-          }else {
-            this.initParams();
-            let searchParams = this.getQueryParams();
-            this.getDailyAppointments(searchParams);
-          }
-          this.fetchCount++;
+        console.log('subscribe params', params);
+        this.initParams();
+        if (params.startDate) {
+            this.params = params;
+            console.log('Appontments Params', params);
         }
+        let searchParams = this.getQueryParams();
+        console.log('getDailyAppointments');
+        this.getDailyAppointments(searchParams);
       });
   }
 
@@ -103,6 +85,7 @@ export class DailyScheduleAppointmentsComponent implements OnInit, OnDestroy {
   }
 
   public getDailyAppointments(params) {
+    console.log('getDailyAppointments Params', params);
     this.loadingDailyAppointments = true;
     this.clinicDashboardCacheService.setIsLoading(this.loadingDailyAppointments);
 
@@ -113,14 +96,14 @@ export class DailyScheduleAppointmentsComponent implements OnInit, OnDestroy {
     } else {
       this.appointmentSubscription = result.subscribe(
         (patientList) => {
-          if (patientList.length > 0) {
-            this.dailyAppointmentsPatientList = this.dailyAppointmentsPatientList.concat(
-              patientList);
+          if (patientList.length > 300) {
             let size: number = patientList.length;
             this.nextStartIndex = this.nextStartIndex + size;
           } else {
             this.dataLoaded = true;
           }
+          this.dailyAppointmentsPatientList = this.dailyAppointmentsPatientList.concat(
+            patientList);
           this.loadingDailyAppointments = false;
           this.clinicDashboardCacheService.setIsLoading(this.loadingDailyAppointments);
 
@@ -143,6 +126,7 @@ export class DailyScheduleAppointmentsComponent implements OnInit, OnDestroy {
     this.loadingDailyAppointments = true;
     this.clinicDashboardCacheService.setIsLoading(this.loadingDailyAppointments);
     let params = this.getQueryParams();
+    console.log('getDailyAppointments');
     this.getDailyAppointments(params);
 
   }
@@ -157,34 +141,16 @@ export class DailyScheduleAppointmentsComponent implements OnInit, OnDestroy {
   }
 
   private getQueryParams() {
-    this.filterSelected();
+    console.log('Getquery params', this.params);
     return {
-      startDate: this.selectedDate,
+      startDate: this.params.startDate,
       startIndex: this.nextStartIndex,
       locationUuids: this.selectedClinic,
-      programVisitEncounter: this.encodedParams,
+      programType: this.params.programType,
+      visitType: this.params.visitType,
+      encounterType: this.params.encounterType,
       limit: undefined
     };
-
-  }
-
-  private filterSelected() {
-      let cookieKey = 'programVisitEncounterFilter';
-
-      let cookieVal =  encodeURI(JSON.stringify(this.encodedParams));
-
-      let programVisitStored = this.localStorageService.getItem(cookieKey);
-
-      if (programVisitStored === null) {
-
-      } else {
-
-         cookieVal =  this.localStorageService.getItem(cookieKey);
-
-         // this._cookieService.put(cookieKey, cookieVal);
-      }
-
-      this.encodedParams = cookieVal;
 
   }
 }

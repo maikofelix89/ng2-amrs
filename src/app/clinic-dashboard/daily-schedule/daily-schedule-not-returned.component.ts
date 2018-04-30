@@ -21,12 +21,12 @@ export class DailyScheduleNotReturnedComponent implements OnInit, OnDestroy {
   public dataLoaded: boolean = false;
   public nextStartIndex: number = 0;
   public selectedNotReturnedTab: any;
-  public filter: any = {
-     'programType': [],
-     'visitType': [],
-     'encounterType': []
+  public params: any =  {
+    'programType': '',
+    'visitType': '',
+    'encounterType': '',
+    'startDate': Moment().format('YYYY-MM-DD')
   };
-  public encodedParams: string =  encodeURI(JSON.stringify(this.filter));
   public extraColumns: any = {
     headerName: 'Phone Number',
     width: 80,
@@ -53,43 +53,23 @@ export class DailyScheduleNotReturnedComponent implements OnInit, OnDestroy {
   }
 
   public ngOnInit() {
-     this.filterSelected();
      this.selectedDate = Moment().format('YYYY-MM-DD');
      this.currentClinicSubscription = this.clinicDashboardCacheService.getCurrentClinic()
        .subscribe((location) => {
          this.selectedClinic = location;
-         if (this.selectedClinic) {
-           this.selectedDateSubscription = this.clinicDashboardCacheService.
-             getDailyTabCurrentDate().subscribe((date) => {
-               if (this.loadingDailyNotReturned === false) {
-                 this.selectedDate = date;
-                 this.initParams();
-                 let params = this.getQueryParams();
-                 this.getDailyHasNotReturned(params);
-               }
-
-             });
-
-         }
        });
 
      this.route
        .queryParams
        .subscribe((params) => {
-         if (params) {
-           if (this.fetchCount === 0 ) {
-            /*
-            for intial page load do not fetch daily visits as
-            it has been already fetched
-            */
-
-          }else {
-             let searchParams = this.getQueryParams();
-             this.initParams();
-             this.getDailyHasNotReturned(searchParams);
+          console.log('subscribe params', params);
+          if (params.startDate) {
+              this.params = params;
+              console.log('Has Not Returned Params', params);
           }
-           this.fetchCount++;
-         }
+          let searchParams = this.getQueryParams();
+          console.log('getHasNotReturned');
+          this.getDailyHasNotReturned(searchParams);
        });
   }
 
@@ -116,13 +96,14 @@ export class DailyScheduleNotReturnedComponent implements OnInit, OnDestroy {
   }
 
   private getQueryParams() {
-    this.filterSelected();
     return {
-      startDate: this.selectedDate,
+      startDate: this.params.startDate,
       startIndex: this.nextStartIndex,
       locationUuids: this.selectedClinic,
-      programVisitEncounter: this.encodedParams,
-      limit: undefined
+      programType: this.params.programType,
+      visitType: this.params.visitType,
+      encounterType: this.params.encounterType,
+      limit: 300
     };
 
   }
@@ -137,15 +118,16 @@ export class DailyScheduleNotReturnedComponent implements OnInit, OnDestroy {
     } else {
       result.subscribe(
         (patientList) => {
-          if (patientList.length > 0) {
-            this.notReturnedPatientList = this.notReturnedPatientList.concat(
-              patientList);
+          this.initParams();
+          if (patientList.length > 300) {
             let size: number = patientList.length;
             this.nextStartIndex = this.nextStartIndex + size;
             this.currentTabLoaded = true;
           } else {
             this.dataLoaded = true;
           }
+          this.notReturnedPatientList = this.notReturnedPatientList.concat(
+            patientList);
           this.loadingDailyNotReturned = false;
           this.clinicDashboardCacheService.setIsLoading(this.loadingDailyNotReturned);
         }
@@ -161,27 +143,6 @@ export class DailyScheduleNotReturnedComponent implements OnInit, OnDestroy {
         }
       );
     }
-  }
-
-    private filterSelected() {
-
-      let cookieKey = 'programVisitEncounterFilter';
-
-      let cookieVal =  encodeURI(JSON.stringify(this.encodedParams));
-
-      let programVisitStored = this.localStorageService.getItem(cookieKey);
-
-      if (programVisitStored === null) {
-
-      } else {
-
-         cookieVal =  this.localStorageService.getItem(cookieKey);
-
-         // this._cookieService.put(cookieKey, cookieVal);
-      }
-
-      this.encodedParams = cookieVal;
-
   }
 
 }
