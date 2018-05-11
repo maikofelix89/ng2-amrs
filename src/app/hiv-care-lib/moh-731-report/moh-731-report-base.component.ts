@@ -1,4 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
+import { Router, ActivatedRoute , Params } from '@angular/router';
 // import { Observable, Subject } from 'rxjs/Rx';
 
 import * as Moment from 'moment';
@@ -82,7 +83,10 @@ export class Moh731ReportBaseComponent implements OnInit {
     this._isAggregated = v;
   }
 
-  constructor(public moh731Resource: Moh731ResourceService) {
+  constructor(
+    public moh731Resource: Moh731ResourceService,
+    public route: ActivatedRoute,
+    public router: Router) {
   }
 
   public ngOnInit() {
@@ -133,8 +137,20 @@ export class Moh731ReportBaseComponent implements OnInit {
       this.patientListLocationUuids.length > 0 && this.currentIndicator) {
       this.showTabularView = false;
       this.showPatientListLoader = true;
+      let params = {
+        startDate: this.toDateString(this.startDate),
+        endDate: this.toDateString(this.endDate),
+        locations: this.getSelectedLocations(this.patientListLocationUuids),
+        indicators: this.currentIndicator,
+        isLegacy: this.isLegacyReport
+      };
       // console.log('loading pl for', this.patientListLocationUuids);
       // console.log('loading pl for', this.currentIndicator);
+      this.router.navigate(['patient-list']
+        , {
+           relativeTo: this.route,
+          queryParams: params
+       });
     }
   }
 
@@ -179,6 +195,7 @@ export class Moh731ReportBaseComponent implements OnInit {
         selectedLocations = selectedLocations + ',' + locationUuids[i];
       }
     }
+    console.log('Locations ', selectedLocations);
     return selectedLocations;
   }
 

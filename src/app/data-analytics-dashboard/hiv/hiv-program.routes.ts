@@ -31,6 +31,9 @@ import {
   Moh731ReportComponent
 } from './moh-731/moh-731-report.component';
 
+import { Moh731PatientListComponent } from
+'./../../hiv-care-lib/moh-731-report/moh-731-patientlist.component';
+
 const routes: Routes = [
   {
     path: '',
@@ -82,6 +85,10 @@ const routes: Routes = [
               {
                 path: '',
                 component: Moh731ReportComponent
+              },
+              {
+                path: 'patient-list',
+                component: Moh731PatientListComponent
               }
             ]
           },
