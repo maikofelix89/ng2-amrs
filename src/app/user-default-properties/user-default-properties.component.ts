@@ -9,6 +9,7 @@ import { LocalStorageService } from '../utils/local-storage.service';
 import { DepartmentProgramsConfigService } from './../etl-api/department-programs-config.service';
 import { RetrospectiveDataEntryService
 } from '../retrospective-data-entry/services/retrospective-data-entry.service';
+import * as _ from 'lodash';
 
 @Component({
   selector: 'user-default-properties',
