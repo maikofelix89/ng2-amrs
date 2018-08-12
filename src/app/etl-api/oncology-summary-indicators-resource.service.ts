@@ -30,7 +30,7 @@ export class OncolgyMonthlySummaryIndicatorsResourceService {
         if (params.startDate && params.startDate !== '') {
             urlParams.set('startDate', params.startDate);
         }
-        if (params.gender && params.gender !== '') {
+        if (params.gender && params.gender.length > 0) {
             urlParams.set('genders', params.gender);
         }
         if (params.startAge && params.startAge !== '') {
