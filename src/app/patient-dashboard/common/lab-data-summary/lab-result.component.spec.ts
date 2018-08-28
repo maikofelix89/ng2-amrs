@@ -1,4 +1,5 @@
 
+/*
 import { TestBed, async, inject, fakeAsync, tick } from '@angular/core/testing';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { ChangeDetectorRef } from '@angular/core';
@@ -87,6 +88,7 @@ describe('Component: Lab Results Unit Tests', () => {
     (service: LabsResourceService) => {
       expect(comp).toBeTruthy();
     }));
+    */
   /*it('should render result table when there are new results',
     inject([LabsResourceService, PatientService],
       (service: LabsResourceService) => {
@@ -97,4 +99,6 @@ describe('Component: Lab Results Unit Tests', () => {
         let trs = nativeElement.querySelectorAll('tr');
         expect(trs.length).toBe(3);
       }));*/
+      /*
 });
+*/
