@@ -41,13 +41,18 @@ export class LabResultComponent implements OnInit, OnDestroy {
         if (patient) {
           this.patient = patient;
           this.patientUuId = this.patient.person.uuid;
+          /*
           this.getHistoricalPatientLabResults(this.patientUuId,
             { startIndex: this.nextStartIndex.toString(), limit: '20' });
+            */
+
+          // this.createOncologyColumnDefs();
+          this.createOncologyRows();
 
         }
       }
     );
-    this.gridOptions.columnDefs = this.createColumnDefs();
+    this.gridOptions.columnDefs = this.createOncologyColumnDefs();
     this.gridOptions.rowData = this.labResults;
 
   }
@@ -79,7 +84,8 @@ export class LabResultComponent implements OnInit, OnDestroy {
         this.fetchingResults = false;
         this.error = err;
       });
-    return this.labResults;
+    this.createOncologyRows();
+    // return this.labResults;
 
   }
   public formatDateField(result) {
@@ -208,6 +214,294 @@ export class LabResultComponent implements OnInit, OnDestroy {
         }
       }
     ];
+  }
+
+  private createOncologyColumnDefs() {
+    return [
+      {
+        headerName: '',
+        width: 250,
+        field: 'labs',
+         cellStyle: {
+          'text-align': 'right'
+        }
+      },
+      {
+        headerName: 'Most Recent Lab Tests',
+        width: 250,
+        field: 'most_recent',
+         cellStyle: {
+          'text-align': 'right'
+        }
+      },
+      {
+        headerName: 'Second Most Recent Lab Tests',
+        width: 250,
+        field: 'second_recent',
+         cellStyle: {
+          'text-align': 'right'
+        }
+      },
+      {
+        headerName: 'Third most recent lab tests',
+        width: 250,
+        field: 'third_recent',
+         cellStyle: {
+          'text-align': 'right'
+        }
+      }
+    ];
+  }
+
+  private createOncologyRows() {
+
+    let rows = [
+      {
+        labs: 'WBC',
+        most_recent: '',
+        second_recent: '',
+        third_recent: ''
+      },
+      {
+        labs: 'HGB',
+        most_recent: '',
+        second_recent: '',
+        third_recent: ''
+      },
+      {
+        labs: 'PLT',
+        most_recent: '',
+        second_recent: '',
+        third_recent: ''
+      },
+      {
+        labs: 'ANC',
+        most_recent: '',
+        second_recent: '',
+        third_recent: ''
+      },
+      {
+        labs: 'RBC',
+        most_recent: '',
+        second_recent: '',
+        third_recent: ''
+      },
+      {
+        labs: 'MCV',
+        most_recent: '',
+        second_recent: '',
+        third_recent: ''
+      },
+      {
+        labs: 'WBC',
+        most_recent: '',
+        second_recent: '',
+        third_recent: ''
+      },
+      {
+        labs: 'MCH',
+        most_recent: '',
+        second_recent: '',
+        third_recent: ''
+      },
+      {
+        labs: 'MCHC',
+        most_recent: '',
+        second_recent: '',
+        third_recent: ''
+      },
+      {
+        labs: 'RDW',
+        most_recent: '',
+        second_recent: '',
+        third_recent: ''
+      },
+      {
+        labs: 'Sodium',
+        most_recent: '',
+        second_recent: '',
+        third_recent: ''
+      },
+      {
+        labs: 'Potassium',
+        most_recent: '',
+        second_recent: '',
+        third_recent: ''
+      },
+       {
+        labs: 'WBC',
+        most_recent: '',
+        second_recent: '',
+        third_recent: ''
+      },
+      {
+        labs: 'HGB',
+        most_recent: '',
+        second_recent: '',
+        third_recent: ''
+      },
+      {
+        labs: 'PLT',
+        most_recent: '',
+        second_recent: '',
+        third_recent: ''
+      },
+      {
+        labs: 'ANC',
+        most_recent: '',
+        second_recent: '',
+        third_recent: ''
+      },
+      {
+        labs: 'RBC',
+        most_recent: '',
+        second_recent: '',
+        third_recent: ''
+      },
+      {
+        labs: 'MCV',
+        most_recent: '',
+        second_recent: '',
+        third_recent: ''
+      },
+      {
+        labs: 'WBC',
+        most_recent: '',
+        second_recent: '',
+        third_recent: ''
+      },
+      {
+        labs: 'MCH',
+        most_recent: '',
+        second_recent: '',
+        third_recent: ''
+      },
+      {
+        labs: 'MCHC',
+        most_recent: '',
+        second_recent: '',
+        third_recent: ''
+      },
+      {
+        labs: 'RDW',
+        most_recent: '',
+        second_recent: '',
+        third_recent: ''
+      },
+      {
+        labs: 'Sodium',
+        most_recent: '',
+        second_recent: '',
+        third_recent: ''
+      },
+      {
+        labs: 'Potassium',
+        most_recent: '',
+        second_recent: '',
+        third_recent: ''
+      },
+
+      {
+        labs: 'Chloride',
+        most_recent: '',
+        second_recent: '',
+        third_recent: ''
+      },
+      {
+        labs: 'Urea',
+        most_recent: '',
+        second_recent: '',
+        third_recent: ''
+      },
+      {
+        labs: 'Creatinine',
+        most_recent: '',
+        second_recent: '',
+        third_recent: ''
+      },
+      {
+        labs: 'Total Protein',
+        most_recent: '',
+        second_recent: '',
+        third_recent: ''
+      },
+      {
+        labs: 'Albumin',
+        most_recent: '',
+        second_recent: '',
+        third_recent: ''
+      },
+      {
+        labs: 'MCV',
+        most_recent: '',
+        second_recent: '',
+        third_recent: ''
+      },
+      {
+        labs: 'AST',
+        most_recent: '',
+        second_recent: '',
+        third_recent: ''
+      },
+      {
+        labs: 'ALT',
+        most_recent: '',
+        second_recent: '',
+        third_recent: ''
+      },
+      {
+        labs: 'ALP',
+        most_recent: '',
+        second_recent: '',
+        third_recent: ''
+      },
+      {
+        labs: 'GGT',
+        most_recent: '',
+        second_recent: '',
+        third_recent: ''
+      },
+      {
+        labs: 'Total Bili',
+        most_recent: '',
+        second_recent: '',
+        third_recent: ''
+      },
+      {
+        labs: 'Direct Bili',
+        most_recent: '',
+        second_recent: '',
+        third_recent: ''
+      },
+      {
+        labs: 'Uric acid',
+        most_recent: '',
+        second_recent: '',
+        third_recent: ''
+      },
+      {
+        labs: 'LDH',
+        most_recent: '',
+        second_recent: '',
+        third_recent: ''
+      },
+      {
+        labs: 'Total PSA',
+        most_recent: '',
+        second_recent: '',
+        third_recent: ''
+      },
+      {
+        labs: 'CEA 19-9',
+        most_recent: '',
+        second_recent: '',
+        third_recent: ''
+      }
+    ];
+
+    this.labResults = rows;
+    this.gridOptions.api.sizeColumnsToFit();
+
   }
 
 }
