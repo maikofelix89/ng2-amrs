@@ -292,7 +292,7 @@ export class FormentryComponent implements OnInit, OnDestroy {
     this.draftedFormsService.loadDraftOnNextFormLoad = false;
   }
 
-  public loadDefaultValues(): void {
+  public  loadDefaultValues(): void {
     let location = this.userDefaultPropertiesService.getCurrentUserDefaultLocationObject();
     let currentUser = this.userService.getLoggedInUser();
     let currentDate = moment().format();
@@ -553,8 +553,8 @@ export class FormentryComponent implements OnInit, OnDestroy {
         }
         // add visit type if present
         if (this.visitTypeUuid && this.visitTypeUuid !== '') {
-          this.dataSources.registerDataSource('visitTypeUuid',
-          {visitTypeUuid: this.visitTypeUuid  }, true);
+          this.dataSources.registerDataSource('visitType',
+          {uuid: this.visitTypeUuid  }, true);
         }
         // now set default value
         this.loadDefaultValues();
