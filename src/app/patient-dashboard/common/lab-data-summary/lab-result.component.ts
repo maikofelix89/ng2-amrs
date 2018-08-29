@@ -269,37 +269,7 @@ export class LabResultComponent implements OnInit, OnDestroy {
         third_recent: ''
       },
       {
-        labs: 'PLT',
-        most_recent: '',
-        second_recent: '',
-        third_recent: ''
-      },
-      {
-        labs: 'ANC',
-        most_recent: '',
-        second_recent: '',
-        third_recent: ''
-      },
-      {
-        labs: 'RBC',
-        most_recent: '',
-        second_recent: '',
-        third_recent: ''
-      },
-      {
         labs: 'MCV',
-        most_recent: '',
-        second_recent: '',
-        third_recent: ''
-      },
-      {
-        labs: 'WBC',
-        most_recent: '',
-        second_recent: '',
-        third_recent: ''
-      },
-      {
-        labs: 'MCH',
         most_recent: '',
         second_recent: '',
         third_recent: ''
@@ -317,122 +287,73 @@ export class LabResultComponent implements OnInit, OnDestroy {
         third_recent: ''
       },
       {
-        labs: 'Sodium',
+        labs: 'PLT',
         most_recent: '',
         second_recent: '',
         third_recent: ''
       },
       {
-        labs: 'Potassium',
+        labs: 'WBC',
+        most_recent: '',
+        second_recent: '',
+        third_recent: ''
+      },
+      {
+        labs: 'SERUM WBC',
+        most_recent: '',
+        second_recent: '',
+        third_recent: ''
+      },
+      {
+        labs: 'ANC',
+        most_recent: '',
+        second_recent: '',
+        third_recent: ''
+      },
+      {
+        labs: 'URIC ACID',
+        most_recent: '',
+        second_recent: '',
+        third_recent: ''
+      },
+      {
+        labs: 'CRETANINE',
+        most_recent: '',
+        second_recent: '',
+        third_recent: ''
+      },
+      {
+        labs: 'SODIUM',
         most_recent: '',
         second_recent: '',
         third_recent: ''
       },
        {
-        labs: 'WBC',
+        labs: 'POTASSIUM',
         most_recent: '',
         second_recent: '',
         third_recent: ''
       },
       {
-        labs: 'HGB',
+        labs: 'CHLORIDE',
         most_recent: '',
         second_recent: '',
         third_recent: ''
       },
       {
-        labs: 'PLT',
+        labs: 'TOTAL Bili',
         most_recent: '',
         second_recent: '',
         third_recent: ''
       },
       {
-        labs: 'ANC',
+        labs: 'Direct Bili',
         most_recent: '',
         second_recent: '',
         third_recent: ''
       },
       {
-        labs: 'RBC',
-        most_recent: '',
-        second_recent: '',
-        third_recent: ''
-      },
-      {
-        labs: 'MCV',
-        most_recent: '',
-        second_recent: '',
-        third_recent: ''
-      },
-      {
-        labs: 'WBC',
-        most_recent: '',
-        second_recent: '',
-        third_recent: ''
-      },
-      {
-        labs: 'MCH',
-        most_recent: '',
-        second_recent: '',
-        third_recent: ''
-      },
-      {
-        labs: 'MCHC',
-        most_recent: '',
-        second_recent: '',
-        third_recent: ''
-      },
-      {
-        labs: 'RDW',
-        most_recent: '',
-        second_recent: '',
-        third_recent: ''
-      },
-      {
-        labs: 'Sodium',
-        most_recent: '',
-        second_recent: '',
-        third_recent: ''
-      },
-      {
-        labs: 'Potassium',
-        most_recent: '',
-        second_recent: '',
-        third_recent: ''
-      },
-
-      {
-        labs: 'Chloride',
-        most_recent: '',
-        second_recent: '',
-        third_recent: ''
-      },
-      {
-        labs: 'Urea',
-        most_recent: '',
-        second_recent: '',
-        third_recent: ''
-      },
-      {
-        labs: 'Creatinine',
-        most_recent: '',
-        second_recent: '',
-        third_recent: ''
-      },
-      {
-        labs: 'Total Protein',
-        most_recent: '',
-        second_recent: '',
-        third_recent: ''
-      },
-      {
-        labs: 'Albumin',
-        most_recent: '',
-        second_recent: '',
-        third_recent: ''
-      },
-      {
-        labs: 'MCV',
+        labs: 'GGT',
         most_recent: '',
         second_recent: '',
         third_recent: ''
@@ -450,31 +371,19 @@ export class LabResultComponent implements OnInit, OnDestroy {
         third_recent: ''
       },
       {
+        labs: 'Total Protein',
+        most_recent: '',
+        second_recent: '',
+        third_recent: ''
+      },
+      {
+        labs: 'Albium',
+        most_recent: '',
+        second_recent: '',
+        third_recent: ''
+      },
+      {
         labs: 'ALP',
-        most_recent: '',
-        second_recent: '',
-        third_recent: ''
-      },
-      {
-        labs: 'GGT',
-        most_recent: '',
-        second_recent: '',
-        third_recent: ''
-      },
-      {
-        labs: 'Total Bili',
-        most_recent: '',
-        second_recent: '',
-        third_recent: ''
-      },
-      {
-        labs: 'Direct Bili',
-        most_recent: '',
-        second_recent: '',
-        third_recent: ''
-      },
-      {
-        labs: 'Uric acid',
         most_recent: '',
         second_recent: '',
         third_recent: ''
@@ -491,8 +400,39 @@ export class LabResultComponent implements OnInit, OnDestroy {
         second_recent: '',
         third_recent: ''
       },
+
       {
-        labs: 'CEA 19-9',
+        labs: 'CEA',
+        most_recent: '',
+        second_recent: '',
+        third_recent: ''
+      },
+      {
+        labs: 'CA 19-9',
+        most_recent: '',
+        second_recent: '',
+        third_recent: ''
+      },
+      {
+        labs: 'HBF',
+        most_recent: '',
+        second_recent: '',
+        third_recent: ''
+      },
+      {
+        labs: 'HBA',
+        most_recent: '',
+        second_recent: '',
+        third_recent: ''
+      },
+      {
+        labs: 'HbS',
+        most_recent: '',
+        second_recent: '',
+        third_recent: ''
+      },
+      {
+        labs: 'HBA2',
         most_recent: '',
         second_recent: '',
         third_recent: ''
