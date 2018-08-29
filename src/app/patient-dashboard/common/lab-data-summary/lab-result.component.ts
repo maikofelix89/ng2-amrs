@@ -500,7 +500,9 @@ export class LabResultComponent implements OnInit, OnDestroy {
     ];
 
     this.labResults = rows;
-    this.gridOptions.api.sizeColumnsToFit();
+    setTimeout(() => {
+      this.gridOptions.api.sizeColumnsToFit();
+    }, 500);
 
   }
 
