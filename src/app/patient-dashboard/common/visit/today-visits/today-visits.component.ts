@@ -127,16 +127,19 @@ export class TodayVisitsComponent implements OnInit {
   }
 
   public onFormSelected(selected) {
+    console.log('Form selected', selected);
     if (selected) {
       this.router.navigate(['../formentry', selected.form.uuid],
         {
           relativeTo: this.route,
-          queryParams: { visitUuid: selected.visit.uuid }
+          queryParams: { visitUuid: selected.visit.uuid ,
+            visitTypeUuid : selected.visit.visitType.uuid }
         });
     }
   }
 
   public onEncounterSelected(encounter) {
+    console.log('Encounter selected', encounter);
     if (encounter) {
       this.router.navigate(['../formentry', encounter.form.uuid], {
         relativeTo: this.route,

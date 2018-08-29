@@ -80,6 +80,7 @@ export class FormentryComponent implements OnInit, OnDestroy {
   private encounterUuid: string = null;
   private encounter: any = null;
   private visitUuid: string = null;
+  private visitTypeUuid: string = null;
   private failedPayloadTypes: Array<string> = null;
   private compiledSchemaWithEncounter: any = null;
   private submitDuplicate: boolean = false;
@@ -121,6 +122,7 @@ export class FormentryComponent implements OnInit, OnDestroy {
     // get visitUuid & encounterUuid then load form
     this.route.queryParams.subscribe((params) => {
       componentRef.visitUuid = params['visitUuid'];
+      componentRef.visitTypeUuid = params['visitTypeUuid'];
       componentRef.encounterUuid = params['encounter'];
       componentRef.transferCareForm = params['transferCareEncounter'];
       componentRef.programEncounter = params['programEncounter'];
@@ -533,6 +535,7 @@ export class FormentryComponent implements OnInit, OnDestroy {
       // for the case of hiv, set-up the hiv summary
       this.setUpHivSummaryDataObject();
 
+
       if (this.encounter) { // editing existing form
         this.form = this.formFactory.createForm(schema, this.dataSources.dataSources);
         this.formRelationsFix(this.form);
@@ -547,6 +550,11 @@ export class FormentryComponent implements OnInit, OnDestroy {
         // add visit uuid if present
         if (this.visitUuid && this.visitUuid !== '') {
           this.form.valueProcessingInfo.visitUuid = this.visitUuid;
+        }
+        // add visit type if present
+        if (this.visitTypeUuid && this.visitTypeUuid !== '') {
+          this.dataSources.registerDataSource('visitTypeUuid',
+          {visitTypeUuid: this.visitTypeUuid  }, true);
         }
         // now set default value
         this.loadDefaultValues();
@@ -563,6 +571,7 @@ export class FormentryComponent implements OnInit, OnDestroy {
       }
       // Find and set a provider uuid to be used when updating orders as orderer
       this.setProviderUuid();
+      console.log('Formentry form', this.form);
 
     } catch (ex) {
       // TODO Handle all form rendering errors
