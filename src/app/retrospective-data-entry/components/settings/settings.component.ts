@@ -67,7 +67,7 @@ export class RetrospectiveSettingsComponent implements OnInit, OnDestroy {
 
   public ngOnDestroy() {
     this.cdRef.detach();
-    this.suggest.unsubscribe();
+    // this.suggest.unsubscribe();
   }
 
   public fetchLocationOptions() {
