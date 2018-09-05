@@ -1,0 +1,91 @@
+<div *ngIf="group">
+
+  <h3 style="margin-bottom: 25px;"> <i class="fa fa-users"></i>
+    <span class="text-bold"> Manage Groups \ {{group.name}}</span>
+  </h3>
+<mat-expansion-panel>
+  <mat-expansion-panel-header>
+    <mat-panel-title>
+      <h4 class="text-bold">Group Summary</h4>
+    </mat-panel-title>
+  </mat-expansion-panel-header>
+  <div class="row">
+    <div class="col-md-4 col-sm-4">
+      <h5> Group #: <span class="text-bold" *ngIf="groupNumber">{{groupNumber.value}}</span> </h5>
+    </div>
+    <div class="col-md-4 col-sm-4">
+     <h5> Group Name: <span class="text-bold">{{group.name}}</span></h5>
+    </div>
+    <div class="col-md-4 col-sm-4">
+      <h5 *ngIf="group.location"> Facility: <span class="text-bold">{{group.location.display}}</span> </h5>
+    </div>
+  </div>
+  <hr>
+  <div class="row">
+    <div class="col-md-4 col-sm-4">
+      <h5 *ngIf="landmark"> Landmark: <span class="text-bold">{{landmark.value}} </span> </h5>
+    </div>
+    <div class="col-md-4 col-sm-4">
+      <h5>Provider: <span class="text-bold">{{provider}}</span> </h5>
+    </div>
+    <div class="col-md-4 col-sm-4">
+      <h5>Group Leader:<span class="text-bold" *ngIf="group.cohortLeaders"> {{group.cohortLeaders[0].person.display}}</span> </h5>
+      <h5>Since:<span class="text-bold"> {{group.cohortLeaders[0].startDate | date: medium }}</span></h5>
+    </div>
+  </div>
+  <hr>
+  <div class="row">
+    <div class="col-md-4 col-sm-4">
+      <h5> Active Since: <span class="text-bold"> {{group.startDate | date : medium }}</span> </h5>
+    </div>
+    <div class="col-md-4 col-sm-4">
+      <h5> # of Members: <span class="text-bold"> 3</span> </h5>
+    </div>
+    <div class="col-md-4 col-sm-4">
+      <h5> Last Group Meeting: <span class="text-bold"> - </span> </h5>
+    </div>
+  </div>
+  <hr>
+  <div class="row">
+  <div class="col-md-5 col-sm-6 pull-right">
+    <div class="btn-group" role="group">
+      <button type="button" class="btn btn-default">Edit Details</button>
+      <button type="button" class="btn btn-default">Change Leader</button>
+      <button type="button" class="btn btn-danger">End Group</button>
+    </div>
+  </div>
+  </div>
+</mat-expansion-panel>
+  <mat-card>
+    <div class="row" style="margin-bottom: 15px;">
+    <h4 class="text-bold col-md-5 col-sm-5">
+      Group Members and Meetings
+    </h4>
+
+      <div class="col-md-5 col-sm-6 pull-right">
+        <div class="btn-group" role="group">
+          <button type="button" class="btn btn-default">Edit Membership</button>
+          <button type="button" class="btn btn-primary">Start Group Meeting</button>
+        </div>
+      </div>
+    </div>
+    <!--<table class="table table-striped">-->
+      <!--<thead>-->
+      <!--<tr>-->
+        <!--<th>Identifiers</th>-->
+        <!--<th>Name</th>-->
+        <!--<th>Contacts</th>-->
+        <!--<th>Member Since</th>-->
+      <!--</tr>-->
+      <!--</thead>-->
+      <!--<tbody>-->
+      <!--<tr *ngFor="let member of cohortMembers">-->
+        <!--<td>member.identifiers</td>-->
+        <!--<td>member.name</td>-->
+        <!--<td>member.contacts</td>-->
+        <!--<td>member.startDate</td>-->
+      <!--</tr>-->
+      <!--</tbody>-->
+    <!--</table>-->
+  </mat-card>
+</div>

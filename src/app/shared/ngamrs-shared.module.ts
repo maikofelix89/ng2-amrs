@@ -10,7 +10,8 @@ import { NgxPaginationModule } from 'ngx-pagination';
 import { SelectModule } from 'ngx-select';
 
 import {
-  MatProgressSpinnerModule, MatProgressBarModule, MatTabsModule, MatSnackBarModule, MatSlideToggleModule
+  MatProgressSpinnerModule, MatProgressBarModule, MatTabsModule, MatSnackBarModule, MatSlideToggleModule, MatCardModule,
+  MatExpansionModule
 } from '@angular/material';
 import { CacheService } from 'ionic-cache';
 import { DateTimePickerModule } from 'ngx-openmrs-formentry/dist/ngx-formentry/';
@@ -114,12 +115,14 @@ import { RetrospectiveDataEntryModule
     ModalModule.forRoot(),
     // BrowserAnimationsModule
     CacheModule,
+    MatExpansionModule,
     // SelectModule,
     NgSelectModule,
     MatTabsModule,
     MatProgressBarModule,
     MatProgressSpinnerModule,
     MatTabsModule,
+    MatCardModule,
     MatSnackBarModule,
     MatSlideToggleModule,
     FormEntryModule,
@@ -128,7 +131,7 @@ import { RetrospectiveDataEntryModule
     MatSnackBarModule, NgxPaginationModule
   ],
   exports: [NgBusyModule, LaddaModule, NgSelectModule, DisplayErrorComponent,
-    RetrospectiveDataEntryModule,
+    RetrospectiveDataEntryModule, MatCardModule, MatExpansionModule,
     PatientReferralContainerComponent, PatientEncounterObservationsComponent,
     StringToDatePipe, Ng2FilterPipe, OnlineTrackerComponent, HivProgramSnapshotComponent,
     BuildVersionComponent, UnenrollPatientProgramsComponent,
