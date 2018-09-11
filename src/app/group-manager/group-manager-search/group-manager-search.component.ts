@@ -18,6 +18,7 @@ export class GroupManagerSearchComponent implements OnInit {
     public hideResults: boolean;
     public totalGroups: number;
     public errorMessage: String;
+    public showGroupDialog = false;
     constructor(private groupService: CommunityGroupService,
                 private router: Router,
                 private route: ActivatedRoute) { }
@@ -55,5 +56,10 @@ export class GroupManagerSearchComponent implements OnInit {
 
     public onGroupSelected(groupUuid: string) {
         this.router.navigate(['../group', groupUuid], {relativeTo: this.route});
+    }
+    public navigateToCreateGroup() {
+        this.router.navigate(['../create-group'], {
+            relativeTo: this.route
+        });
     }
 }
