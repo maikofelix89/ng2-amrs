@@ -120,7 +120,7 @@ const routes: Routes = [
               path: 'clinic-flow', component: DailyScheduleClinicFlowComponent,
               children: [
                 { path: 'visits', component: ClinicFlowVisitsComponent },
-                { path: 'summary', component: ClinicFlowSummaryComponent },
+                { path: '', component: ClinicFlowSummaryComponent },
                 { path: 'provider-stats', component: ClinicFlowProviderStatsComponent },
                 { path: 'location', component: ClinicFlowLocationStatsComponent },
                 { path: '', redirectTo: 'summary', pathMatch: 'prefix' }

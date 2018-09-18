@@ -33,6 +33,7 @@ export class DataEntryStatisticsComponent
   public viewTypes: any = [];
   public subType: any = [];
   public view: any = [];
+  public error = '';
 
   constructor(
     private _cd: ChangeDetectorRef,
@@ -83,7 +84,11 @@ export class DataEntryStatisticsComponent
           message: ''
         };
        }
-   });
+   },
+   (error: any) => {
+     this.error = error.message;
+     console.log('Erro');
+  });
 
 }
 

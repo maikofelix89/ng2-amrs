@@ -1,5 +1,5 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
-import { Message } from 'primeng/primeng';
+import { Message, Schedule } from 'primeng/primeng';
 import { ClinicDashboardCacheService }
   from '../../clinic-dashboard/services/clinic-dashboard-cache.service';
 import { DatePipe } from '@angular/common';
@@ -17,12 +17,14 @@ export class DailyScheduleBaseComponent implements OnInit {
 
   public errors: any[] = [];
   public selectedDate: any;
+  public viewDate: string = '';
   public changeDate;
   public selectedLocation: any;
   public loadingData: boolean = true;
   public filterSet = false;
   @Output() public selectedSchedule = new EventEmitter();
   public msgs: Message[] = [];
+  public calendarType: string = 'daily';
   public reportFilter: any = { ageRange: [40, 70] };
   public dataToBind: any = {
     ageRange: [0, 15],
@@ -48,55 +50,54 @@ export class DailyScheduleBaseComponent implements OnInit {
 
   }
   public ngOnInit() {
-    this.setActiveTab();
-    this.updateCurrentDate();
-    // this.clinicDashboardCacheService.getIsLoading().subscribe((value) => {
-    //   this.loadingData = value;
-    // });
-
-    // this.clinicFlowCache.getIsLoading().subscribe((value) => {
-    //   this.loadingData = value;
-    // });
+    console.log('Daily Schedule Init');
+    setTimeout(( ) => {
+      this.setActiveTab();
+    }, 100);
+    // this.updateCurrentDate();
     this.clinicDashboardCacheService.getCurrentClinic()
       .subscribe((location) => {
         this.selectedLocation = location;
         this.clinicFlowCache.setSelectedLocation(location);
       });
-    if (this.clinicFlowCache.lastClinicFlowSelectedDate) {
-      this.selectedDate = this.clinicFlowCache.lastClinicFlowSelectedDate;
-    }
+    this.route
+    .queryParams
+    .subscribe((params) => {
+      console.log('Update current date', params);
+      if (params['startDate']) {
+        console.log('Update current date', params);
+        let paramsDate = params['startDate'];
+        this.viewDate = params.startDate;
+        console.log('View Date', this.viewDate);
+        let m = Moment(this.selectedDate);
+        this.selectedDate = Moment(paramsDate, 'YYYY-MM-DD').format('MMM dd, YYYY');
+        // this.changeDate = new Date(this.selectedDate);
+        // this.clinicDashboardCacheService.setDailyTabCurrentDate(this.selectedDate);
+      } else {
+
+          this.selectedDate = Moment().format('MMM DD, YYYY');
+      }
+    });
   }
 
   public setActiveTab() {
+    console.log('setActiveTab');
     if (this.router.url) {
       let path = this.router.url;
       let n = this.router.url.indexOf('?');
       path = this.router.url.substring(0, n !== -1 ? n : path.length);
+      console.log('Path', path);
       path = path.substr(this.router.url.lastIndexOf('/') + 1);
       this.activeLinkIndex = this.tabLinks.findIndex((x) => x.link === path);
+      console.log('ActiveLinkIndex', this.activeLinkIndex);
+      console.log('setActiveTab', this.router.url);
 
     }
   }
 
   public updateCurrentDate() {
     if (this.route && this.route.queryParams) {
-      this.route.queryParams.subscribe((params) => {
-        if (params['date']) {
-          this.selectedDate = params['date'];
-          let m = Moment(this.selectedDate);
-          this.changeDate = new Date(this.selectedDate);
-          this.clinicDashboardCacheService.setDailyTabCurrentDate(this.selectedDate);
-        } else {
-
-            if (this.filterSet === false) {
-                this.selectedDate = this._datePipe.transform(
-                  new Date(), 'yyyy-MM-dd');
-                this.changeDate = new Date(this.selectedDate);
-
-            }
-
-        }
-      });
+     
     }
 
   }
@@ -147,6 +148,17 @@ export class DailyScheduleBaseComponent implements OnInit {
       this.filterSet = true;
       this.selectedDate = this._datePipe.transform( this.selectedDate, 'yyyy-MM-dd');
       this.changeDate = new Date(this.selectedDate);
+  }
+  public navigate($event, link) {
+    console.log('Link', link);
+    let queryParams = this.route.snapshot.queryParams;
+    this.router.navigate(['./' + link], {
+      queryParams : queryParams,
+      relativeTo: this.route
+    });
+    setTimeout(( ) => {
+      this.setActiveTab();
+    }, 100);
   }
 
 }

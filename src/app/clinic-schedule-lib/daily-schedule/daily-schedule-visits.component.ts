@@ -29,7 +29,15 @@ export class DailyScheduleVisitsComponent implements OnInit, OnDestroy {
      'visitType': [],
      'encounterType': []
   };
-  public encodedParams: string =  encodeURI(JSON.stringify(this.filter));
+  public params: any = {
+    'programType': [],
+    'visitType': [],
+    'encounterType': []
+  };
+  public busyIndicator: any = {
+    busy: false,
+    message: 'Please wait...' // default message
+  };
   public fetchCount: number = 0;
   @Input() public tab: any;
   @Input() public newList: any;
@@ -53,6 +61,7 @@ export class DailyScheduleVisitsComponent implements OnInit, OnDestroy {
   }
 
   public ngOnInit() {
+    console.log('Visits init');
     this.selectedDate = Moment().format('YYYY-MM-DD');
     this.currentClinicSubscription = this.clinicDashboardCacheService.getCurrentClinic()
       .subscribe((location) => {
@@ -76,18 +85,11 @@ export class DailyScheduleVisitsComponent implements OnInit, OnDestroy {
       .queryParams
       .subscribe((params) => {
         if (params) {
-          if (this.fetchCount === 0 ) {
-            /*
-            for intial page load do not fetch daily visits as
-            it has been already fetched
-            */
-
-          }else {
+          if (params.programType) {
             let searchParams = this.getQueryParams();
             this.initParams();
             this.getDailyVisits(searchParams);
           }
-          this.fetchCount++;
 
         }
       });
@@ -107,13 +109,26 @@ export class DailyScheduleVisitsComponent implements OnInit, OnDestroy {
   }
 
   public getQueryParams() {
-    this.filterSelected();
+    let programType: any = [];
+    let visitType: any = [];
+    let encounterType: any = [];
+    if (this.params.programType.length > 0) {
+        programType = this.params.programType;
+    }
+    if (this.params.visitType && this.params.visitType.length > 0) {
+      visitType = this.params.visitType;
+    }
+    if (this.params.encounterType && this.params.encounterType.length > 0) {
+      encounterType = this.params.encounterType;
+    }
     return {
       startDate: this.selectedDate,
       startIndex: this.nextStartIndex,
       locationUuids: this.selectedClinic,
-      programVisitEncounter: this.encodedParams,
-      limit: undefined
+      programType: programType,
+      visitType: visitType,
+      encounterType: encounterType,
+      limit: 1000
     };
 
   }
@@ -128,6 +143,7 @@ export class DailyScheduleVisitsComponent implements OnInit, OnDestroy {
   }
 
   private getDailyVisits(params) {
+    this.setBusy();
     this.loadingDailyVisits = true;
     this.clinicDashboardCacheService.setIsLoading(this.loadingDailyVisits);
     let result = this.dailyScheduleResource.
@@ -138,20 +154,20 @@ export class DailyScheduleVisitsComponent implements OnInit, OnDestroy {
     } else {
       this.visitsSubscription = result.subscribe(
         (patientList) => {
-          if (patientList.length > 0) {
-            this.dailyVisitsPatientList = this.dailyVisitsPatientList.concat(
-              patientList);
-            let size: number = patientList.length;
-            this.nextStartIndex = this.nextStartIndex + size;
+          if (patientList) {
+            this.dailyVisitsPatientList = patientList;
             this.currentTabLoaded = true;
+            this.dataLoaded = true;
           } else {
             this.dataLoaded = true;
           }
+          this.setFree();
           this.loadingDailyVisits = false;
           this.clinicDashboardCacheService.setIsLoading(this.loadingDailyVisits);
         }
         ,
         (error) => {
+          this.setFree();
           this.loadingDailyVisits = false;
           this.clinicDashboardCacheService.setIsLoading(this.loadingDailyVisits);
           this.dataLoaded = true;
@@ -164,23 +180,21 @@ export class DailyScheduleVisitsComponent implements OnInit, OnDestroy {
     }
   }
 
-    private filterSelected() {
-      let cookieKey = 'programVisitEncounterFilter';
+  private setBusy() {
 
-      let cookieVal = encodeURI(JSON.stringify(this.encodedParams));
+    this.busyIndicator = {
+      busy: true,
+      message: 'Please wait...Loading'
+    };
 
-      let programVisitStored = this.localStorageService.getItem(cookieKey);
+  }
+  private setFree() {
 
-      if (programVisitStored === null) {
+    this.busyIndicator = {
+      busy: false,
+      message: ''
+    };
 
-      } else {
-
-        cookieVal =  this.localStorageService.getItem(cookieKey);
-
-        // this._cookieService.put(cookieKey, cookieVal);
-      }
-
-      this.encodedParams = cookieVal;
   }
 
 }

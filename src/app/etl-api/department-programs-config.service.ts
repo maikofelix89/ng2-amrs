@@ -26,4 +26,19 @@ export class DepartmentProgramsConfigService {
 
   }
 
+  public getDepartmentPrograms(department): Observable<any> {
+    let urlParams: URLSearchParams = new URLSearchParams();
+    let url = this.getBaseUrl() + 'department-programs';
+    urlParams.set('department', department);
+    return this.http.get(url, {
+      search: urlParams
+    })
+    .map((response: Response) => {
+        return response.json();
+    });
+
+    // return this.cacheService.cacheRequest(url, '' , request);
+
+  }
+
 }

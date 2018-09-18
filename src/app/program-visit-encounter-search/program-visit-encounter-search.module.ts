@@ -10,6 +10,9 @@ import { AppFeatureAnalytics } from '../shared/app-analytics/app-feature-analyti
 import { DepartmentProgramsConfigService } from './../etl-api/department-programs-config.service';
 import { DataCacheService } from '../shared/services/data-cache.service';
 import { SelectDepartmentService } from './program-visit-encounter-search.service';
+import {
+    DateTimePickerModule
+  } from 'ng2-openmrs-formentry/dist/components/date-time-picker';
 @NgModule({
     imports: [
         FormsModule,
@@ -18,7 +21,8 @@ import { SelectDepartmentService } from './program-visit-encounter-search.servic
         MdSelectModule,
         MdOptionModule,
         MdFormFieldModule,
-        MdInputModule
+        MdInputModule,
+        DateTimePickerModule
     ],
     exports: [ProgramVisitEncounterSearchComponent],
     declarations: [ProgramVisitEncounterSearchComponent],
