@@ -380,3 +380,13 @@ app-formentry p-dialog a.ui-dialog-titlebar-close {
 .form-entry ng-select {
   overflow-x: visible !important;
 }
+
+.mat-datepicker-dialog {
+  margin-top: 200px !important;
+}
+
+@media only screen and (max-width: 600px){
+  .mat-datepicker-dialog {
+    margin-top: 200px !important;
+  }
+}
