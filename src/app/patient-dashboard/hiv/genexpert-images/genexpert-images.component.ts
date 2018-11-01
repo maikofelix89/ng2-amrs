@@ -16,6 +16,7 @@ export class GeneXpertImagesComponent implements OnInit, OnDestroy {
     images = [];
     error = '';
     busy = false;
+    resultDate = '';
     public allImages: any = [];
     @ViewChild('imageModal')
     public imageModal: ModalDirective;
@@ -45,7 +46,8 @@ export class GeneXpertImagesComponent implements OnInit, OnDestroy {
     }
 
     showImage(image) {
-        this.imageLink = `${image}`;
+        this.resultDate = image.obs_datetime;
+        this.imageLink = `${image.value_text}`;
         this.imageModal.show();
     }
     ngOnDestroy(): void {

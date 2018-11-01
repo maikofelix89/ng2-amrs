@@ -18,7 +18,7 @@
               {{image.obs_datetime}}
             </td>
             <td>
-              <button (click)="showImage(image.value_text)" class="btn btn-primary" >
+              <button (click)="showImage(image)" class="btn btn-primary" >
                 <span class="fa fa-eye" aria-hidden="true"></span>
               </button>
             </td>
@@ -37,7 +37,7 @@
       <div class="modal-dialog modal-lg">
         <div class="modal-content">
           <div class="modal-header">
-            <h4 class="modal-title pull-left">Gene Expert Image {{this.resultDate |date:'dd-MMM-yyyy'}}</h4>
+            <h4 class="modal-title pull-left">Gene Expert Image {{this.resultDate }}</h4>
             <button type="button" class="close pull-right" aria-label="Close" (click)="imageModal.hide()">
               <span aria-hidden="true">&times;</span>
             </button>
