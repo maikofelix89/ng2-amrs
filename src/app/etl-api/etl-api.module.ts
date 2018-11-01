@@ -41,11 +41,13 @@ import { CdmSummaryResourceService } from './cdm-summary-resource.service';
 // import { ReferralProviderResourceService } from './referral-provider-resource.service';
 import { RadiologyImagingResourceService } from './radiology-imaging-resource.service';
 import { HivEnhancedReportService } from './hiv-enhanced-program-report.service';
+import { GeneXpertResourceService} from './genexpert-images-resource.service';
 @NgModule({
   imports: [CommonModule, AppSettingsModule],
   declarations: [],
   providers: [
     DailyScheduleResourceService,
+    GeneXpertResourceService,
     IndicatorResourceService,
     PatientReminderResourceService,
     VitalsResourceService,

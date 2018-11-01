@@ -48,6 +48,11 @@
           "url": "patient-imaging",
           "label": "Imaging",
           "icon": "icon-i-radiology"
+        },
+        {
+          "url": "patient-gene-xpert-images",
+          "label": "Gene Xpert Images",
+          "icon": "icon-i-laboratory"
         }
       ]
     },
