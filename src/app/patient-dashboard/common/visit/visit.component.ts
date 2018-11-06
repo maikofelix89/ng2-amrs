@@ -143,6 +143,7 @@ export class VisitComponent implements OnInit, OnDestroy {
   }
 
   public onVisitStartedOrChanged(visit) {
+    console.log('VisitStarted Event', visit);
     this.todayVisitService.makeVisitsStale();
   }
 
