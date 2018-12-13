@@ -9,6 +9,7 @@ export class DynamicRoutesService {
   public routes = new ReplaySubject(1);
   public patientRoutes = new ReplaySubject<Array<RouteModel>>(1);
   public clinicRoutes = new ReplaySubject<Array<RouteModel>>(1);
+  public selectedDepartment = 'HIV';
   public routesModel = {};
   public dashboardConfig: DashboardModel = null;
   public analyticsDashboardConfig: object = require('./schema/analytics.dashboard.conf.json');
