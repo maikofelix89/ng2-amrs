@@ -659,6 +659,7 @@ export class FormentryComponent implements OnInit, OnDestroy {
         // now set default value
         this.loadDefaultValues();
       }
+      console.log('Form', this.form);
       // add valueProcessingInfo
       this.form.valueProcessingInfo.personUuid = this.patient.person.uuid;
       this.form.valueProcessingInfo.formUuid = schema.uuid;
