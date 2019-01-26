@@ -25,7 +25,7 @@
                                             </div>
                                     </div>
                             </div>
-                            <div class="row" id="location-filters">
+                            <div class="row" id="location-filters" *ngIf="showLocationFilters">
                                             <div class="col-md-6 col-lg-6 col-sm-6 col-xs-12">
                                                 <div class="form-group">
                                                     <div class="row">
@@ -70,22 +70,6 @@
                                         <br><br>
                             </div>
                             <div class="row" *ngIf="!loadingFilters">
-                                            <div class="col-md-6 col-lg-6 col-sm-6 col-xs-12">
-                                                      <div class="form-group">
-                                                                <label class="control-label">Department</label>
-                                                                    <angular2-multiselect #departmentSelect
-                                                                                [data]="departments" 
-                                                                                [(ngModel)]="department" 
-                                                                                [settings]="dropdownSettings" 
-                                                                                (onSelect)="selectDepartment($event)" 
-                                                                                (onDeSelect)="departmentDeselect($event)"
-                                                                                (onSelectAll)="onSelectAllDepartments($event)"
-                                                                                (onDeSelectAll)="onDeSelectAllDepartment($event)"
-                                                                                name="department-filter">
-                                                                    </angular2-multiselect>
-                                                        </div>
-                                                </div>
-                                                <div *ngIf="department.length > 0">
                                                 <div class="col-md-6 col-lg-6 col-sm-6 col-xs-12">
                                                                   <div class="form-group">
                                                                     <label class="control-label">Program</label>
@@ -102,13 +86,6 @@
                                                                  </div>
                                                 </div>
                                                 
-                                            </div>
-                                             <div class="col-md-6 col-lg-6 col-sm-6 col-xs-12">
-                                                             <div class="form-group">
-                                                                  <label class="control-label" for="start-date">Start Date</label>
-                                                                  <date-time-picker tabindex="0" [modelValue]="selectedStartDate" [id]="'selectedStartDate'" (onDateChange)="getSelectedStartDate($event)"></date-time-picker>
-                                                                </div>
-                                                </div>
                                         
                                                 <div class="col-md-6 col-lg-6 col-sm-6 col-xs-12">
                                                               <div class="form-group">

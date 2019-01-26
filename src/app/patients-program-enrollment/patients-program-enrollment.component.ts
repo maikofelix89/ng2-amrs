@@ -1,10 +1,11 @@
 
 import {take} from 'rxjs/operators';
 import { Component, OnInit, Input } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute, NavigationStart } from '@angular/router';
 import * as _ from 'lodash';
 import { PatientProgramEnrollmentService } from './../etl-api/patient-program-enrollment.service';
 import { DepartmentProgramsConfigService } from './../etl-api/department-programs-config.service';
+import { ClinicDashboardCacheService } from './../clinic-dashboard/services/clinic-dashboard-cache.service';
 
 @Component({
     selector: 'patients-program-enrollment',
@@ -31,15 +32,28 @@ export class PatientsProgramEnrollmentComponent implements OnInit {
     public departmentProgConfig: any = [];
     public enrolledPatientList: any = [];
     public enrolledSummary: any = [];
+    public error: any = {
+        'error': false,
+        'message': ''
+    };
 
     constructor(
         private _patientProgramEnrollmentService: PatientProgramEnrollmentService,
         private _departmentProgramService: DepartmentProgramsConfigService,
+        private _clinicDashboardCacheService: ClinicDashboardCacheService,
         private route: ActivatedRoute,
         private router: Router) {
     }
 
     public ngOnInit() {
+
+        this.router.events
+        .filter(event => event instanceof NavigationStart)
+        .pipe(take(1))
+        .subscribe((event: NavigationStart) => {
+          // You only receive NavigationStart events
+          console.log('url event', event);
+        });
 
         this.getDepartmentConfig();
     }
@@ -80,19 +94,33 @@ export class PatientsProgramEnrollmentComponent implements OnInit {
             busy: true,
             message: 'Fetching Patient Enrollments...'
          };
+         this.error = {
+            'error': false,
+            'message': ''
+        };
 
         if (typeof params !== 'undefined') {
 
                 this._patientProgramEnrollmentService.getActivePatientEnrollmentSummary(params).pipe(
                 take(1)).subscribe((enrollmentSummary) => {
                     if (enrollmentSummary) {
-                        this.processEnrollmentSummary(enrollmentSummary);
+                        this.processEnrollmentSummary(enrollmentSummary.result);
                     }
 
                     this.busyIndicator = {
                         busy: false,
                         message: ''
                     };
+                }, (error) => {
+                    this.busyIndicator = {
+                        busy: false,
+                        message: ''
+                    };
+                    this.error = {
+                        'error': true,
+                        'message': error.error.message ? error.error.message : ''
+                    };
+                    console.log('Enrollment Error', error);
                 });
 
     }
