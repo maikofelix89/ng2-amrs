@@ -1,6 +1,7 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
+            
             <report-filters 
                   [enabledControls]="enabledControls" 
                   [(startDate)]="startDate" 
@@ -9,10 +10,12 @@
                   [end]="ageRangeEnd" 
                   (onAgeChangeFinish)="onAgeChangeFinished($event)" 
                   (onGenderChange)="getSelectedGender($event)"
+                  (selectedPeriodChange)="selectedPeriodChange($event)"
                   (onIndicatorChange)="getSelectedIndicators($event)" 
                   (onselectedLocationChange)="getLocations($event)" 
                   [selectedIndicators]="selectedIndicators"
-                  [selectedGender]="selectedGender" 
+                  [selectedGender]="selectedGender"
+                  [selectedPeriod]="selectedPeriod"
                   [reportName]="reportName" 
                   [parentIsBusy]="isLoadingReport" 
                   (generateReport)="generateReport()">

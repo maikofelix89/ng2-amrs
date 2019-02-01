@@ -49,8 +49,9 @@ export class OncologysummaryIndicatorsPatientListComponent implements OnInit {
 
   public ngOnInit() {
     this._route
-      .queryParams
-      .subscribe((params: any) => {
+    .queryParams
+    .subscribe((params: any) => {
+      console.log('Patient list params: ', params);
         if (params) {
              this.getPatientList(params);
              this.title = this.translateIndicator(params.indicators);
@@ -151,7 +152,7 @@ export class OncologysummaryIndicatorsPatientListComponent implements OnInit {
 
 public translateIndicator(indicator: string) {
   return indicator.toLowerCase().split('_').map((word) => {
-      return (word.charAt(0) + word.slice(1));
+      return ((word.charAt(0).toUpperCase()) + word.slice(1));
   }).join(' ');
 }
 

@@ -23,6 +23,7 @@ export class OncologyMonthlyIndicatorSummaryComponent implements OnInit, AfterVi
   public endDate: string = Moment().endOf('month').format('YYYY-MM-DD');
   public startAge: number = 0;
   public endAge: number = 120;
+  public selectedPeriod = 'monthly';
   public indicators: string = '';
   public specificOncologyReport: any;
   public reportUuid: string = '';
@@ -34,6 +35,10 @@ export class OncologyMonthlyIndicatorSummaryComponent implements OnInit, AfterVi
     busy: false,
     message: 'Please wait...' // default message
   };
+  public errorMsg = {
+    'message': '',
+    'isError': false
+  }
 
   constructor(
     private _router: Router,
@@ -82,13 +87,16 @@ export class OncologyMonthlyIndicatorSummaryComponent implements OnInit, AfterVi
        if (params.endAge) {
         this.endAge = params.endAge;
        }
+       if (params.period) {
+        this.selectedPeriod = params.period;
+       }
        this.indicators = params.indicators;
 
        if (typeof params.gender === 'string') {
             let genderArray = [];
             genderArray.push(params.gender);
             this.gender = genderArray;
-       }else {
+       } else {
         this.gender = params.gender;
        }
 
@@ -111,6 +119,7 @@ export class OncologyMonthlyIndicatorSummaryComponent implements OnInit, AfterVi
       'startDate': this.params.startDate,
       'endDate': this.params.endDate,
       'gender': this.params.gender,
+      'period': this.params.period,
       'type': this.params.type,
       'reportUuid': this.params.reportUuid,
       'indicators' : this.params.indicators,

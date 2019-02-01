@@ -20,7 +20,7 @@ export class OncologySummaryFiltersComponent implements OnInit, OnChanges {
   public isAggregated: boolean;
   public selectedIndicators  = [];
   public enabledControls = 'datesControl,' +
-    'ageControl,genderControl,locationControl';
+    'ageControl,genderControl,locationControl,periodControl';
   public isLoadingReport: boolean = false;
   public encounteredError: boolean = false;
   public errorMessage: string = '';
@@ -36,6 +36,7 @@ export class OncologySummaryFiltersComponent implements OnInit, OnChanges {
   @Input() public reportIndex: number;
   @Input() public reportUuid: number;
   @Input() public gender: any = [];
+  @Input() public selectedPeriod = '';
   public selectedGender: any = [];
   public locationUuids: Array<string>;
   public monthlySummary: any = [];
@@ -86,6 +87,9 @@ export class OncologySummaryFiltersComponent implements OnInit, OnChanges {
        this.selectedGender = selectedGender;
 
   }
+  public selectedPeriodChange($event) {
+    this.selectedPeriod = $event;
+  }
 
   public generateReport() {
     this.isLoadingReport = true;
@@ -103,6 +107,7 @@ export class OncologySummaryFiltersComponent implements OnInit, OnChanges {
       'startDate': Moment(this.startDate).format('YYYY-MM-DD'),
       'indicators': this.indicators,
       'gender': this.gender,
+      'period': this.selectedPeriod,
       'startAge': this.ageRangeStart,
       'endAge': this.ageRangeEnd,
       'type': this.reportType,
@@ -157,6 +162,7 @@ export class OncologySummaryFiltersComponent implements OnInit, OnChanges {
     this.ageRangeEnd = $event.ageTo;
   }
   public getSelectedGender(selectedGender) {
+    console.log('Initial gender: ', selectedGender);
     let gender: any = [];
     _.each(selectedGender, (specGender: any) => {
       if (typeof specGender === 'string') {
@@ -166,6 +172,7 @@ export class OncologySummaryFiltersComponent implements OnInit, OnChanges {
       }
     });
     this.gender = gender;
+    console.log('Final gender: ', this.gender);
   }
 
   public getSelectedIndicators(selectedIndicator) {

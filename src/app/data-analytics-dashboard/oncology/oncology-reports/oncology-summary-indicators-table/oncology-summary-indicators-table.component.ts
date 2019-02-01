@@ -71,7 +71,7 @@ export class OncologySummaryIndicatorsTableComponent implements OnInit, OnChange
                 hide: true
             },
            {
-            headerName: 'Month',
+            headerName: 'Period',
             field : 'encounter_datetime'
            },
            {
@@ -119,10 +119,10 @@ export class OncologySummaryIndicatorsTableComponent implements OnInit, OnChange
         this.oncologySummaryColdef = cols;
 
     }
-
+2
     public translateIndicator(indicator: string) {
         return indicator.toLowerCase().split('_').map((word) => {
-            return (word.charAt(0) + word.slice(1));
+            return ((word.charAt(0).toUpperCase()) + word.slice(1));
         }).join(' ');
     }
 
@@ -198,6 +198,7 @@ export class OncologySummaryIndicatorsTableComponent implements OnInit, OnChange
 
     public goToPatientList(data) {
         console.log('Patient List Data', data);
+        console.log('Period: ', this.params.period); 
 
         switch (data.colDef.field) {
 
@@ -214,17 +215,24 @@ export class OncologySummaryIndicatorsTableComponent implements OnInit, OnChange
             let startDate;
             let endDate;
             let location;
+            let period = this.params.period;
+
+            console.log('Params from oncology summary indicators table: ', this.params);
 
             if (data.data.location_name === 'Totals') {
                 startDate = this.params.startDate;
                 endDate  = this.params.endDate;
                 location = this.params.locationUuids;
-            }else {
-                startDate =
-                moment(data.data.encounter_datetime, 'MM-YYYY').startOf('month')
-                .format('YYYY-MM-DD');
-                endDate =
-                moment(data.data.encounter_datetime, 'MM-YYYY').endOf('month').format('YYYY-MM-DD');
+            } else {
+                if (period === 'daily') {
+                    startDate = moment(data.data.encounter_datetime, 'DD-MM-YYYY').format('YYYY-MM-DD');
+                    endDate = moment(data.data.encounter_datetime, 'DD-MM-YYYY').format('YYYY-MM-DD');
+                } else if (period === 'monthly') {
+                    startDate = moment(data.data.encounter_datetime, 'MM-YYYY').startOf('month').format('YYYY-MM-DD');
+                    endDate = moment(data.data.encounter_datetime, 'MM-YYYY').endOf('month').format('YYYY-MM-DD');                
+                }
+                // startDate = moment(data.data.encounter_datetime, 'MM-YYYY').startOf('month').format('YYYY-MM-DD');
+                // endDate = moment(data.data.encounter_datetime, 'MM-YYYY').endOf('month').format('YYYY-MM-DD');
                 location = data.data.location_uuid;
             }
 
@@ -242,6 +250,7 @@ export class OncologySummaryIndicatorsTableComponent implements OnInit, OnChange
                 startDate: startDate,
                 endDate: endDate
             };
+            console.log('Params after setup: ', params);
             this.router.navigate(['patient-list']
                 , {
                     relativeTo: this.route,

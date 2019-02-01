@@ -67,8 +67,20 @@ export class ReportFiltersComponent implements OnInit, ControlValueAccessor, Aft
       label: 'M'
     }
   ];
+  public periodOptions: Array<any> = [
+    {
+      value: 'daily',
+      label: 'Daily'
+    },
+    {
+      value: 'monthly',
+      label: 'Monthly'
+    }
+  ];
   public selectedIndicatorTagsSelectedAll: boolean = false;
   public selectedProgramTagsSelectedAll: boolean = false;
+  @Input() public selectedPeriod = '';
+  @Output() public selectedPeriodChange = new EventEmitter<any>();
   @Output() public onGenderChange = new EventEmitter<any>();
   public disableGenerateReportBtn: boolean = false;
   @Output()
@@ -95,6 +107,7 @@ export class ReportFiltersComponent implements OnInit, ControlValueAccessor, Aft
   private _report: string;
   private _indicators: Array<any> = [];
   private _gender: Array<any> = [];
+  private _period: Array<any> = [];
   private _programs: Array<any> = [];
   constructor(private indicatorResourceService: IndicatorResourceService,
               private dataAnalyticsDashboardService: DataAnalyticsDashboardService,
@@ -153,8 +166,12 @@ export class ReportFiltersComponent implements OnInit, ControlValueAccessor, Aft
   }
   public set selectedGender(v: Array<any>) {
     this._gender = v;
+    console.log('Gender: ', [this._gender, typeof this._gender]);
     this.onGenderChange.emit(this._gender);
   }
+
+  
+
 
   public get startDateString(): string {
     return this.startDate ? Moment(this.startDate).format('YYYY-MM-DD') : null;
@@ -305,6 +322,7 @@ export class ReportFiltersComponent implements OnInit, ControlValueAccessor, Aft
     this.selectedGender = selectedGender;
     this.onGenderChange.emit( this.selectedGender);
   }
+
   public onClickedGenerate() {
     this.generateReport.emit();
   }
@@ -334,6 +352,12 @@ export class ReportFiltersComponent implements OnInit, ControlValueAccessor, Aft
   public  onSelectedIndicators(v: Array<any>) {
     this._indicators = v;
     this.onIndicatorChange.emit(this._indicators);
+  }
+
+  public onPeriodChange($event) {
+    console.log('onPeriodChange', $event.value);
+    this.selectedPeriodChange.emit($event.value);
+
   }
 
   set value(value: any) {
