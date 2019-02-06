@@ -42,7 +42,7 @@ export class PatientSideNavComponent implements OnInit, OnDestroy {
     }
 
     public setFormsTabViewingRight() {
-        this.canViewFormsTab = this.navigationService.checkFormsTabViewingRight();
+        this.canViewFormsTab = true;
     }
     public ngOnDestroy() {
         this.changingRoutesSub.unsubscribe();
