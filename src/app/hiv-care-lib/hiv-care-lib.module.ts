@@ -12,6 +12,7 @@ import {
   DialogModule, InputTextModule, MessagesModule, InputTextareaModule,
   DropdownModule, ButtonModule, CalendarModule
 } from 'primeng/primeng';
+// import { RetentionReportModule } from './retention-report/retention-report.module';
 import { Moh731TabularComponent } from './moh-731-report/moh-731-tabular.component';
 import { Moh731ReportFiltersComponent } from './moh-731-report/moh-731-report-filters.component';
 import { Moh731ReportBaseComponent } from './moh-731-report/moh-731-report-base.component';
@@ -95,6 +96,13 @@ export function highchartsFactory() {
   hce(hc);
   return hc;
 }
+import { RetentionReportPatientListComponent } from './retention-report/retention-report-patient-list.component';
+import { RetentionReportFiltersComponent } from './retention-report/retention-report-filters.component';
+import { RetentionReportComponent } from './retention-report/retention-report.component';
+import { RetentionReportResourceService } from './../etl-api/retention-report-resource.service';
+import { RetentionReportTabularComponent } from './retention-report/retention-report-tabular.component';
+import { RetentionIndicatorDefComponent } from './retention-report/retention-indicator-definitions.component';
+
 @NgModule({
   imports: [
     RouterModule,
@@ -150,7 +158,12 @@ export function highchartsFactory() {
     VisualizationPatientListComponent,
     HivSummaryIndicatorsPatientListComponent,
     HivSummaryMonthlyTabularComponent,
-    HivMonthlySummaryIndicatorsPatientListComponent
+    HivMonthlySummaryIndicatorsPatientListComponent,
+    RetentionReportPatientListComponent,
+    RetentionReportFiltersComponent,
+    RetentionReportComponent,
+    RetentionReportTabularComponent,
+    RetentionIndicatorDefComponent
   ],
   declarations: [
     Moh731TabularComponent,
@@ -176,11 +189,17 @@ export function highchartsFactory() {
     HivSummaryIndicatorsPatientListComponent,
     HivMonthlySummaryIndicatorBaseComponent,
     HivSummaryMonthlyTabularComponent,
-    HivMonthlySummaryIndicatorsPatientListComponent
+    HivMonthlySummaryIndicatorsPatientListComponent,
+    RetentionReportPatientListComponent,
+    RetentionReportFiltersComponent,
+    RetentionReportComponent,
+    RetentionReportTabularComponent,
+    RetentionIndicatorDefComponent
   ],
   providers: [MOHReportService,
     LocationResourceService,
     ClinicalSummaryVisualizationService,
+    RetentionReportResourceService,
     ProgramWorkFlowResourceService,
     {
       provide: HighchartsStatic,

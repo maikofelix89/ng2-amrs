@@ -97,6 +97,7 @@ import {
 import { DefaulterListComponent } from '../general/defaulter-list/defaulter-list.component';
 import { GeneralModule } from '../general/general.module';
 import { ChangeDepartmentModule } from '../change-department/change-department.module';
+import { ClinicDashboardRetentionReportComponent } from './retention-report/clinic-dashboard-retention-report.component';
 @NgModule({
     imports: [
         clinicDashboardHivRouting,
@@ -170,7 +171,8 @@ import { ChangeDepartmentModule } from '../change-department/change-department.m
         HivEnhancedPatientListComponent,
         DefaulterListComponent,
         Moh731MonthlyVizComponent,
-        ClinicKibanaVizComponent
+        ClinicKibanaVizComponent,
+        ClinicDashboardRetentionReportComponent
     ],
     providers: [
         ClinicalSummaryVisualizationService
