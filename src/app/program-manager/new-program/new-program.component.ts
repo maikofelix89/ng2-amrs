@@ -677,4 +677,20 @@ export class NewProgramComponent extends ProgramManagerBaseComponent implements 
       this.patientCurrentGroups = _.filter(groups, (group) => !group.voided);
     });
   }
+
+  public setUserDefaultLocation() {
+    const retroLocation = localStorage.getItem('retroLocation');
+    if (retroLocation) {
+      this.selectedLocation = JSON.parse(retroLocation);
+      return;
+    }
+    const location: any = this.userDefaultPropertiesService.getCurrentUserDefaultLocationObject();
+    if (location) {
+      this.selectedLocation = {
+        value: location.uuid,
+        label: location.display
+      };
+    }
+  }
+
 }
