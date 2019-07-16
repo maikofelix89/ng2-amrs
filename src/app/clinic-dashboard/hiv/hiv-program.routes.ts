@@ -139,7 +139,7 @@ const routes: Routes = [
     component: HivMonthlyScheduleComponent
   },
   {
-    path: 'hiv-enhanced-program',
+    path: 'viremia-reports',
     component: HivEnhancedComponent
   },
   {
