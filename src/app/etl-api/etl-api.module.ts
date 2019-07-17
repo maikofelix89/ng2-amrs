@@ -30,7 +30,6 @@ import {
   PatientsRequiringVLResourceServiceMock
 } from './patients-requiring-vl-resource.service.mock';
 import { DailyScheduleResourceService } from './daily-scheduled-resource.service';
-import { HivClinicFlowResourceService } from './hiv-clinic-flow-resource.service';
 import { DefaulterListResourceService } from './defaulter-list-resource.service';
 import {
   HivMonthlySummaryIndicatorsResourceService
@@ -43,6 +42,7 @@ import { RadiologyImagingResourceService } from './radiology-imaging-resource.se
 import { HivEnhancedReportService } from './hiv-enhanced-program-report.service';
 import { SurgeResourceService } from './surge-resource.service';
 
+import { OncologySummaryResourceService } from './oncology-summary-resource.service';
 @NgModule({
   imports: [CommonModule, AppSettingsModule],
   declarations: [],
@@ -79,8 +79,7 @@ import { SurgeResourceService } from './surge-resource.service';
     RadiologyImagingResourceService,
     HivEnhancedReportService,
     HivEnhancedReportService,
-    RadiologyImagingResourceService,
-    SurgeResourceService
+    OncologySummaryResourceService
   ],
   exports: []
 })
