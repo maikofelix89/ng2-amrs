@@ -57,6 +57,22 @@ export class PatientCreationComponent implements OnInit, OnDestroy {
     { label: 'Female', val: 'F' },
     { label: 'Male', val: 'M' }
   ];
+  public statusOptions = [
+    {
+      label: 'Positive',
+      val: 'positive'
+    },
+    {
+      label: 'Negative',
+      val: 'negative'
+    },
+    {
+      label: 'Unknown',
+      val: 'unknown'
+    }
+  ];
+  public patientHIVStatus: any;
+  public isValidCccStatus = true;
   public patientExists = true;
   public preferredNameuuid: string;
   public birthDate: any;
@@ -301,6 +317,10 @@ export class PatientCreationComponent implements OnInit, OnDestroy {
 
   }
 
+  public setPatientHIVStatus($event) {
+    this.patientHIVStatus = $event;
+  }
+
   public setIdentifierType(identifierType) {
     this.patientIdentifierType = identifierType;
     this.commonIdentifier = '';
@@ -402,6 +422,10 @@ export class PatientCreationComponent implements OnInit, OnDestroy {
     this.errors = false;
     const ids = [];
     this.successAlert = '';
+    this.isValidCccStatus = this.isValidateCccStatus(this.identifiers);
+    if (this.setPatientHIVStatus && !this.isValidCccStatus) {
+         this.errors = true;
+    }
     if (!this.checkUniversal()) {
       this.identifierAdded = false;
       this.errors = true;
@@ -779,6 +803,40 @@ export class PatientCreationComponent implements OnInit, OnDestroy {
     const estimateDate = new Date(date).toISOString();
 
     return estimateDate;
+  }
+
+  public patientRequiresCCC() {
+     const hivStatus = this.patientHIVStatus.val;
+     if (hivStatus === 'positive') {
+        return true;
+     } else {
+         return false;
+     }
+
+  }
+
+  public checkForCCC(identifiers: any) {
+    const cccIndex = identifiers.findIndex((identifier: any) => {
+       return identifier.identifierType = 'f2d6ff1a-8440-4d35-a150-1d4b5a930c5e';
+    });
+    if (cccIndex > -1) {
+       return false;
+    } else {
+        return true;
+    }
+  }
+
+  public isValidateCccStatus(identifiers) {
+     const requiresCCC = this.patientRequiresCCC();
+     if (requiresCCC) {
+          if (this.checkForCCC(identifiers)) {
+             return false;
+           } else {
+              return true;
+           }
+     } else {
+       return true;
+     }
   }
 
 }
