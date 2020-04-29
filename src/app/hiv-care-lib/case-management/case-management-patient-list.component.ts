@@ -130,6 +130,16 @@ export class CaseManagementPatientListComponent implements OnInit {
 
   public ngOnInit() {
 
+
+  }
+
+  public getPatientList(params){
+
+    this.caseManagementResourceService.getCaseManagementList(params)
+    .subscribe((results) => {
+
+    })
+      
   }
 
 }

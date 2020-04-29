@@ -1,0 +1,91 @@
+<div class="container-fluid">
+  <div class="row" id="case-mgmt-filters">
+      <h5 class="report-title">Report Filters</h5>
+      <hr class="intro-divider"/>
+    <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
+        <div class="row">
+          <div class="col-md-4 col-sm-4">
+            <div class="row">
+              <div class="col-md-3 col-sm-3">
+                <label class="control-label"> Case Manager:  </label>
+              </div>
+              <div class="col-md-9 col-sm-9">
+                <div class="ui-grid-row ui-fluid">
+                      <div class="ui-grid-col-12">
+                        <p-multiSelect 
+                            [options]="caseManagers"  
+                            [(ngModel)]="selectedCaseManager"
+                            [defaultLabel]="'Select'"
+                        
+                        ></p-multiSelect>
+                      </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        
+          <div class="col-md-2 col-sm-2">
+          <input id="dueForVl" type="checkbox" name="dueForVl" [checked]="dueForVl" (change)="dueForVl = !dueForVl"/>
+          <label for="dueForVl" class="control-label"> Due Viral Load  </label>
+        </div>
+        <div class="col-md-2 col-sm-2">
+          <input id="elavatedVl" type="checkbox" name="elevatedVL"   [checked]="elevatedVL" (change)="elevatedVL = !elevatedVL"/>
+          <label for="elavatedVl"> Has Elevated VL </label>
+        </div>
+        <div class="col-md-2 col-sm-2">
+          <input id="noCaseManager" type="checkbox" name="noCaseManager"  [checked]="noCaseManager" (change)="noCaseManager = !noCaseManager"/>
+          <label for="noCaseManager"> No Case Manager </label>
+        </div>
+        <div class="col-md-2 col-sm-2">
+            <input id="noPhoneRTC" type="checkbox" name="noPhoneRTC"  [checked]="noPhoneRTC" (change)="noPhoneRTC = !noPhoneRTC"/>
+            <label for="noPhoneRTC"> No Phone RTC </label>
+        </div>
+      </div>
+      <div class="row row-separator">
+        <div class="col-md-6">
+          <div class="form-group row">
+            <div class="col-md-5">
+              <label for="minFollowupPeriod"> Days since Follow Up Between </label>
+            </div>
+            <div class="col-md-3">
+              <input type="number" id="minFollowupPeriod" class="form-control" [(ngModel)]="minFollowupPeriod" min="0"  />
+            </div>
+          
+          <div class="col-md-1">
+              <label for="maxFollowupPeriod"> To </label>
+          </div>
+          <div class="col-md-3">
+              <input type="number"  id="maxFollowupPeriod" class="form-control" [(ngModel)]="maxFollowupPeriod" min="0"/>
+          </div>
+        </div>
+        </div>
+
+        <div class="col-md-6">
+          <div class="form-group row">
+            <div class="col-md-5">
+              <label for="minDefaultPeriod"> Days since Missed Appointment </label>
+            </div>
+            <div class="col-md-3">
+              <input type="number" class="form-control" [(ngModel)]="minDefaultPeriod" min="0" />
+            </div>
+            <div class="col-md-1">
+             <label for="maxDefaultPeriod">To</label>
+            </div>
+            <div class="col-md-3">
+              <input type="number" class="form-control" [(ngModel)]="maxDefaultPeriod" min="0" />
+            </div>
+          </div>
+        </div>
+      </div>
+     
+      <div class="row">
+         <div class="col-md-12">
+              <button type="button" class="btn btn-success pull-left" (click) ="setFilters()" >Load Cases</button>
+         </div>
+      </div>
+  </div>
+
+      </div>
+
+
+</div>

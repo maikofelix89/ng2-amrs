@@ -44,6 +44,18 @@ export class CaseManagementResourceService {
       }
   ];
 
+  public mockParams = {
+      'locationUuid': 'uuid1',
+      'caseManager': 'manager_uuid',
+      'hasCaseManager': 1,
+      'hasPhoneRTC': 1,
+      'dueForVl': 1,
+      'elevatedVL': 1,
+      'minDefaultPeriod': 0,
+      'maxDefaultPeriod': 100
+
+  };
+
     public getUrl(): string {
         return this.appSettingsService.getEtlRestbaseurl().trim()
           + 'case-management';
