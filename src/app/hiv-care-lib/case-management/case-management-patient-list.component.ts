@@ -130,6 +130,7 @@ export class CaseManagementPatientListComponent implements OnInit {
 
   public ngOnInit() {
 
+
   }
 
 }
