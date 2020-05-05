@@ -138,6 +138,13 @@ export class CaseManagementResourceService {
       if (params.phoneFollowUpStartDate && params.phoneFollowUpStartDate !== '') {
         urlParams = urlParams.set('phoneFollowUpStartDate', params.phoneFollowUpStartDate);
       }
+      if (params.offset && params.offset !== '') {
+        urlParams = urlParams.set('offset', params.offset);
+      }
+
+      if (params.limit && params.limit !== '') {
+        urlParams = urlParams.set('limit', params.limit);
+      }
 
       console.log('Url pARAMS', urlParams);
 

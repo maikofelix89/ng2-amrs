@@ -17,6 +17,8 @@ export class CaseManagementComponent implements OnInit {
     public patientList = [];
     public params: any;
     public assignCaseManager = false;
+    public offset = 0;
+    public limit = 300;
     @Input() public locationUuids: any;
     @Input() public dashboardType: String;
     public busyIndicator: any = {
@@ -100,6 +102,14 @@ export class CaseManagementComponent implements OnInit {
         'isError': false,
         'message': ''
       };
+     }
+
+     public loadNextPatients() {
+        this.offset += this.limit;
+
+     }
+     public onFilterReset($event) {
+       this.offset = 0;
      }
 
 

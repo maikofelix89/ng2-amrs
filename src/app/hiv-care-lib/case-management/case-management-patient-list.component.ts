@@ -231,7 +231,6 @@ public getLocationParams() {
         );
   }
   public rowSelected(event) {
-    console.log('event', event);
     if (event.api.getSelectedRows().length > 0) {
       event.columnApi.setColumnsVisible(['action', 'action2'], false, 'api');
     } else {
@@ -246,7 +245,7 @@ public getLocationParams() {
       caseManagers: this.caseForManager
     };
     if (isSubmiting === true) {
-      this.caseManagementResourceService.massAssign(massAssignPayload).subscribe(response =>{
+      this.caseManagementResourceService.massAssign(massAssignPayload).subscribe(response => {
        this.dismissDialog();
       });
     }

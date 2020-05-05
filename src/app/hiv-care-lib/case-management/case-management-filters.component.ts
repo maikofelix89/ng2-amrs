@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, OnChanges, SimpleChanges, Output , EventEmitter } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 
 import { CaseManagementResourceService } from './../../etl-api/case-management-resource.service';
@@ -29,6 +29,8 @@ export class CaseManagementFiltersComponent implements OnInit, OnChanges {
         'rtcEndDate': '',
         'phoneFollowUpStartDate': '',
         'filterSet': false,
+        'offset': 0,
+        'limit': 300,
         'locationUuid': ''
     };
 
@@ -37,6 +39,9 @@ export class CaseManagementFiltersComponent implements OnInit, OnChanges {
     public locationParams = {};
 
     @Input() public clinicDashboardLocation: any;
+    @Input() public offset = 0;
+    @Input() public limit = 300;
+    @Output() public filterReset = new EventEmitter<any>();
 
     public caseManagers = [];
     public selectedCaseManager: any;
@@ -90,6 +95,11 @@ export class CaseManagementFiltersComponent implements OnInit, OnChanges {
             && typeof change.clinicDashboardLocation.previousValue !== 'undefined') {
             this.getCaseManagers();
             this.selectedCaseManager = '';
+            this.filterReset.emit(true);
+            this.setParams();
+        }
+        if (change.offset
+            && typeof change.offset.previousValue !== 'undefined') {
             this.setParams();
         }
 
@@ -147,6 +157,8 @@ export class CaseManagementFiltersComponent implements OnInit, OnChanges {
             'rtcEndDate': this.selectedRtcEndDate,
             'phoneFollowUpStartDate': this.selectedPhoneFollowUpDate,
             'filterSet': this.filterSet,
+            'offset': this.offset,
+            'limit': this.limit,
             'locationUuid': this.clinicDashboardLocation
         };
 
@@ -185,6 +197,8 @@ export class CaseManagementFiltersComponent implements OnInit, OnChanges {
             this.selectedRtcEndDate = this.rtcEndDate;
             this.phoneFollowUpStartDate = urlParams.phoneFollowUpStartDate ? urlParams.phoneFollowUpStartDate : '';
             this.selectedPhoneFollowUpDate = this.phoneFollowUpStartDate;
+            this.offset = urlParams.offset ? urlParams.offset : 0;
+            this.limit = urlParams.limit ? urlParams.limit : 300;
         }
 
     }
@@ -248,6 +262,9 @@ export class CaseManagementFiltersComponent implements OnInit, OnChanges {
             this.selectedRtcEndDate = '';
             this.phoneFollowUpStartDate = '';
             this.selectedPhoneFollowUpDate = '';
+            this.offset = 0;
+            this.limit = 300;
+            this.filterReset.emit(true);
 
     }
 

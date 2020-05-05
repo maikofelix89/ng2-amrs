@@ -12,6 +12,9 @@
      <div class="col-md-12 col-lg-12 col-xs-12 col-sm-12">
           <case-management-filters
            [clinicDashboardLocation]="locationUuids"
+           [offset]="offset"
+           [limit]="limit"
+           (filterReset)="onFilterReset($event)"
           >
 
           </case-management-filters
@@ -24,11 +27,15 @@
       </assign-case-manager>
      </div>
      <div class="col-md-12 col-lg-12 col-xs-12 col-sm-12">
-        
+        <p>Offset {{offset}}</p>
+        <p>Limit {{limit}}</p>
       <case-management-patient-list
       [rowData]="patientList"
       ></case-management-patient-list>
        
+    </div>
+    <div class="col-md-12 col-lg-12 col-xs-12 col-sm-12">
+        <button class="btn btn-success" (click)="loadNextPatients()">Load Next 300</button>
     </div>
   </div>
 </div>
