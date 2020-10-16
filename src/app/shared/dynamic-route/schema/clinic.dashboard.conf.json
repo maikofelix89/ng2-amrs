@@ -63,6 +63,12 @@
       "alias": "hiv",
       "routes": [
         {
+          "url": "dwapi",
+          "label": "Dwapi",
+          "icon": "fa fa-database",
+          "isSideBarOpen": false
+        },
+        {
           "url": "daily-schedule",
           "label": "Daily Schedule",
           "icon": "fa fa-calendar-o",

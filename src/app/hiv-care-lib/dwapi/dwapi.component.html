@@ -1,0 +1,45 @@
+<div class="container-fluid">
+<div class="row">
+  <div class="col-md-12 col-lg-12 col-xs-12 col-sm-12">
+    <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
+      <div class="loader" *ngIf="busyIndicator.busy"><span><i class="fa fa-spinner fa-spin">
+        </i>{{busyIndicator.message}}</span>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
+    <div class="alert alert-danger fade in" *ngIf="errorObj.isError">
+      <a  class="close" data-dismiss="alert">&times;</a>
+      <p>
+          <small >{{errorObj.message}}</small>
+      </p>
+    </div>
+  </div>
+  <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
+    <div class="alert alert-success fade in" *ngIf="successObj.isSuccess">
+      <a  class="close" data-dismiss="alert">&times;</a>
+      <p>
+          <small >{{successObj.message}}</small>
+      </p>
+    </div>
+  </div>
+      <div class="col-md-12 col-lg-12 col-xs-12 col-sm-12">
+        <app-mfl-filters
+         (uploadMflSet) = "uploadMflSet($event)"
+        >
+
+        </app-mfl-filters
+        >
+      </div>
+    <br>
+      <div class="col-md-12 col-lg-12 col-xs-12 col-sm-12">
+          <h4 class="report-title">{{extractTitle}} Extract</h4>
+          <app-dwapi-patient-list
+          [rowData]="patientList"
+          (updatePatientList)="updatePatientList($event)"
+          >
+          </app-dwapi-patient-list>
+          
+      </div>
+  </div>
+</div>

@@ -130,6 +130,9 @@ import { CaseManagementResourceService } from './../etl-api/case-management-reso
 import { PrepReportBaseComponent } from './prep-report/prep-report-base/prep-report-base.component';
 import { PrepReportPatientListComponent } from './prep-report/prep-report-patient-list/prep-report-patient-list.component';
 import { MonthlyReportComponent } from './monthly-report/monthly-report.component';
+import { DwapiComponent } from './dwapi/dwapi.component';
+import { MflFiltersComponent } from './dwapi/mfl-filter.component';
+import { DwapiPatientListComponent } from './dwapi/dwapi-patient-list.component';
 
 
 @NgModule({
@@ -206,7 +209,10 @@ import { MonthlyReportComponent } from './monthly-report/monthly-report.componen
     HeiIndicatorsFilterComponent,
     HeiIndicatorsTabularComponent,
     HeiIndicatorsPatientListComponent,
-    HeiIndicatorsPdfViewComponent
+    HeiIndicatorsPdfViewComponent,
+    DwapiComponent,
+    MflFiltersComponent,
+    DwapiPatientListComponent
   ],
   declarations: [
     Moh731TabularComponent,
@@ -256,7 +262,10 @@ import { MonthlyReportComponent } from './monthly-report/monthly-report.componen
     HeiIndicatorsFilterComponent,
     HeiIndicatorsTabularComponent,
     HeiIndicatorsPatientListComponent,
-    HeiIndicatorsPdfViewComponent
+    HeiIndicatorsPdfViewComponent,
+    DwapiComponent,
+    MflFiltersComponent,
+    DwapiPatientListComponent
   ],
   providers: [MOHReportService,
     LocationResourceService,

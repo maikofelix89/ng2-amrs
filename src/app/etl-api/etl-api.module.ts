@@ -46,6 +46,7 @@ import { HivDifferentiatedCareResourceService } from './hiv-differentiated-care-
 import { SurgeResourceService } from './surge-resource.service';
 
 import { HeiReportService } from './hei-report.service';
+import { DwapiResourceService } from './dwapi-resource.service';
 @NgModule({
   imports: [CommonModule, AppSettingsModule],
   declarations: [],
@@ -87,7 +88,8 @@ import { HeiReportService } from './hei-report.service';
     KibanaDashboardListService,
     HivDifferentiatedCareResourceService,
     SurgeResourceService,
-    HeiReportService
+    HeiReportService,
+    DwapiResourceService
   ],
   exports: []
 })

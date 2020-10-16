@@ -1,0 +1,66 @@
+<div class="container-fluid">
+  <div class="row" id="mfl-filters">
+    <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
+      <h5 class="report-title">DWAPI Report Filters</h5>
+    </div>
+    <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
+      <div class="alert alert-danger fade in" *ngIf="errorObj.isError">
+        <a  class="close" data-dismiss="alert">&times;</a>
+        <p>
+            <small >{{errorObj.message}}</small>
+        </p>
+      </div>
+    </div>
+    <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
+      <div class="alert alert-success fade in" *ngIf="successObj.isSuccess">
+        <a  class="close" data-dismiss="alert">&times;</a>
+        <p>
+            <small >{{successObj.message}}</small>
+        </p>
+      </div>
+    </div>
+      <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
+      <hr class="intro-divider"/>
+      </div>
+    <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12" *ngIf="showFilters">
+        <div class="row">
+          <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
+            <label class="control-label"> MFL Sites: </label>
+            <div class="input-group">
+            <div class="input-group-addon"><i class="fa fa-user-md fa-fw" aria-hidden="true"></i></div>
+              <ng-select class="sharp-corners" [multiple]="true" id="indicator" (change)="onMflSelected($event)"
+                         [placeholder]="'Select MFL Location'"
+                         [(ngModel)]="selectedMflCode" [items]="mflCodeOptions">
+              </ng-select>
+            </div>
+          </div>
+        </div>
+        <div class="row row-separator">
+          <div class="col-md-6 col-lg-6 col-sm-6 col-xs-12">
+            <label for="dueForVl" class="control-label">Extract</label>
+            <select class="form-control" [(ngModel)]="extract" id="extract" name="extract"
+                (ngModelChange)="onExtractChange($event)" required>
+                <option *ngFor="let extract of extractOptions" [value]="extract.value">{{ extract.label}}
+                </option>
+           </select>
+          </div>
+        </div>
+     
+     
+      <div class="row row-separator">
+         <div class="col-md-4 col-lg-4 col-sm-4 col-xs-12">
+              <button type="button" class="btn btn-success pull-left" (click) ="setFilters()" >Generate Report</button>
+         </div>
+         <div class="col-md-4 col-lg-4 col-sm-4 col-xs-12">
+          <button type="button" class="btn btn-primary" (click) ="setMflSite()" >Set Site for Upload</button>
+         </div>
+         <div class="col-md-4 col-lg-4 col-sm-4 col-xs-12">
+          <button type="button" class="btn btn-danger" (click) ="restartMssql()" >Restart MSSQL server</button>
+        </div>
+      </div>
+  </div>
+
+      </div>
+
+
+</div>

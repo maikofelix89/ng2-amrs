@@ -93,6 +93,7 @@ import {
     ClinicDashboardHeiReportComponent
 } from './clinic-dashboard-hei-indicators-report/clinic-dashboard-hei-report.component';
 import { HeiIndicatorsPatientListComponent } from './../../hiv-care-lib/hei-indicators-report/hei-indicators-patient-list.component';
+import { DwapiComponent } from './../../hiv-care-lib/dwapi/dwapi.component';
 const routes: Routes = [
     {
         path: 'landing-page',
@@ -292,6 +293,15 @@ const routes: Routes = [
             {
                 path: 'patient-list',
                 component: HeiIndicatorsPatientListComponent
+            }
+        ]
+    },
+    {
+        path: 'dwapi',
+        children: [
+            {
+                path: '',
+                component: DwapiComponent
             }
         ]
     }
