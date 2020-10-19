@@ -901,6 +901,7 @@ export class FormentryComponent implements OnInit, OnDestroy {
       this.setUpHivSummaryDataObject();
 
       if (this.encounter) {
+        console.log('This encounter', this.encounter);
         // editing existing form
         this.form = this.formFactory.createForm(
           schema,
@@ -964,8 +965,15 @@ export class FormentryComponent implements OnInit, OnDestroy {
       // Find and set a provider uuid to be used when updating orders as orderer
       this.setProviderUuid();
 
+      console.log('Datasource', this.dataSources);
+      console.log('Form', this.form);
+
       // prefill transferOut details in AMPATH POC Transfer Out Form (4f8b3fc4-7262-45f7-81b0-7bed31655fcd)
-      if (this.formUuid === '4f8b3fc4-7262-45f7-81b0-7bed31655fcd') {
+      // do not try to prefill transfer options if edit mode
+      if (
+        this.formUuid === '4f8b3fc4-7262-45f7-81b0-7bed31655fcd' &&
+        !this.encounter
+      ) {
         this.patientTransferService.prefillTransferOptions();
       }
     } catch (ex) {
