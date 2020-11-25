@@ -45,6 +45,7 @@ import { PatientTransferService } from './patient-transfer.service';
 import { UserDefaultPropertiesService } from '../../../user-default-properties/user-default-properties.service';
 import { UserService } from '../../../openmrs-api/user.service';
 import { PatientConsentResourceService } from './../../../openmrs-api/patient-consent-resource.service';
+import { PatientEACSessionResourceService } from './../../../etl-api/patient-eac-session-resource.service';
 
 @Component({
   selector: 'app-formentry',
@@ -108,6 +109,7 @@ export class FormentryComponent implements OnInit, OnDestroy {
   private subscription: Subscription;
   private visitUuid: string = null;
   private hasCallConsent = false;
+  private eacSessionNo = null;
 
   constructor(
     private appFeatureAnalytics: AppFeatureAnalytics,
@@ -134,7 +136,8 @@ export class FormentryComponent implements OnInit, OnDestroy {
     public router: Router,
     private userService: UserService,
     public userDefaultPropertiesService: UserDefaultPropertiesService,
-    public patientConsentResourceService: PatientConsentResourceService
+    public patientConsentResourceService: PatientConsentResourceService,
+    private patientEacService: PatientEACSessionResourceService
   ) {}
 
   public ngOnInit() {
@@ -143,6 +146,7 @@ export class FormentryComponent implements OnInit, OnDestroy {
       'Formentry Component Loaded',
       'ngOnInit'
     );
+    this.getEacSessionNo();
     this.wireDataSources();
     const componentRef = this;
     this.route.params.subscribe((routeParams) => {
@@ -249,6 +253,10 @@ export class FormentryComponent implements OnInit, OnDestroy {
     this.dataSources.registerDataSource(
       'patient',
       this.formDataSourceService.getDataSources()['hasCallConsent']
+    );
+    this.dataSources.registerDataSource(
+      'patient',
+      this.formDataSourceService.getDataSources()['eacSessionNo']
     );
   }
 
@@ -880,6 +888,11 @@ export class FormentryComponent implements OnInit, OnDestroy {
       this.dataSources.registerDataSource(
         'patient',
         { hasCallConsent: this.hasCallConsent },
+        true
+      );
+      this.dataSources.registerDataSource(
+        'patient',
+        { eacSessionNo: this.eacSessionNo },
         true
       );
       this.dataSources.registerDataSource(
@@ -1542,5 +1555,27 @@ export class FormentryComponent implements OnInit, OnDestroy {
       this.warnMCHTransfer = true;
     }
     return validTransfer;
+  }
+
+  private getEacSessionNo() {
+    console.log('EacSessionNo called');
+    this.patientService.currentlyLoadedPatient.subscribe((patient) => {
+      if (patient) {
+        console.log('patient', patient);
+        this.patientEacService
+          .getPatientLatesSessionNumber(patient.uuid)
+          .subscribe((result: any) => {
+            console.log('eac result', result);
+            if (result) {
+              this.eacSessionNo = result.eacSessionNo;
+              this.dataSources.registerDataSource(
+                'patient',
+                { eacSessionNo: this.eacSessionNo },
+                true
+              );
+            }
+          });
+      }
+    });
   }
 }
