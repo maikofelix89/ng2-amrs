@@ -8,6 +8,7 @@ import { LocalStorageService } from '../utils/local-storage.service';
 describe('Service: OnlineTracker', () => {
   let onlineTrackerService: OnlineTrackerService;
   let sessionServiceSpy: jasmine.SpyObj<SessionService>;
+  spyOn(sessionServiceSpy, 'getSession').and.returnValue(false);
   beforeEach(() => {
     const spy = jasmine.createSpyObj('SessionService', ['getSession']);
     TestBed.configureTestingModule({
@@ -35,6 +36,6 @@ describe('Service: OnlineTracker', () => {
 
   it('should get session when update online status is called', () => {
     onlineTrackerService.updateOnlineStatus();
-    // expect(sessionServiceSpy.getSession).toHaveBeenCalled();
+    expect(sessionServiceSpy.getSession).toHaveBeenCalled();
   });
 });
