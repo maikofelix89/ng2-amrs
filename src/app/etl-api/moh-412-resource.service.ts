@@ -38,9 +38,10 @@ export class MOH412ResourceService {
       }
     }
     const url = this.getBaseUrl() + 'moh-412-report';
-    return this.http.get(url, {
+    const request = this.http.get(url, {
       params: urlParams
     });
+    return this.cacheService.cacheRequest(url, urlParams, request);
   }
 
   public getMoh412MonthlyReportPatientList(params: any) {
@@ -55,8 +56,9 @@ export class MOH412ResourceService {
       .set('reportType', params.reportType);
 
     const url = this.getPatientListUrl();
-    return this.http.get(url, {
+    const request = this.http.get(url, {
       params: urlParams
     });
+    return this.cacheService.cacheRequest(url, urlParams, request);
   }
 }

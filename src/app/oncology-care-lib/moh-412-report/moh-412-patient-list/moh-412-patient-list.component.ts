@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { MOH412ResourceService } from './../../../../../etl-api/moh-412-resource.service';
 import { Router, ActivatedRoute } from '@angular/router';
+import { MOH412ResourceService } from './../../../etl-api/moh-412-resource.service';
 import { Location } from '@angular/common';
 import { GridOptions } from 'ag-grid';
 

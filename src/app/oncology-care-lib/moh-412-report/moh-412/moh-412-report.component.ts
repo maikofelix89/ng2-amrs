@@ -1,6 +1,6 @@
-import { Component, OnInit, AfterViewInit } from '@angular/core';
-import { ActivatedRoute, Router, Params } from '@angular/router';
-import { MOH412ResourceService } from './../../../../../etl-api/moh-412-resource.service';
+import { Component, OnInit, AfterViewInit, Input } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { MOH412ResourceService } from './../../../etl-api/moh-412-resource.service';
 
 @Component({
   selector: 'app-moh-412-report',
@@ -8,7 +8,7 @@ import { MOH412ResourceService } from './../../../../../etl-api/moh-412-resource
   styleUrls: ['./moh-412-report.component.css']
 })
 export class MOH412ReportComponent implements OnInit, AfterViewInit {
-  public title = 'Cancer Screening Monthly Summary';
+  public title = 'Cervical Cancer Screening Monthly Summary';
   public params: any;
   public moh412Data = [];
   public reportDef = [];
@@ -21,6 +21,8 @@ export class MOH412ReportComponent implements OnInit, AfterViewInit {
     error: false,
     message: ''
   };
+  @Input() public dashboardType = '';
+  @Input() public dashboardLocation = [];
 
   constructor(
     public router: Router,

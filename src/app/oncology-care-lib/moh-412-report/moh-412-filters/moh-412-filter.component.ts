@@ -10,8 +10,8 @@ import { Router, ActivatedRoute } from '@angular/router';
 import * as _ from 'lodash';
 import * as Moment from 'moment';
 
-import { AppFeatureAnalytics } from '../../../../../shared/app-analytics/app-feature-analytics.service';
-import { DataAnalyticsDashboardService } from '../../../../services/data-analytics-dashboard.services';
+import { AppFeatureAnalytics } from './../../../shared/app-analytics/app-feature-analytics.service';
+import { DataAnalyticsDashboardService } from './../../../data-analytics-dashboard/services/data-analytics-dashboard.services';
 
 @Component({
   selector: 'app-moh-412-filter',
@@ -29,6 +29,8 @@ export class MOH412FilterComponent implements OnInit, OnChanges {
   @Input() public reportUuid: number;
   @Input() public period = '';
   @Input() public gender: any = [];
+  @Input() public dashboardType = '';
+  @Input() public dashboardLocation = [];
   public title = 'Filters';
   public data = [];
   public sectionsDef = [];
@@ -73,8 +75,23 @@ export class MOH412FilterComponent implements OnInit, OnChanges {
   }
 
   public processFilterData(filterChanges: any) {
-    if (filterChanges.gender.currentValue) {
-      this.formatGenderFilter(filterChanges.gender.currentValue);
+    if (filterChanges.gender !== undefined) {
+      if (filterChanges.gender.currentValue !== undefined) {
+        this.formatGenderFilter(filterChanges.gender.currentValue);
+      }
+    }
+    if (filterChanges.dashboardType !== undefined) {
+      if (filterChanges.dashboardType.currentValue !== undefined) {
+        this.toggleFilterControls(filterChanges.dashboardType.currentValue);
+      }
+    }
+    if (filterChanges.dashboardLocation !== undefined) {
+      if (
+        filterChanges.dashboardLocation.currentValue !== undefined &&
+        filterChanges.dashboardLocation.previousValue !== undefined
+      ) {
+        this.generateReport();
+      }
     }
   }
 
@@ -116,13 +133,29 @@ export class MOH412FilterComponent implements OnInit, OnChanges {
       report: urlParams.report,
       reportIndex: this.reportIndex,
       reportUuid: this.reportUuid,
-      locationUuids: this.getSelectedLocations(this.locationUuids)
+      locationUuids: this.getDashboardOrAnnalyticsLocation(this.dashboardType)
     };
 
     this.router.navigate(['./'], {
       queryParams: queryParams,
       relativeTo: this.route
     });
+  }
+
+  public getDashboardOrAnnalyticsLocation(dashboardType: string) {
+    let location: any;
+    switch (dashboardType) {
+      case 'clinic-dashboard':
+        location = this.dashboardLocation;
+        break;
+      case 'data-analytics':
+        location = this.getSelectedLocations(this.locationUuids);
+        break;
+      default:
+        location = this.getSelectedLocations(this.locationUuids);
+    }
+
+    return location;
   }
 
   public getSelectedLocations(locationUuids: Array<string>): string {
@@ -225,5 +258,14 @@ export class MOH412FilterComponent implements OnInit, OnChanges {
   public onMonthChange($event) {
     this.startDate = Moment($event).startOf('month').format('YYYY-MM-DD');
     this.endDate = Moment($event).endOf('month').format('YYYY-MM-DD');
+  }
+  public toggleFilterControls(dashboardType: string) {
+    if (dashboardType === 'data-analytics') {
+      this.enabledControls = 'monthControl,locationControl';
+    } else if (dashboardType === 'clinic-dashboard') {
+      this.enabledControls = 'monthControl';
+    } else {
+      this.enabledControls = 'monthControl,locationControl';
+    }
   }
 }
