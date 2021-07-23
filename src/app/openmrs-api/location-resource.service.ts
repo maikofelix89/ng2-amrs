@@ -11,6 +11,16 @@ import * as locationIds from '../shared/locations/location_data.json';
 export class LocationResourceService {
   private locations = new ReplaySubject(1);
   private v = 'full';
+  private amrsLocations = [
+    {
+      uuid: '291bdf8e-93ed-4898-a58f-7d9f7f74128e',
+      display: 'Aboloi'
+    },
+    {
+      uuid: '18c343eb-b353-462a-9139-b16606e6b6c2',
+      display: 'Location Test'
+    }
+  ];
 
   constructor(
     protected http: HttpClient,
@@ -98,5 +108,8 @@ export class LocationResourceService {
           return response.results;
         })
       );
+  }
+  public getAmrsLocations(): Observable<any> {
+    return Observable.of(this.amrsLocations);
   }
 }

@@ -24,6 +24,7 @@ export class FormDataSourceService {
   public getDataSources() {
     const formData: any = {
       location: this.getLocationDataSource(),
+      amrsLocation: this.getAmrsLocationsDataSource(),
       provider: this.getProviderDataSource(),
       drug: this.getDrugDataSource(),
       problem: this.getProblemDataSource(),
@@ -39,6 +40,21 @@ export class FormDataSourceService {
 
     const find = (text: string) => {
       return this.findLocation(text);
+    };
+
+    return {
+      resolveSelectedValue: resolve,
+      searchOptions: find
+    };
+  }
+
+  public getAmrsLocationsDataSource() {
+    const resolve = (uuid: string) => {
+      return this.getAmrsLocations(uuid);
+    };
+
+    const find = (text: string) => {
+      return this.findAmrsLocation(text);
     };
 
     return {
@@ -306,6 +322,40 @@ export class FormDataSourceService {
     return locationSearchResults.asObservable();
   }
 
+  public findAmrsLocation(searchString: string): Observable<Location[]> {
+    const locationSearchResults: BehaviorSubject<any> = new BehaviorSubject<
+      any
+    >([]);
+
+    this.locationResourceService.getAmrsLocations().subscribe(
+      (amrsLocations) => {
+        const mappedLocations = amrsLocations
+          .filter((amrsLocation: any) => {
+            const searchStringSc = searchString.toLowerCase();
+            const amrsLocationSc = amrsLocation.display.toLowerCase();
+            const patt = new RegExp(searchStringSc);
+            const matchResult = patt.test(amrsLocationSc);
+            if (matchResult) {
+              return amrsLocation;
+            }
+          })
+          .map((filteredLocation: any) => {
+            return {
+              value: filteredLocation.uuid,
+              label: filteredLocation.display
+            };
+          });
+        console.log('subscriber next..', mappedLocations);
+        locationSearchResults.next(mappedLocations);
+      },
+      (error) => {
+        console.log('Error getting amrs locations', error);
+      }
+    );
+
+    return locationSearchResults;
+  }
+
   public getLocationByUuid(uuid): Observable<any> {
     const locationSearchResults: BehaviorSubject<any> = new BehaviorSubject<
       any
@@ -330,6 +380,36 @@ export class FormDataSourceService {
           return locationSearchResults.asObservable();
         })
       );
+  }
+
+  public getAmrsLocations(uuid: string): Observable<any> {
+    const locationSearchResults: BehaviorSubject<any> = new BehaviorSubject<
+      any
+    >([]);
+    this.locationResourceService.getAmrsLocations().subscribe(
+      (amrsLocations) => {
+        const mappedLocations = amrsLocations
+          .filter((l) => {
+            return l.uuid === uuid;
+          })
+          .map((m: any) => {
+            return {
+              value: m.uuid,
+              label: m.display
+            };
+          });
+        if (uuid.length > 0 && mappedLocations.length === 1) {
+          locationSearchResults.next(mappedLocations[0]);
+        } else {
+          locationSearchResults.next(mappedLocations);
+        }
+      },
+      (error) => {
+        console.log('getAmrsLocationError', error);
+      }
+    );
+
+    return locationSearchResults;
   }
 
   public resolveConcept(uuid): Observable<any> {
